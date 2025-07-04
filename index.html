@@ -194,7 +194,7 @@
 
             // 回転アニメーションの終了
             const stopRotationTimeout = setTimeout(() => {
-              setIsRotating(false); // 回転アニメーションを停止
+              setIsRotating(false); // アニメーション終了後に停止
             }, 1700); // 回転アニメーションが完了するタイミングで停止 (1.5秒 + 0.2秒)
 
             // オーバーレイ全体のフェードアウト開始
@@ -971,9 +971,7 @@
                           <p className="mb-3 sm:mb-4">
                             {t('aboutMePara2')}
                           </p>
-                          <p>
-                            {t('aboutMePara3')}
-                          </p>
+                          {/* aboutMePara3 を表示する要素を完全に削除 */}
                         </div>
                       </div>
                     </div>
