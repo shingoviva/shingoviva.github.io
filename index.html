@@ -409,6 +409,10 @@
           const handleIntroComplete = React.useCallback(() => {
             setShowIntro(false); // イントロアニメーションを非表示にする
             setMainContentOpacity(1); // メインコンテンツをフェードインさせる
+            // Three.jsコンテナの透明度も同時に設定
+            if (threeJsContainerRef.current) {
+              threeJsContainerRef.current.style.opacity = 1;
+            }
           }, []); // 依存配列が空なので、初回レンダリング時のみ作成される
 
           // 画像ポップアップを開くコールバック関数
@@ -749,10 +753,11 @@
                 <IntroAnimation onAnimationComplete={handleIntroComplete} />
               )}
 
+              {/* Three.jsコンテナの初期透明度を0に設定し、フェードイン時に1にする */}
               <div
                 ref={threeJsContainerRef}
-                className="fixed inset-0 z-0 opacity-100"
-                style={{ pointerEvents: 'none' }}
+                className="fixed inset-0 z-0 transition-opacity duration-1000"
+                style={{ pointerEvents: 'none', opacity: 0 }} 
               ></div>
 
               <div
