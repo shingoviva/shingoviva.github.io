@@ -103,9 +103,7 @@
             process: "Process",
             faq: "FAQ",
             contact: "Contact",
-            aboutMeIntro: "Operating under the artist name 'Shingo Viva Okamoto', I specialize in capturing moments where light and shadow tell a story. Leveraging my background as a fashion designer and unique lighting techniques, I aim to bring out the essence of each subject, valuing emotion and atmosphere in every shot.",
-            aboutMePara2: "My work constantly seeks expressions that resonate deeply with viewers. A selection of my past projects is available in my portfolio; please feel free to browse.",
-            aboutMePara3: "With approximately 10 years of photography experience (starting around 2015), my previous career as a fashion designer has earned me a reputation among fashion brand directors who appreciate my deep understanding of clothing. My refined sense of color, cultivated through design work, also enhances my photography. I have a proven track record working with international clients and foreign-affiliated companies.",
+            aboutMeIntro: "Operating under the artist name 'Shingo Viva Okamoto', I specialize in capturing moments where light and shadow tell a story. Leveraging my background as a fashion designer and unique lighting techniques, I aim to bring out the essence of each subject, valuing emotion and atmosphere in every shot. My work constantly seeks expressions that resonate deeply with viewers. A selection of my past projects is available in my portfolio; please feel free to browse. With approximately 10 years of photography experience (starting around 2015), my previous career as a fashion designer has earned me a reputation among fashion brand directors who appreciate my deep understanding of clothing. My refined sense of color, cultivated through design work, also enhances my photography. I have a proven track record working with international clients and foreign-affiliated companies.",
             servicesTitle: "Services",
             servicesIntro: "I primarily focus on photography for fashion brand catalogs and collections, model portraits, and corporate advertising. Event photography is also available upon request.",
             serviceWeddingTitle: "Wedding Photography",
@@ -195,17 +193,17 @@
             // 回転アニメーションの終了
             const stopRotationTimeout = setTimeout(() => {
               setIsRotating(false); // 回転アニメーションを停止
-            }, 1900); // 回転アニメーションが完了するタイミングで停止 (1.5秒 + 0.4秒)
+            }, 1700); // 回転アニメーションが完了するタイミングで停止 (1.5秒 + 0.2秒)
 
             // オーバーレイ全体のフェードアウト開始
             const fadeOutTimeout = setTimeout(() => {
               setOverlayOpacity(0);
-            }, 2500); // 回転アニメーション終了後、またはほぼ同時にフェードアウト開始
+            }, 2300); // 回転アニメーション終了後、またはほぼ同時にフェードアウト開始
 
             // アニメーション完了のタイミング
             const animationCompleteTimeout = setTimeout(() => {
               onAnimationComplete(); // アニメーション完了コールバック
-            }, 3500); // オーバーレイフェードアウト完了後
+            }, 3000); // オーバーレイフェードアウト完了後
 
             // クリーンアップ関数
             return () => {
@@ -222,7 +220,6 @@
               className="fixed inset-0 bg-[#1A1A1A] z-[100] flex items-center justify-center transition-opacity duration-1000 ease-in-out" // 背景色をモノトーンに
               style={{ opacity: overlayOpacity }}
             >
-              {/* 回転アニメーションのKeyframesを定義 */}
               <style>
                 {`
                   @keyframes comical-rotate {
@@ -237,11 +234,10 @@
                   }
                 `}
               </style>
-              {/* ロゴのSVGを直接埋め込みます */}
               <svg
                 className={`w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 text-white transition-opacity duration-1000 ease-in-out ${isRotating ? 'comical-rotation' : ''}`}
                 style={{ opacity: logoOpacity }}
-                viewBox="0 0 141.67 244"
+                viewBox="0 0 141.67 244" 
                 fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -291,9 +287,9 @@
           const [nextHeroImageIndex, setNextHeroImageIndex] = React.useState(1 % heroImages.length); // 次にフェードインする画像
           const [isFadingIn, setIsFadingIn] = React.useState(false); // フェードインアニメーション中か否か
 
-          const fadeDurationMs = 3000; // フェードの duration (3秒)
-          const displayDurationMs = 2000; // 画像が完全に表示される時間 (2秒)
-          const totalInterval = fadeDurationMs + displayDurationMs; // 全体のインターバル (5秒)
+          const fadeDurationMs = 5000; // フェードの duration (5秒に延長)
+          const displayDurationMs = 3000; // 画像が完全に表示される時間 (3秒に延長)
+          const totalInterval = fadeDurationMs + displayDurationMs; // 全体のインターバル (8秒)
 
           // ヒーロー画像の自動スライドショーを制御するuseEffect
           React.useEffect(() => {
@@ -590,7 +586,8 @@
                 renderer.render(scene, camera); // シーンをレンダリング
             };
 
-            animate(); // アニメーションループを開始
+            // アニメーションループを開始 (コンポーネントマウント時に即座に開始)
+            animate(); 
 
             // ウィンドウのリサイズイベントハンドラ
             const onWindowResize = () => {
@@ -700,27 +697,23 @@
           };
 
           return (
-            <div className="font-open-sans bg-[#1A1A1A] text-white min-h-screen overflow-hidden relative"> {/* 最も暗い背景色を調整 */}
-              {/* Google Fonts - Open Sans をインポートし、カスタムCSSを定義 */}
+            <div className="font-open-sans bg-[#1A1A1A] text-white min-h-screen overflow-hidden relative"> 
               <style>
                 {`
                   @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
                   .font-open-sans {
                     font-family: 'Open Sans', sans-serif;
-                    font-weight: 300; /* 全体に最も細いウェイトを指定 */
+                    font-weight: 300; 
                   }
-                  /* 見出しと太字の箇所も細いウェイトを継承し、文字間隔を広げる */
                   .font-open-sans h1,
                   .font-open-sans h2,
                   .font-open-sans h3 {
-                    font-weight: 300; /* 見出しも細いウェイトに */
-                    letter-spacing: 0.05em; /* 文字間隔を少し広げる */
+                    font-weight: 300; 
+                    letter-spacing: 0.05em; 
                   }
-                  /* ヒーローセクションのサブ見出しにも文字間隔を適用 */
                   .hero-subheading-spaced {
                     letter-spacing: 0.025em;
                   }
-                  /* アイコン回転アニメーションのkeyframes定義 */
                   @keyframes subtle-rotate {
                     0% { transform: rotate(0deg); }
                     25% { transform: rotate(-5deg); }
@@ -732,72 +725,56 @@
                     animation: subtle-rotate 0.4s ease-in-out forwards;
                   }
 
-                  /* アコーディオンコンテンツの開閉アニメーション */
                   .accordion-content {
                     max-height: 0;
                     overflow: hidden;
-                    transition: max-height 0.7s ease-out; /* アニメーション時間を長くし、イージングを調整 */
+                    transition: max-height 0.7s ease-out; 
                   }
                   .accordion-content.expanded {
-                    max-height: 2000px; /* 十分な高さを設定してコンテンツが途切れないようにする */
+                    max-height: 2000px; 
                   }
-                  /* カスタムフォントサイズ */
                   .text-xxs {
                     font-size: 0.65rem;
                   }
                   .text-xxxs {
-                    font-size: 0.5rem; /* 8px */
-                    line-height: 1; /* 行の高さを詰める */
+                    font-size: 0.5rem; 
+                    line-height: 1; 
                   }
                 `}
               </style>
 
-              {/* イントロアニメーションのオーバーレイ */}
               {showIntro && (
                 <IntroAnimation onAnimationComplete={handleIntroComplete} />
               )}
 
-              {/* メインコンテンツコンテナ (イントロアニメーション後に表示) */}
               <div
-                className="transition-opacity duration-1000"
+                ref={threeJsContainerRef}
+                className="fixed inset-0 z-0 opacity-100"
+                style={{ pointerEvents: 'none' }}
+              ></div>
+
+              <div
+                ref={scrollRef}
+                className="relative z-10 w-full h-screen overflow-y-auto scroll-smooth"
                 style={{ opacity: mainContentOpacity }}
               >
-                {/* Three.js背景レイヤー (最も奥) */}
-                {/* 背景のパーティクルアニメーションを制御するThree.jsのコンテナです。 */}
-                {/* この部分は通常、ユーザーが直接編集するコンテンツを含みません。 */}
-                <div
-                  ref={threeJsContainerRef}
-                  className="fixed inset-0 z-0 opacity-100"
-                  style={{ pointerEvents: 'none' }}
-                ></div>
-
-                {/* メインスクロール可能コンテンツコンテナ */}
-                <div
-                  ref={scrollRef}
-                  className="relative z-10 w-full h-screen overflow-y-auto scroll-smooth"
-                >
-                  {/* ヘッダー/ナビゲーション */}
-                  <header className="fixed top-0 left-0 w-full bg-[#1A1A1A] bg-opacity-80 backdrop-blur-sm z-50 py-1 sm:py-2 shadow-lg"> {/* メニューバーの縦幅を狭く */}
-                    <div className="container mx-auto flex justify-between items-center px-4"> {/* ヘッダーコンテンツのラッパー */}
-                      {/* サイトタイトル/ロゴ */}
-                      <div className="flex items-center text-2xl text-[#E0E0E0] mr-auto"> {/* mr-autoを追加して右寄せを防ぐ */}
-                        {/* メニューバーアイコン (SVGロゴ) */}
+                  <header className="fixed top-0 left-0 w-full bg-[#1A1A1A] bg-opacity-80 backdrop-blur-sm z-50 py-1 sm:py-2 shadow-lg"> 
+                    <div className="container mx-auto flex justify-between items-center px-4"> 
+                      <div className="flex items-center text-2xl text-[#E0E0E0] mr-auto"> 
                         <svg
                           className={`w-6 h-6 mr-2 text-white ${isIconRotating ? 'icon-subtle-rotation' : ''}`}
-                          viewBox="0 0 141.67 244" // logo_w 2.txtから提供されたviewBox
+                          viewBox="0 0 141.67 244" 
                           fill="currentColor"
                           xmlns="http://www.w3.org/2000/svg"
                         >
-                          {/* SVG Pathデータ (logo_w 2.txtから) */}
                           <polygon points="20.95 102.74 98.05 79.02 48.45 145.34 108.83 128.62 15.56 244 54.38 161.51 8.55 189.01 20.95 102.74"/>
                           <polygon points="0 17.05 16.29 8.71 40.15 84.85 0 17.05"/>
                           <polygon points="53.41 82.96 64.83 0 84.15 3.03 53.41 82.96"/>
                           <polygon points="70.64 81.05 126.9 8.71 141.67 22.73 70.64 81.05"/>
                         </svg>
-                        <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="whitespace-nowrap" style={{ letterSpacing: '0.05em' }}>{t('siteTitle')}</a> {/* whitespace-nowrapを追加 */}
+                        <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="whitespace-nowrap" style={{ letterSpacing: '0.05em' }}>{t('siteTitle')}</a> 
                       </div>
-                      {/* モバイルメニューボタンとデスクトップナビゲーション */}
-                      <div className="flex items-center md:hidden"> {/* モバイル専用コントロール */}
+                      <div className="flex items-center md:hidden"> 
                         <a
                           href="https://www.instagram.com/shingo_viva/"
                           target="_blank"
@@ -809,11 +786,11 @@
                         </a>
                         <button
                           onClick={toggleLanguage}
-                          className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 flex flex-col items-center justify-center pt-0" // pt-4をpt-0に修正
+                          className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 flex flex-col items-center justify-center pt-2" 
                           aria-label={language === 'ja' ? '言語を英語に切り替える' : 'Switch language to Japanese'}
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                          <span className="text-xxxs font-semibold whitespace-nowrap text-[#A0A0A0]">JP / EN</span> {/* whitespace-nowrapを追加 */}
+                          <span className="text-xxxs font-semibold whitespace-nowrap text-[#A0A0A0]">JP / EN</span> 
                         </button>
                         <button
                           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -826,7 +803,6 @@
                           )}
                         </button>
                       </div>
-                      {/* 通常のナビゲーション (デスクトップ) */}
                       <nav className="hidden md:flex space-x-6 text-lg items-center">
                         <ul className="flex space-x-6 items-center">
                           <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('about')}</a></li>
@@ -835,7 +811,7 @@
                           <li><a href="#process" onClick={(e) => { e.preventDefault(); scrollToSection('process'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('process')}</a></li>
                           <li><a href="#faq" onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('faq')}</a></li>
                           <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('contact')}</a></li>
-                          <li> {/* Instagramリンク */}
+                          <li> 
                             <a
                               href="https://www.instagram.com/shingo_viva/"
                               target="_blank"
@@ -846,20 +822,19 @@
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
                             </a>
                           </li>
-                          <li> {/* 言語切り替えアイコンを右端に配置 */}
+                          <li> 
                             <button
                               onClick={toggleLanguage}
-                              className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 flex flex-col items-center justify-center pt-0 ml-[-2]" // pt-4をpt-0に修正
+                              className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 flex flex-col items-center justify-center pt-2 ml-[-2]" 
                               aria-label={language === 'ja' ? '言語を英語に切り替える' : 'Switch language to Japanese'}
                             >
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
-                              <span className="text-xxxs font-semibold whitespace-nowrap mt-0.5 text-[#A0A0A0]">JP / EN</span> {/* whitespace-nowrapを追加 */}
+                              <span className="text-xxxs font-semibold whitespace-nowrap mt-0.5 text-[#A0A0A0]">JP / EN</span> 
                             </button>
                           </li>
                         </ul>
                       </nav>
-                    </div> {/* ヘッダーコンテンツのラッパー終了 */}
-                    {/* モバイルプルダウンメニュー */}
+                    </div> 
                     <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'} bg-[#1A1A1A] bg-opacity-90 py-4 transition-all duration-300 ease-in-out`}>
                       <ul className="flex flex-col items-center space-y-4 text-lg">
                         <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="block py-2 px-4 hover:bg-[#262626] w-full text-center text-[#C0C0C0]">About</a></li>
@@ -872,51 +847,46 @@
                     </div>
                   </header>
 
-                  {/* ヒーローセクション - サイトのファーストビュー */}
                   <section
                     id="home"
-                    className="relative h-screen flex items-center justify-center text-center px-4 py-32 sm:py-40 md:py-56 overflow-hidden" // 縦方向の間隔を広く
+                    className="relative h-screen flex items-center justify-center text-center px-4 py-32 sm:py-40 md:py-56 overflow-hidden" 
                   >
-                    {/* 現在表示されている画像 (フェードアウトする可能性あり) */}
                     <img
-                      key={`hero-image-${currentHeroImageIndex}-current`} // より堅牢なユニークキーを生成
+                      key={`hero-image-${currentHeroImageIndex}-current`} 
                       src={heroImages[currentHeroImageIndex]}
                       alt={`ヒーロー背景画像 ${currentHeroImageIndex + 1}`}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-10 scale-[0.95] sm:scale-100 ${ // スマホで少し縮小
-                        isFadingIn ? 'opacity-0' : 'opacity-100' // isFadingInがtrueならフェードアウト
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-10 scale-[0.95] sm:scale-100 ${ 
+                        isFadingIn ? 'opacity-0' : 'opacity-100' 
                       }`}
                       onError={(e) => {
                         console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
-                        e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; // 1x1 透明ピクセル
+                        e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
                       }}
                     />
-                    {/* 次に表示される画像 (フェードインする) */}
-                    {heroImages.length > 1 && ( // 画像が複数枚ある場合のみ次画像をレンダリング
-                      <img
-                        key={`hero-image-${nextHeroImageIndex}-next`} // より堅牢なユニークキーを生成
-                        src={heroImages[nextHeroImageIndex]}
-                        alt={`ヒーロー背景画像 ${nextHeroImageIndex + 1}`}
-                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-20 scale-[0.95] sm:scale-100 ${ // スマホで少し縮小
-                          isFadingIn ? 'opacity-100' : 'opacity-0' // isFadingInがtrueならフェードイン
-                        }`}
-                        onError={(e) => {
-                          console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
-                          e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; // 1x1 透明ピクセル
-                        }}
-                      />
+                    {heroImages.length > 1 && ( 
+                      <> 
+                        <img
+                          key={`hero-image-${nextHeroImageIndex}-next`} 
+                          src={heroImages[nextHeroImageIndex]}
+                          alt={`ヒーロー背景画像 ${nextHeroImageIndex + 1}`}
+                          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-20 scale-[0.95] sm:scale-100 ${ 
+                            isFadingIn ? 'opacity-100' : 'opacity-0' 
+                          }`}
+                          onError={(e) => {
+                            console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
+                            e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
+                          }}
+                        />
+                      </>
                     )}
 
-                    {/* 画像上のオーバーレイとテキスト */}
-                    <div className="relative z-30 bg-[#1A1A1A] bg-opacity-50 p-6 sm:p-10 shadow-2xl border border-[#333333] mx-4 sm:mx-auto"> {/* 背景色とボーダーをモノトーンに */}
-                      {/* メインキャッチコピー */}
+                    <div className="relative z-30 bg-[#1A1A1A] bg-opacity-50 p-6 sm:p-10 shadow-2xl border border-[#333333] mx-4 sm:mx-auto"> 
                       <h1 className="text-3xl sm:text-5xl md:text-7xl text-[#E0E0E0] mb-3 sm:mb-4 leading-tight">
                         {t('heroHeading')}
                       </h1>
-                      {/* サブキャッチコピー */}
                       <p className="text-base sm:text-xl md:text-2xl text-[#A0A0A0] mb-6 sm:mb-8 hero-subheading-spaced">
                         {t('heroSubheading')}
                       </p>
-                      {/* ポートフォリオへのボタン */}
                       <a
                         href="#portfolio"
                         onClick={(e) => { e.preventDefault(); scrollToSection('portfolio'); }}
@@ -928,16 +898,13 @@
                     </div>
                   </section>
 
-                  {/* ポートフォリオセクション - 作品集 */}
                   <section
                     id="portfolio"
-                    className="relative min-h-screen px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" // 縦方向の間隔を広く, 背景透明度を調整
+                    className="relative min-h-screen px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" 
                     style={{ transform: getParallaxTransform(200) }}
                   >
                     <div className="container mx-auto py-8 sm:py-16">
-                      {/* セクションタイトル */}
                       <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12 text-center">{t('portfolio')}</h2>
-                      {/* ポートフォリオのアコーディオン表示 */}
                       {portfolioUnits.map((unit, unitIndex) => (
                         <div key={unitIndex} className="mb-8 last:mb-0">
                           <button
@@ -975,25 +942,21 @@
                     </div>
                   </section>
 
-                  {/* 自己紹介セクション */}
                   <section
                     id="about"
-                    className="relative min-h-screen flex items-center justify-center px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" // 縦方向の間隔を広く, 背景透明度を調整
+                    className="relative min-h-screen flex items-center justify-center px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" 
                     style={{ transform: getParallaxTransform(100) }}
                   >
                     <div className="container mx-auto text-center py-8 sm:py-16">
-                      {/* セクションタイトル */}
                       <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-6 sm:mb-8">About</h2>
                       <div className="flex flex-col md:flex-row items-center gap-6 sm:gap-8">
                         <div className="md:w-1/3">
-                          {/* プロフィール写真 */}
                           <img
-                            src="https://github.com/shingoviva/photo/blob/main/image/prof.jpg?raw=true" // プロフィール写真のURLを更新
+                            src="https://github.com/shingoviva/photo/blob/main/image/prof.jpg?raw=true" 
                             alt="Photographer Profile Photo"
                             className="w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 object-cover mx-auto shadow-xl border-4 border-[#4D4D4D] rounded-full"
                           />
                         </div>
-                        {/* 自己紹介文 */}
                         <div className="md:w-2/3 text-sm sm:text-base text-[#A0A0A0] text-left px-4 sm:px-0">
                           <p className="mb-3 sm:mb-4">
                             {t('aboutMeIntro')}
@@ -1009,21 +972,17 @@
                     </div>
                   </section>
 
-                  {/* 撮影の流れセクション */}
                   <section
                     id="process"
-                    className="relative min-h-screen flex items-center justify-center px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" // 縦方向の間隔を広く, 背景透明度を調整
+                    className="relative min-h-screen flex items-center justify-center px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" 
                     style={{ transform: getParallaxTransform(250) }}
                   >
                     <div className="container mx-auto text-center py-8 sm:py-16">
-                      {/* セクションタイトル */}
                       <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12">{t('process')}</h2>
-                      {/* 導入文 */}
                       <p className="text-base sm:text-lg text-[#A0A0A0] mb-8 sm:mb-12">
                         {t('processIntro')}
                       </p>
                       <div className="flex flex-col md:flex-row justify-center items-start gap-8">
-                        {/* 各ステップ */}
                         <div className="flex flex-col items-center text-center md:w-1/4">
                           <div className="bg-[#4D4D4D] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl">1</div>
                           <h3 className="text-xl text-[#E0E0E0] mb-2">{t('processStep1Title')}</h3>
@@ -1048,73 +1007,33 @@
                     </div>
                   </section>
 
-                  {/* お客様の声セクション */}
-                  {/* <section
-                    id="testimonials"
-                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-5xl shadow-2xl border border-[#333333]"
-                    style={{ transform: getParallaxTransform(300) }}
-                  >
-                    <div className="container mx-auto text-center py-8 sm:py-16">
-                      <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12">{t('testimonials')}</h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
-                          <p className="italic text-[#A0A0A0] mb-4">
-                            {t('testimonial1')}
-                          </p>
-                          <p className="text-[#E0E0E0]">{t('testimonial1Author')}</p>
-                        </div>
-                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
-                          <p className="italic text-[#A0A0A0] mb-4">
-                            {t('testimonial2')}
-                          </p>
-                          <p className="text-[#E0E0E0]">{t('testimonial2Author')}</p>
-                        </div>
-                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
-                          <p className="italic text-[#A0A0A0] mb-4">
-                            {t('testimonial3')}
-                          </p>
-                          <p className="text-[#E0E0E0]">{t('testimonial3Author')}</p>
-                        </div>
-                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
-                          <p className="italic text-[#A0A0A0] mb-4">
-                            {t('testimonial4')}
-                          </p>
-                          <p className="text-[#E0E0E0]">{t('testimonial4Author')}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </section> */}
-
-                  {/* よくある質問セクション */}
                   <section
                     id="faq"
-                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-4xl shadow-2xl border border-[#333333]" // 背景色とボーダーをモノトーンに
+                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-4xl shadow-2xl border border-[#333333]" 
                     style={{ transform: getParallaxTransform(350) }}
                   >
                     <div className="container mx-auto text-center py-8 sm:py-16">
-                      {/* セクションタイトル */}
                       <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12">{t('faq')}</h2>
                       <div className="space-y-6 text-left">
-                        {/* 各質問と回答 */}
-                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> 
                           <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ1')}</h3>
                           <p className="text-[#A0A0A0] text-sm sm:text-base">
                             {t('faqA1')}
                           </p>
                         </div>
-                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> 
                           <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ2')}</h3>
                           <p className="text-[#A0A0A0] text-sm sm:text-base">
                             {t('faqA2')}
                           </p>
                         </div>
-                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> 
                           <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ3')}</h3>
                           <p className="text-[#A0A0A0] text-sm sm:text-base">
                             {t('faqA3')}
                           </p>
                         </div>
-                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> 
                           <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ4')}</h3>
                           <p className="text-[#A0A0A0] text-sm sm:text-base">
                             {t('faqA4')}
@@ -1124,20 +1043,16 @@
                     </div>
                   </section>
 
-                  {/* お問い合わせセクション */}
                   <section
                     id="contact"
-                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-4xl shadow-2xl border border-[#333333]" // 背景色とボーダーをモノトーンに
+                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-4xl shadow-2xl border border-[#333333]" 
                     style={{ transform: getParallaxTransform(400) }}
                   >
                     <div className="container mx-auto text-center py-8 sm:py-16">
-                      {/* セクションタイトル */}
                       <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-6 sm:mb-8">{t('contact')}</h2>
-                      {/* 導入文 */}
                       <p className="text-base sm:text-lg text-[#A0A0A0] mb-6 sm:mb-8">
                         {t('contactIntro')}
                       </p>
-                      {/* お問い合わせフォーム */}
                       <form className="max-w-lg mx-auto space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
                         <div>
                           <label htmlFor="name" className="block text-[#808080] text-left mb-1 sm:mb-2 text-sm sm:text-base">{t('yourName')}</label>
@@ -1145,7 +1060,7 @@
                             type="text"
                             id="name"
                             name="name"
-                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" // 背景色、ボーダー、テキスト色、フォーカスリングをモノトーンに
+                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" 
                             style={{ borderRadius: 0 }}
                             placeholder={t('yourName')}
                             required
@@ -1157,7 +1072,7 @@
                             type="email"
                             id="email"
                             name="email"
-                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" // 背景色、ボーダー、テキスト色、フォーカスリングをモノトーンに
+                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" 
                             style={{ borderRadius: 0 }}
                             placeholder={t('emailAddress')}
                             required
@@ -1169,7 +1084,7 @@
                             id="message"
                             name="message"
                             rows="4"
-                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" // 背景色、ボーダー、テキスト色、フォーカスリングをモノトーンに
+                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" 
                             style={{ borderRadius: 0 }}
                             placeholder={t('message')}
                             required
@@ -1177,7 +1092,7 @@
                         </div>
                         <button
                           type="submit"
-                          className="w-full bg-[#4D4D4D] hover:bg-[#666666] text-white py-2 sm:py-3 shadow-lg transition duration-300 transform hover:scale-105 text-base sm:text-lg" // ボタン色をモノトーンに
+                          className="w-full bg-[#4D4D4D] hover:bg-[#666666] text-white py-2 sm:py-3 shadow-lg transition duration-300 transform hover:scale-105 text-base sm:text-lg" 
                           style={{ borderRadius: 0 }}
                           disabled={formStatus === 'sending'}
                         >
@@ -1190,38 +1105,33 @@
                           <p className="text-red-500 mt-2">メッセージの送信中にエラーが発生しました。後でもう一度お試しください。</p>
                         )}
                       </form>
-                      <p className="text-base sm:text-lg text-[#A0A0A0] mt-4"> {/* メールアドレスのサイズを大きく */}
+                      <p className="text-base sm:text-lg text-[#A0A0A0] mt-4"> 
                         <a href="mailto:shingo_viva@me.com" className="hover:text-[#C0C0C0] transition duration-300">shingo_viva@me.com</a>
                       </p>
                     </div>
                   </section>
 
-                  {/* Footer - フッターセクションです */}
-                  <footer className="relative z-20 bg-[#1A1A1A] bg-opacity-80 backdrop-blur-sm p-6 sm:p-8 text-center text-[#808080] mt-8 sm:mt-16 text-xs sm:text-sm"> {/* 背景色を最も暗いグレーに */}
-                    {/* 著作権表示 - ここを編集して著作権情報を変更できます */}
+                  <footer className="relative z-20 bg-[#1A1A1A] bg-opacity-80 backdrop-blur-sm p-6 sm:p-8 text-center text-[#808080] mt-8 sm:mt-16 text-xs sm:text-sm"> 
                     <p>{t('copyright')}</p>
-                    {/* Instagramリンク - hrefのURLと表示テキストを編集できます */}
                     <div className="mt-4">
-                      <a href="https://www.instagram.com/shingo_viva/" target="_blank" rel="noopener noreferrer" className="text-[#808080] hover:text-[#C0C0C0] transition duration-300 inline-flex items-center space-x-2"> {/* ホバー色をモノトーンに */}
+                      <a href="https://www.instagram.com/shingo_viva/" target="_blank" rel="noopener noreferrer" className="text-[#808080] hover:text-[#C0C0C0] transition duration-300 inline-flex items-center space-x-2"> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
                         <span>{t('instagram')}</span>
                       </a>
                     </div>
                   </footer>
                 </div>
-              </div>
-
-              {/* Image Popup Modal - ポートフォリオ画像クリック時に表示されるポップアップです */}
+              
               {selectedImage && (
                 <div
-                  className="fixed inset-0 bg-[#1A1A1A] bg-opacity-90 z-[101] flex items-center justify-center p-4 cursor-pointer" // 背景色をモノトーンに
+                  className="fixed inset-0 bg-[#1A1A1A] bg-opacity-90 z-[101] flex items-center justify-center p-4 cursor-pointer" 
                   onClick={closeImagePopup}
                 >
                   <img
                     src={selectedImage}
                     alt="Selected Portfolio Image"
                     className="max-w-full max-h-full object-contain"
-                    onClick={(e) => e.stopPropagation()} // 画像クリックで閉じないようにする
+                    onClick={(e) => e.stopPropagation()} 
                   />
                 </div>
               )}
