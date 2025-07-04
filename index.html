@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shingo Viva Okamoto | 東京のファッション・ポートレート・広告撮影フォトグラファー</title>
+    <meta name="description" content="東京・川崎を拠点に活動するフォトグラファーShingo Viva Okamoto。ファッションデザイナー出身の独自の視点と高度なライティング・レタッチ技術で、広告レベルのファッション、ポートレート、企業広告撮影を提供。迅速な納品と親密なフォトワークが強みです。">
+    <meta name="keywords" content="ファッション撮影, ポートレート撮影, 広告撮影, 東京, Tokyo, 神奈川, Kanagawa, 川崎, Kawasaki, ファッションフォトグラファー, Fashion photographer, Portrait photography, Advertising photography, Shingo Viva Okamoto, ライティング, レタッチ, スピーディー, キャスティング, 個人, 中小企業, ファッション業界, アイドル業界, ギャル業界">
+    <meta property="og:title" content="Shingo Viva Okamoto | 東京のファッション・ポートレート・広告撮影フォトグラファー">
+    <meta property="og:description" content="東京・川崎を拠点に活動するフォトグラファーShingo Viva Okamoto。ファッションデザイナー出身の独自の視点と高度なライティング・レタッチ技術で、広告レベルのファッション、ポートレート、企業広告撮影を提供。迅速な納品と親密なフォトワークが強みです。">
+    <meta property="og:image" content="https://placehold.co/1200x630/212121/E0E0E0?text=Shingo+Viva+Okamoto+OGP">
+    <meta property="og:url" content="https://shingoviva.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Open Sans をインポート -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <!-- React and ReactDOM CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel Standalone for JSX compilation in browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Three.js CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // React, ReactDOM, Three.jsはCDN経由でグローバルに利用可能です。
+        // Lucide Reactのアイコンは、ビルドプロセスがない場合、ブラウザで直接動作しない可能性があります。
+        // そのため、ここではLucide Reactのコンポーネントを直接使用せず、対応するSVGパスを埋め込んでいます。
+
+        // 多言語対応のためのテキストデータ
+        const translations = {
+          ja: {
+            siteTitle: "Shingo Viva",
+            heroHeading: "VISIONS CAPTURED. STORIES TOLD.",
+            heroSubheading: "Shingo Viva: Where Art Meets Precision in Every Frame.",
+            viewMyWork: "Explore My Work",
+            home: "Home",
+            about: "About",
+            services: "Services",
+            portfolio: "Portfolio",
+            process: "Process",
+            faq: "FAQ",
+            contact: "Contact",
+            aboutMeTitle: "About Shingo Viva Okamoto",
+            aboutMeIntro: "Shingo Viva Okamotoです。ファッションデザイナーとしての経験と独自のライティング技術で、光と影が織りなす瞬間を捉えます。被写体の魅力を最大限に引き出し、感情豊かな作品を創り出します。",
+            aboutMePara2: "私の作品は、皆様の心に響く表現を追求。ポートフォリオでその一部を公開しています。",
+            aboutMePara3: "約10年のキャリア。ファッションデザイナーとしての経験を活かした撮影は、服の魅力を知り尽くしたカメラマンとして高い評価を得ています。色彩感覚も私の強み。国内外のクライアントとの実績も豊富です。",
+            servicesTitle: "Services",
+            servicesIntro: "ファッションブランドのカタログ、コレクション、モデルポートレート、企業広告が主な撮影分野。イベント撮影も対応可能です。",
+            serviceWeddingTitle: "ウェディング",
+            serviceWeddingDesc: "お二人の特別な日を、感動的で美しい写真で永遠に。自然な表情と瞬間を丁寧に捉えます。",
+            serviceFamilyTitle: "ファミリーポートレート",
+            serviceFamilyDesc: "ご家族の温かい絆と成長を、自然体で魅力的に記録。ロケーション撮影も可能です。",
+            serviceCommercialTitle: "商業・広告",
+            serviceCommercialDesc: "ファッション、モデル、企業広告など幅広い商業撮影に対応。独自のライティングと高度なレタッチで、高品質な写真を提供します。",
+            serviceEventTitle: "イベント",
+            serviceEventDesc: "イベントの活気と雰囲気を捉え、記憶に残る写真をお届けします。",
+            portfolioTitle: "Portfolio",
+            processTitle: "Process",
+            processIntro: "ご依頼から納品までの流れ。",
+            processStep1Title: "お問い合わせ",
+            processStep1Desc: "フォーム、メール（shingo_viva@me.com）、またはInstagram DM（@shingo_viva）よりご連絡ください。",
+            processStep2Title: "打ち合わせ・計画",
+            processStep2Desc: "メールで撮影イメージ、ご希望を伺い、お見積もりとプランをご提案。レタッチや修正レベルも確認します。専門知識がないお客様もご安心ください。",
+            processStep3Title: "撮影・編集",
+            processStep3Desc: "都内スタジオを中心に、屋外・出張撮影も可能。モデルキャスティングやロケーション提案もスムーズです。ファッションデザイナーの経験とライティング技術で、心を込めて撮影し、高度なレタッチで仕上げます。",
+            processStep4Title: "納品",
+            processStep4Desc: "写真データは所定のフォーマットで納品。最短翌日納品も可能ですが、品質維持のため余裕を持ったご依頼を推奨します。",
+            faqTitle: "FAQ",
+            faqQ1: "Q: 撮影予約はいつまでに？",
+            faqA1: "A: 内容によりますが、人気シーズンは数ヶ月前のご予約を推奨。まずはお問い合わせください。",
+            faqQ2: "Q: 撮影場所は？",
+            faqA2: "A: 事前打ち合わせでご希望を伺い、最適な場所を提案。ご自宅や思い出の場所も可能です。",
+            faqQ3: "Q: 納品期間は？",
+            faqA3: "A: 通常2週間〜1ヶ月。お急ぎの場合はご相談ください。",
+            faqQ4: "Q: 料金は？",
+            faqA4: "A: 内容、時間、枚数で変動。お問い合わせ後、個別にお見積もり。銀行振込、PayPal対応。",
+            contactTitle: "Contact",
+            contactIntro: "ご質問、ご依頼はお気軽にどうぞ。",
+            yourName: "お名前",
+            emailAddress: "メールアドレス",
+            message: "メッセージ",
+            sendMessage: "メッセージを送る",
+            copyright: "© 2025 Shingo Viva Okamoto. All Rights Reserved.",
+            instagram: "Instagram",
+          },
+          en: {
+            siteTitle: "Shingo Viva",
+            heroHeading: "VISIONS CAPTURED. STORIES TOLD.",
+            heroSubheading: "Shingo Viva: Where Art Meets Precision in Every Frame.",
+            viewMyWork: "Explore My Work",
+            home: "Home",
+            about: "About",
+            services: "Services",
+            portfolio: "Portfolio",
+            process: "Process",
+            faq: "FAQ",
+            contact: "Contact",
+            aboutMeIntro: "Operating under the artist name 'Shingo Viva Okamoto', I specialize in capturing moments where light and shadow tell a story. Leveraging my background as a fashion designer and unique lighting techniques, I aim to bring out the essence of each subject, valuing emotion and atmosphere in every shot.",
+            aboutMePara2: "My work constantly seeks expressions that resonate deeply with viewers. A selection of my past projects is available in my portfolio; please feel free to browse.",
+            aboutMePara3: "With approximately 10 years of photography experience (starting around 2015), my previous career as a fashion designer has earned me a reputation among fashion brand directors who appreciate my deep understanding of clothing. My refined sense of color, cultivated through design work, also enhances my photography. I have a proven track record working with international clients and foreign-affiliated companies.",
+            servicesTitle: "Services",
+            servicesIntro: "I primarily focus on photography for fashion brand catalogs and collections, model portraits, and corporate advertising. Event photography is also available upon request.",
+            serviceWeddingTitle: "Wedding Photography",
+            serviceWeddingDesc: "Capturing your special day with emotional photographs that will last a lifetime, focusing on natural expressions and beautiful moments.",
+            serviceFamilyTitle: "Family Portraits",
+            serviceFamilyDesc: "Creating natural and captivating portraits that document your family's warm bonds and growth. On-location shoots are available.",
+            serviceCommercialTitle: "Commercial & Advertising Photography",
+            serviceCommercialDesc: "Specializing in fashion brand catalogs, collections, model portraits, and corporate advertising. I provide high-quality images tailored to your needs, utilizing unique lighting techniques and advanced retouching capabilities combining Photoshop with specialized software.",
+            serviceEventTitle: "Event Photography",
+            serviceEventDesc: "Capturing the atmosphere and vibrancy of your events, delivering memorable photographs.",
+            portfolioTitle: "Portfolio",
+            processTitle: "Process",
+            processIntro: "Here's a simple overview of the process from inquiry to photo delivery.",
+            processStep1Title: "Inquiry",
+            processStep1Desc: "Feel free to contact me via the website form, email (shingo_viva@me.com), or Instagram DM (@shingo_viva).",
+            processStep2Title: "Consultation & Planning",
+            processStep2Desc: "Via email, I'll discuss your specific photography ideas and preferences in detail, then provide a quote and a concrete shooting plan. For retouching, the number and level of revisions will be confirmed beforehand. Even if clients lack photography knowledge, I guide them clearly and smoothly to ensure a satisfying shoot.",
+            processStep3Title: "Shoot & Editing",
+            processStep3Desc: "While primarily operating from various studios in Tokyo, I also offer on-location shoots with a full set of lighting equipment. My extensive network of professional models allows for smooth model casting and location suggestions. My fashion photography, informed by my background as a fashion designer, is highly regarded. I meticulously capture and expertly retouch photos with advanced techniques.",
+            processStep4Title: "Delivery",
+            processStep4Desc: "Photo data will be delivered in the specified format. While next-day delivery is possible for urgent requests, I generally recommend allowing ample time for scheduling.",
+            faqTitle: "FAQ",
+            faqQ1: "Q: How far in advance should I book a session?",
+            faqA1: "A: While it depends on the type of shoot, I recommend booking several months in advance, especially during popular seasons. Please feel free to inquire.",
+            faqQ2: "Q: How do we decide on the shooting location?",
+            faqA2: "A: During our initial consultation, I'll discuss your preferences and ideas to suggest the optimal location. Shoots at your home or special places are also possible.",
+            faqQ3: "Q: How long does it take to receive the photos?",
+            faqA3: "A: Typically, data delivery takes about 2 weeks to 1 month after the shoot. Please consult me if you need urgent delivery.",
+            faqQ4: "Q: How are the fees determined?",
+            faqA4: "A: Fees vary depending on the shoot content, duration, and number of delivered photos. After your inquiry, I will provide a personalized quote. Payment can be made via bank transfer or PayPal.",
+            contactTitle: "Contact",
+            contactIntro: "Please feel free to contact me with any questions or inquiries.",
+            yourName: "Your Name",
+            emailAddress: "Email Address",
+            message: "Message",
+            sendMessage: "Send Message",
+            copyright: "© 2025 Shingo Viva Okamoto. All Rights Reserved.",
+            instagram: "Instagram",
+          },
+        };
+
+        // Language Context
+        const LanguageContext = React.createContext();
+
+        // Language Provider Component
+        const LanguageProvider = ({ children }) => {
+          const [language, setLanguage] = React.useState('en'); // デフォルトを英語に設定
+
+          const toggleLanguage = () => {
+            setLanguage((prevLang) => (prevLang === 'ja' ? 'en' : 'ja'));
+          };
+
+          const t = React.useCallback((key) => {
+            return translations[language][key] || key;
+          }, [language]);
+
+          return (
+            <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
+              {children}
+            </LanguageContext.Provider>
+          );
+        };
+
+        // Custom Hook for Translation
+        const useTranslation = () => {
+          return React.useContext(LanguageContext);
+        };
+
+
+        // Intro Animation Component
+        const IntroAnimation = ({ onAnimationComplete }) => {
+          const [logoOpacity, setLogoOpacity] = React.useState(0);
+          const [overlayOpacity, setOverlayOpacity] = React.useState(1);
+          const [isRotating, setIsRotating] = React.useState(false); // 回転アニメーション用の新しいステート
+
+          React.useEffect(() => {
+            // ロゴのフェードイン開始
+            const fadeInTimeout = setTimeout(() => {
+              setLogoOpacity(1);
+            }, 500); // 0.5秒後にロゴのフェードインを開始
+
+            // 回転アニメーションの開始
+            const startRotationTimeout = setTimeout(() => {
+              setIsRotating(true); // ロゴのフェードイン完了後に回転を開始
+            }, 1500); // ロゴが完全に表示される1.5秒後から開始
+
+            // 回転アニメーションの終了
+            const stopRotationTimeout = setTimeout(() => {
+              setIsRotating(false); // 回転アニメーションを停止
+            }, 1900); // 回転アニメーションが完了するタイミングで停止 (1.5秒 + 0.4秒)
+
+            // オーバーレイ全体のフェードアウト開始
+            const fadeOutTimeout = setTimeout(() => {
+              setOverlayOpacity(0);
+            }, 2500); // 回転アニメーション終了後、またはほぼ同時にフェードアウト開始
+
+            // アニメーション完了のタイミング
+            const animationCompleteTimeout = setTimeout(() => {
+              onAnimationComplete(); // アニメーション完了コールバック
+            }, 3500); // オーバーレイフェードアウト完了後
+
+            // クリーンアップ関数
+            return () => {
+              clearTimeout(fadeInTimeout);
+              clearTimeout(startRotationTimeout);
+              clearTimeout(stopRotationTimeout);
+              clearTimeout(fadeOutTimeout);
+              clearTimeout(animationCompleteTimeout);
+            };
+          }, [onAnimationComplete]);
+
+          return (
+            <div
+              className="fixed inset-0 bg-[#1A1A1A] z-[100] flex items-center justify-center transition-opacity duration-1000 ease-in-out" // 背景色をモノトーンに
+              style={{ opacity: overlayOpacity }}
+            >
+              {/* 回転アニメーションのKeyframesを定義 */}
+              <style>
+                {`
+                  @keyframes comical-rotate {
+                    0% { transform: rotate(0deg); }
+                    25% { transform: rotate(-10deg); } /* 左に少し回転 */
+                    50% { transform: rotate(10deg); }  /* 右に少し回転 */
+                    75% { transform: rotate(-5deg); }  /* 左に少し戻る */
+                    100% { transform: rotate(0deg); }  /* 元に戻る */
+                  }
+                  .comical-rotation {
+                    animation: comical-rotate 0.2s ease-in-out 2; /* 0.2秒で2回繰り返すことで、より速く短いアニメーションに */
+                  }
+                `}
+              </style>
+              {/* ロゴのSVGを直接埋め込みます */}
+              <svg
+                className={`w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 text-white transition-opacity duration-1000 ease-in-out ${isRotating ? 'comical-rotation' : ''}`}
+                style={{ opacity: logoOpacity }}
+                viewBox="0 0 141.67 244"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <polygon points="20.95 102.74 98.05 79.02 48.45 145.34 108.83 128.62 15.56 244 54.38 161.51 8.55 189.01 20.95 102.74"/>
+                <polygon points="0 17.05 16.29 8.71 40.15 84.85 0 17.05"/>
+                <polygon points="53.41 82.96 64.83 0 84.15 3.03 53.41 82.96"/>
+                <polygon points="70.64 81.05 126.9 8.71 141.67 22.73 70.64 81.05"/>
+              </svg>
+            </div>
+          );
+        };
+
+
+        // Main App Component
+        const App = () => {
+          // THREE.jsのコンテナ要素への参照
+          const threeJsContainerRef = React.useRef(null);
+          // スクロール可能なメインコンテンツ要素への参照
+          const scrollRef = React.useRef(null);
+          // 現在のスクロール位置を保持するstate
+          const [scrollPosition, setScrollPosition] = React.useState(0);
+          // イントロアニメーションを表示するかどうかのstate
+          const [showIntro, setShowIntro] = React.useState(true);
+          // メインコンテンツの透明度を制御するstate
+          const [mainContentOpacity, setMainContentOpacity] = React.useState(0);
+          // モバイルメニューが開いているかどうかのstate
+          const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+          // ポップアップ表示する画像のURLを保持するstate
+          const [selectedImage, setSelectedImage] = React.useState(null);
+          // アイコンの回転アニメーションをトリガーするstate
+          const [isIconRotating, setIsIconRotating] = React.useState(false);
+          // フォーム送信の状態を保持するstate (success/error/'' )
+          const [formStatus, setFormStatus] = React.useState('');
+
+          // 言語コンテキストから言語、言語切り替え関数、翻訳関数を取得
+          const { language, toggleLanguage, t } = useTranslation();
+
+          // ヒーローセクションの背景画像リストを更新
+          const heroImages = [
+            "https://github.com/shingoviva/photo/blob/main/image/top1.jpg?raw=true",
+            "https://github.com/shingoviva/photo/blob/main/image/top2.jpg?raw=true",
+            "https://github.com/shingoviva/photo/blob/main/image/top3.jpg?raw=true",
+          ];
+
+          // クロスフェードのための新しい状態管理
+          const [currentHeroImageIndex, setCurrentHeroImageIndex] = React.useState(0); // 現在完全に表示されている画像
+          const [nextHeroImageIndex, setNextHeroImageIndex] = React.useState(1 % heroImages.length); // 次にフェードインする画像
+          const [isFadingIn, setIsFadingIn] = React.useState(false); // フェードインアニメーション中か否か
+
+          const fadeDurationMs = 3000; // フェードの duration (3秒)
+          const displayDurationMs = 2000; // 画像が完全に表示される時間 (2秒)
+          const totalInterval = fadeDurationMs + displayDurationMs; // 全体のインターバル (5秒)
+
+          // ヒーロー画像の自動スライドショーを制御するuseEffect
+          React.useEffect(() => {
+            if (heroImages.length <= 1) return; // 画像が1枚以下ならスライドショーは不要
+
+            const intervalId = setInterval(() => {
+              setIsFadingIn(true); // 次の画像がフェードインを開始
+
+              const fadeTimeoutId = setTimeout(() => {
+                // フェードインが完了したら、現在の画像を更新し、次の画像を計算
+                setCurrentHeroImageIndex(nextHeroImageIndex);
+                setNextHeroImageIndex((prevNextIndex) => (prevNextIndex + 1) % heroImages.length);
+                setIsFadingIn(false); // フェード状態をリセットし、新しい画像を表示
+              }, fadeDurationMs);
+
+              return () => clearTimeout(fadeTimeoutId); // フェードタイムアウトのクリーンアップ
+            }, totalInterval);
+
+            return () => clearInterval(intervalId);
+          }, [nextHeroImageIndex, heroImages.length, fadeDurationMs, totalInterval]);
+
+
+          // SEOメタタグとJSON-LDを動的に設定するuseEffect
+          React.useEffect(() => {
+            // サイトのURL (実際のデプロイURLに置き換えてください)
+            const siteUrl = "https://shingoviva.com"; // 独自ドメインに更新
+            // サイトの代表的な画像URL (OGPやJSON-LD用)
+            const representativeImageUrl = "https://placehold.co/1200x630/212121/E0E0E0?text=Shingo+Viva+Okamoto+OGP"; // TODO: 実際の代表画像URLに置き換えてください
+
+            // JSON-LD (構造化データ) の設定
+            let jsonLdScript = document.querySelector('script[type="application/ld+json"]');
+            if (!jsonLdScript) {
+              jsonLdScript = document.createElement('script');
+              jsonLdScript.type = "application/ld+json";
+              document.head.appendChild(jsonLdScript);
+            }
+
+            const jsonLdData = {
+              "@context": "http://schema.org",
+              "@type": "ProfessionalService",
+              "name": "Shingo Viva Okamoto",
+              "image": representativeImageUrl, // OGP画像と同じURLを使用
+              "url": siteUrl,
+              "telephone": "", // 電話番号が提供されていないため空
+              "email": "shingo_viva@me.com",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "川崎市",
+                "addressRegion": "神奈川県",
+                "addressCountry": "JP"
+              },
+              "description": "ファッションデザイナー出身のフォトグラファーShingo Viva Okamotoによる、高度なライティングと広告レベルのレタッチを駆使したファッション、ポートレート、企業広告撮影サービス。",
+              "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "写真撮影サービス",
+                "itemListElement": [
+                  {
+                    "@type": "OfferCatalog",
+                    "name": "ファッション撮影",
+                    "itemListElement": [
+                      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "ファッションブランドカタログ撮影"}},
+                      {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "ファッションコレクション撮影"}}
+                    ]
+                  },
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "ポートレート撮影"}},
+                  {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "企業広告撮影"}}
+                ]
+              },
+              "areaServed": [
+                { "@type": "City", "name": "Tokyo" },
+                { "@type": "State", "name": "Kanagawa" },
+                { "@type": "City", "name": "Kawasaki" }
+              ],
+              "sameAs": [
+                "https://www.instagram.com/shingo_viva/"
+              ]
+            };
+            jsonLdScript.textContent = JSON.stringify(jsonLdData, null, 2);
+
+            // クリーンアップ関数（コンポーネントのアンマウント時にメタタグを削除）
+            return () => {
+              if (jsonLdScript) jsonLdScript.remove();
+            };
+          }, []); // 空の依存配列で、コンポーネントのマウント時とアンマウント時にのみ実行
+
+          // スクロールイベントを処理し、パララックス効果を更新するコールバック関数
+          const handleScroll = React.useCallback(() => {
+            if (scrollRef.current) {
+              setScrollPosition(scrollRef.current.scrollTop);
+            }
+          }, []); // 依存配列が空なので、初回レンダリング時のみ作成される
+
+          // 指定されたセクションへスムーズにスクロールするコールバック関数
+          const scrollToSection = React.useCallback((id) => {
+            const section = document.getElementById(id);
+            const header = document.querySelector('header'); // ヘッダー要素を取得
+            if (section && scrollRef.current && header) { // ここを修正: React.useRef.current -> scrollRef.current
+              // ヘッダーの高さを取得
+              const headerHeight = header.offsetHeight;
+              // 追加のオフセット（例: -150px）を設定して、ヘッダーの下にさらにスペースを作る
+              // ユーザーの要望により、通り過ぎるより手前で止まるように負の値を設定
+              const additionalOffset = -150; 
+              // ターゲットセクションのトップ位置からヘッダーの高さと追加オフセットを引く
+              const targetScroll = section.offsetTop - headerHeight - additionalOffset;
+
+              scrollRef.current.scrollTo({
+                top: targetScroll,
+                behavior: 'smooth'
+              });
+              setIsMobileMenuOpen(false); // モバイルメニューが開いている場合は閉じる
+            }
+          }, []); // 依存配列が空なので、初回レンダリング時のみ作成される
+
+          // イントロアニメーション完了時のコールバック関数
+          const handleIntroComplete = React.useCallback(() => {
+            setShowIntro(false); // イントロアニメーションを非表示にする
+            setMainContentOpacity(1); // メインコンテンツをフェードインさせる
+          }, []); // 依存配列が空なので、初回レンダリング時のみ作成される
+
+          // 画像ポップアップを開くコールバック関数
+          const openImagePopup = React.useCallback((imageUrl) => {
+            setSelectedImage(imageUrl);
+          }, []); // 依存配列が空なので、初回レンダリング時のみ作成される
+
+          // 画像ポップアップを閉じるコールバック関数
+          const closeImagePopup = React.useCallback(() => {
+            setSelectedImage(null);
+          }, []);
+
+          // メニューバーアイコンの微回転アニメーションを10秒ごとにトリガーするuseEffect
+          React.useEffect(() => {
+            const rotationInterval = setInterval(() => {
+              setIsIconRotating(true); // 回転アニメーションを開始
+              setTimeout(() => {
+                setIsIconRotating(false); // アニメーション終了後に停止
+              }, 400); // アニメーションの持続時間 (0.4秒)
+            }, 10000); // 10秒ごとにトリガー
+
+            // コンポーネントのアンマウント時にインターバルをクリア
+            return () => clearInterval(rotationInterval);
+          }, []); // 依存配列が空なので、初回レンダリング時のみ作成される
+
+
+          // THREE.jsのセットアップとアニメーションループを管理するuseEffect
+          React.useEffect(() => {
+            const container = threeJsContainerRef.current;
+            if (!container) {
+              console.error("Three.js container ref is null.");
+              return; // コンテナ要素がなければ何もしない
+            }
+
+            // --- THREE.js シーンのセットアップ ---
+            const scene = new THREE.Scene();
+            // カメラの作成 (視野角, アスペクト比, nearクリッピング, farクリッピング)
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1500);
+            // WebGLレンダラーの作成 (アンチエイリアス有効, 透明な背景有効)
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+
+            // レンダラーのサイズを設定し、ピクセル比率をデバイスに合わせる
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            // レンダラーのDOM要素をコンテナに追加
+            container.appendChild(renderer.domElement);
+
+            // カメラの初期位置を設定
+            camera.position.z = 500;
+
+            // パーティクル配列の初期化
+            const particles = [];
+            const numParticles = 150; // パーティクルの数を150に削減
+            // `Three.PlaneGeometry` を `THREE.PlaneGeometry` に修正
+            const particleGeometry = new THREE.PlaneGeometry(1, 1); // 各パーティクルのジオメトリ (シンプルな平面)
+
+            // カメラからの距離に基づく深度範囲
+            const depthRange = 400;
+
+            // 定数定義: パーティクルの動きとフェードアウトの境界
+            const wrapLimit = 1500; // X/Y/Z軸のパーティクルの最大範囲
+            const fadeMargin = 500; // wrapLimitからフェードアウトを開始する距離
+            const fadeStartThreshold = wrapLimit - fadeMargin; // フェードアウト開始しきい値
+
+            // パーティクルの生成
+            for (let i = 0; i < numParticles; i++) {
+                let particleColor = 0xFFFFFF; // デフォルトは白
+                if (Math.random() < 0.1) { // 10%の確率でショッキングピンク
+                    particleColor = 0xFF69B4; // ショッキングピンクの色コード
+                }
+
+                // パーティクルのマテリアル設定
+                // `Three.MeshBasicMaterial` を `THREE.MeshBasicMaterial` に修正
+                const material = new THREE.MeshBasicMaterial({
+                    // `Three.Color` を `THREE.Color` に修正
+                    color: new THREE.Color(particleColor), // 色
+                    transparent: true, // 透明度を有効に
+                    opacity: 0.05 + Math.random() * 0.1, // 初期透明度を0.05 - 0.15の範囲に調整
+                    blending: THREE.AdditiveBlending // 加算ブレンドで光る効果を出す
+                });
+
+                // パーティクルメッシュの作成
+                const particle = new THREE.Mesh(particleGeometry, material);
+
+                // パーティクル固有のデータをuserDataに格納
+                particle.userData = {
+                    speedX: (Math.random() - 0.5) * 0.3, // X軸方向の移動速度を遅く
+                    speedY: (Math.random() - 0.5) * 0.3, // Y軸方向の移動速度を遅く
+                    speedZ: (Math.random() - 0.5) * 0.3, // Z軸方向の移動速度を遅く
+                    rotationSpeedX: (Math.random() - 0.5) * 0.002, // X軸周りの回転速度を遅く
+                    rotationSpeedY: (Math.random() - 0.5) * 0.002, // Y軸周りの回転速度を遅く
+                    rotationSpeedZ: (Math.random() - 0.5) * 0.002, // Z軸周りの回転速度を遅く
+                    oscillationSpeed: Math.random() * 0.02 + 0.005, // オシレーション（揺れ）の速度を調整
+                    oscillationAmplitude: Math.random() * 30 + 20, // オシレーションの振幅
+                    // 揺れの基準となる位置を初期位置として設定
+                    baseX: (Math.random() - 0.5) * 1500, // 初期位置を画面全体に広げる
+                    baseY: (Math.random() - 0.5) * 1500, // 初期位置を画面全体に広げる
+                    baseZ: (Math.random() - 0.5) * 1500, // 初期位置を画面全体に広げる
+                    swirlRadius: Math.random() * 150 + 80, // スワール（渦巻き）の半径
+                    swirlSpeed: Math.random() * 0.05 + 0.02, // スワールの速度を調整
+                    swirlAngleOffset: Math.random() * Math.PI * 2, // スワールの初期角度オフセット
+                    initialOpacity: material.opacity, // 初期透明度を保存
+                };
+
+                // パーティクルの初期位置をランダムに設定
+                particle.position.set(
+                    particle.userData.baseX,
+                    particle.userData.baseY,
+                    particle.userData.baseZ
+                );
+                // パーティクルのスケールを調整
+                particle.scale.setScalar(200 + Math.random() * 300); // 200から500の範囲でスケールを設定
+
+                // シーンにパーティクルを追加
+                scene.add(particle);
+                // パーティクル配列に追加
+                particles.push(particle);
+            }
+
+
+            // アニメーションループ関数
+            const animate = () => {
+                requestAnimationFrame(animate);
+
+                const time = performance.now() * 0.001;
+
+                particles.forEach(p => {
+                    // 基本的な移動
+                    p.position.x += p.userData.speedX;
+                    p.position.y += p.userData.speedY;
+                    p.position.z += p.userData.speedZ;
+
+                    // Z軸方向のカメラからの距離に基づくフェードアウト
+                    const distance = Math.abs(p.position.z - camera.position.z);
+                    const maxDistance = depthRange / 2 + 200; // フェードアウトが完全に終了する距離
+                    const normalizedDistance = Math.min(1, distance / maxDistance); // 0-1に正規化
+                    let depthOpacity = 1 - Math.pow(normalizedDistance, 2); // 距離が離れるほど急激に透明になる
+                    depthOpacity = Math.max(0, depthOpacity); // 0以下にならないようにクランプ
+
+                    // X軸方向の境界に基づくフェードアウト
+                    let fadeX = 1;
+                    if (Math.abs(p.position.x) > fadeStartThreshold) {
+                      fadeX = 1 - (Math.abs(p.position.x) - fadeStartThreshold) / fadeMargin;
+                    }
+                    fadeX = Math.max(0, Math.min(1, fadeX)); // 0-1にクランプ
+
+                    // Y軸方向の境界に基づくフェードアウト
+                    let fadeY = 1;
+                    if (Math.abs(p.position.y) > fadeStartThreshold) {
+                      fadeY = 1 - (Math.abs(p.position.y) - fadeStartThreshold) / fadeMargin;
+                    }
+                    fadeY = Math.max(0, Math.min(1, fadeY)); // 0-1にクランプ
+
+                    // オシレーションとスワールの動きを適用
+                    p.position.x = p.userData.baseX + Math.sin(time * p.userData.swirlSpeed + p.userData.swirlAngleOffset) * p.userData.swirlRadius;
+                    p.position.y = p.userData.baseY + Math.cos(time * p.userData.swirlSpeed + p.userData.swirlAngleOffset) * p.userData.swirlRadius;
+                    p.position.z = p.userData.baseZ + Math.sin(time * p.userData.oscillationSpeed + p.uuid.charCodeAt(0) * 0.1) * p.userData.oscillationAmplitude;
+
+                    // パーティクルの回転
+                    p.rotation.x += p.userData.rotationSpeedX;
+                    p.rotation.y += p.userData.rotationSpeedY;
+                    p.rotation.z += p.userData.rotationSpeedZ;
+
+                    // 全ての透明度要因を結合し、脈動効果を追加
+                    const pulse = (Math.sin(time * 0.1 + p.uuid.charCodeAt(1) * 0.05) * 0.5 + 0.5); // 0.5から1.5の間で脈動
+                    p.material.opacity = p.userData.initialOpacity * depthOpacity * pulse * fadeX * fadeY; // 最終的な透明度
+
+                    // ラッピング処理: 画面外に出たパーティクルを反対側に戻す
+                    if (p.position.x > wrapLimit) p.position.x = -wrapLimit;
+                    if (p.position.x < -wrapLimit) p.position.x = wrapLimit;
+                    if (p.position.y > wrapLimit) p.position.y = -wrapLimit;
+                    if (p.position.y < -wrapLimit) p.position.y = wrapLimit;
+                    if (p.position.z > wrapLimit) p.position.z = -wrapLimit;
+                    if (p.position.z < -wrapLimit) p.position.z = wrapLimit;
+                });
+
+                renderer.render(scene, camera); // シーンをレンダリング
+            };
+
+            animate(); // アニメーションループを開始
+
+            // ウィンドウのリサイズイベントハンドラ
+            const onWindowResize = () => {
+              camera.aspect = window.innerWidth / window.innerHeight; // カメラのアスペクト比を更新
+              camera.updateProjectionMatrix(); // プロジェクション行列を更新
+              renderer.setSize(window.innerWidth, window.innerHeight); // レンダラーのサイズを更新
+            };
+
+            // リサイズイベントリスナーを追加
+            window.addEventListener('resize', onWindowResize);
+
+            // クリーンアップ関数: コンポーネントのアンマウント時に実行される
+            return () => {
+              window.removeEventListener('resize', onWindowResize); // イベントリスナーを削除
+              if (container && renderer.domElement) {
+                container.removeChild(renderer.domElement); // DOM要素を削除
+                renderer.dispose(); // レンダラーのリソースを解放
+                // 各パーティクルのジオメトリとマテリアルを解放
+                particles.forEach(p => {
+                    scene.remove(p);
+                    p.geometry.dispose();
+                    p.material.dispose();
+                });
+              }
+            };
+          }, []); // 依存配列が空なので、初回レンダリング時のみ実行される
+
+          // スクロールイベントリスナーを設定するuseEffect
+          React.useEffect(() => {
+            const currentScrollRef = scrollRef.current;
+            if (currentScrollRef) {
+              currentScrollRef.addEventListener('scroll', handleScroll); // スクロールイベントリスナーを追加
+              return () => {
+                currentScrollRef.removeEventListener('scroll', handleScroll); // クリーンアップ時に削除
+              };
+            }
+          }, [handleScroll]); // handleScrollが変更された場合にのみ再実行
+
+          // スクロール位置に基づいてパララックス変換を計算する関数
+          const getParallaxTransform = (offset) => {
+            const parallaxValue = scrollPosition * 0.15 + offset; // スクロール位置に0.15を乗算してオフセットを加算
+            return `translateY(-${parallaxValue}px)`; // Y軸方向に移動
+          };
+
+          // ポートフォリオデータ構造を更新
+          const portfolioUnits = [
+            // ポートフォリオ単位 1
+            [
+              { id: 1, thumb: 'https://github.com/shingoviva/photo/blob/main/image/1_1s_20240526.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/1_1_20240526.jpg?raw=true', title: 'May 2024 Tokyo / Studio' },
+              { id: 2, thumb: 'https://github.com/shingoviva/photo/blob/main/image/1_2s_20250617.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/1_2_20250617.jpg?raw=true', title: 'June 2025 Tokyo / Studio' },
+              { id: 3, thumb: 'https://github.com/shingoviva/photo/blob/main/image/1_3s_20250301.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/1_3_20250301.jpg?raw=true', title: 'March 2025 Tokyo / Studio' },
+              { id: 4, thumb: 'https://github.com/shingoviva/photo/blob/main/image/1_4s_20241124.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/1_4_20241124.jpg?raw=true', title: 'November 2024 Tokyo / Studio' },
+              { id: 5, thumb: 'https://github.com/shingoviva/photo/blob/main/image/1_5s_20241228.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/1_5_20241228.jpg?raw=true', title: 'December 2024 Tokyo / Studio' },
+              { id: 6, thumb: 'https://github.com/shingoviva/photo/blob/main/image/1_6s_20230813.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/1_6_20230813.jpg?raw=true', title: 'August 2023 Tokyo / Studio' },
+            ],
+            // ポートフォリオ単位 2
+            [
+              { id: 7, thumb: 'https://github.com/shingoviva/photo/blob/main/image/2_1s_20250331.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/2_1_20250331.jpg?raw=true', title: 'March 2025 Tokyo / Hotel' },
+              { id: 8, thumb: 'https://github.com/shingoviva/photo/blob/main/image/2_2s_20250223.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/2_2_20250223.jpg?raw=true', title: 'February 2025 Tokyo / Studio' },
+              { id: 9, thumb: 'https://github.com/shingoviva/photo/blob/main/image/2_3s_20250118.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/2_3_20250118.jpg?raw=true', title: 'January 2025 Tokyo / Street' },
+              { id: 10, thumb: 'https://github.com/shingoviva/photo/blob/main/image/2_4s_20250621.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/2_4_20250621.jpg?raw=true', title: 'June 2025 Tokyo / Studio' },
+              { id: 11, thumb: 'https://github.com/shingoviva/photo/blob/main/image/2_5s_20250121.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/2_5_20250121.jpg?raw=true', title: 'January 2025 Tokyo / Street' },
+              { id: 12, thumb: 'https://github.com/shingoviva/photo/blob/main/image/2_6s_20231118.jpg?raw=true', full: 'https://github.com/shingoviva/photo/blob/main/image/2_6_20231118.jpg?raw=true', title: 'November 2023 Tokyo / Studio' },
+            ],
+          ];
+
+          // アコーディオンの開閉状態を管理するstate
+          // 各要素は対応するポートフォリオ単位が開いているかどうかを示します。
+          const [isPortfolioExpanded, setIsPortfolioExpanded] = React.useState(
+            portfolioUnits.map((_, index) => index === 0) // 最初のみ開く
+          );
+
+          // ポートフォリオ単位の開閉を切り替える関数
+          const togglePortfolio = (index) => {
+            setIsPortfolioExpanded(prevState => {
+              const newState = [...prevState];
+              newState[index] = !newState[index];
+              return newState;
+            });
+          };
+
+          // フォーム送信処理
+          // 現在はmailtoリンクを使用していますが、より堅牢なフォームにはバックエンド処理が必要です。
+          // 例: Firebase Functions, Netlify Forms, AWS Lambdaなど
+          const handleSubmit = async (event) => {
+            event.preventDefault(); // デフォルトのフォーム送信を防ぐ
+
+            const name = event.target.name.value;
+            const email = event.target.email.value;
+            const message = event.target.message.value;
+            const recipientEmail = 'shingo_viva@me.com'; // 送信先のメールアドレス
+            const subject = encodeURIComponent(`Contact from your portfolio: ${name}`); // 件名
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`); // 本文
+
+            const mailtoLink = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+
+            // メールクライアントを開く
+            window.location.href = mailtoLink;
+
+            setFormStatus('success'); // 成功ステータスを設定
+            event.target.reset(); // フォームをリセット
+
+            // 3秒後にステータスをクリア
+            setTimeout(() => {
+              setFormStatus('');
+            }, 3000);
+          };
+
+          return (
+            <div className="font-open-sans bg-[#1A1A1A] text-white min-h-screen overflow-hidden relative"> {/* 最も暗い背景色を調整 */}
+              {/* Google Fonts - Open Sans をインポートし、カスタムCSSを定義 */}
+              <style>
+                {`
+                  @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;700&display=swap');
+                  .font-open-sans {
+                    font-family: 'Open Sans', sans-serif;
+                    font-weight: 300; /* 全体に最も細いウェイトを指定 */
+                  }
+                  /* 見出しと太字の箇所も細いウェイトを継承し、文字間隔を広げる */
+                  .font-open-sans h1,
+                  .font-open-sans h2,
+                  .font-open-sans h3 {
+                    font-weight: 300; /* 見出しも細いウェイトに */
+                    letter-spacing: 0.05em; /* 文字間隔を少し広げる */
+                  }
+                  /* ヒーローセクションのサブ見出しにも文字間隔を適用 */
+                  .hero-subheading-spaced {
+                    letter-spacing: 0.025em;
+                  }
+                  /* アイコン回転アニメーションのkeyframes定義 */
+                  @keyframes subtle-rotate {
+                    0% { transform: rotate(0deg); }
+                    25% { transform: rotate(-5deg); }
+                    50% { transform: rotate(5deg); }
+                    75% { transform: rotate(-2deg); }
+                    100% { transform: rotate(0deg); }
+                  }
+                  .icon-subtle-rotation {
+                    animation: subtle-rotate 0.4s ease-in-out forwards;
+                  }
+
+                  /* アコーディオンコンテンツの開閉アニメーション */
+                  .accordion-content {
+                    max-height: 0;
+                    overflow: hidden;
+                    transition: max-height 0.7s ease-out; /* アニメーション時間を長くし、イージングを調整 */
+                  }
+                  .accordion-content.expanded {
+                    max-height: 2000px; /* 十分な高さを設定してコンテンツが途切れないようにする */
+                  }
+                  /* カスタムフォントサイズ */
+                  .text-xxs {
+                    font-size: 0.65rem;
+                  }
+                  .text-xxxs {
+                    font-size: 0.5rem; /* 8px */
+                    line-height: 1; /* 行の高さを詰める */
+                  }
+                `}
+              </style>
+
+              {/* イントロアニメーションのオーバーレイ */}
+              {showIntro && (
+                <IntroAnimation onAnimationComplete={handleIntroComplete} />
+              )}
+
+              {/* メインコンテンツコンテナ (イントロアニメーション後に表示) */}
+              <div
+                className="transition-opacity duration-1000"
+                style={{ opacity: mainContentOpacity }}
+              >
+                {/* Three.js背景レイヤー (最も奥) */}
+                {/* 背景のパーティクルアニメーションを制御するThree.jsのコンテナです。 */}
+                {/* この部分は通常、ユーザーが直接編集するコンテンツを含みません。 */}
+                <div
+                  ref={threeJsContainerRef}
+                  className="fixed inset-0 z-0 opacity-100"
+                  style={{ pointerEvents: 'none' }}
+                ></div>
+
+                {/* メインスクロール可能コンテンツコンテナ */}
+                <div
+                  ref={scrollRef}
+                  className="relative z-10 w-full h-screen overflow-y-auto scroll-smooth"
+                >
+                  {/* ヘッダー/ナビゲーション */}
+                  <header className="fixed top-0 left-0 w-full bg-[#1A1A1A] bg-opacity-80 backdrop-blur-sm z-50 py-1 sm:py-2 shadow-lg"> {/* メニューバーの縦幅を狭く */}
+                    <div className="container mx-auto flex justify-between items-center px-4"> {/* ヘッダーコンテンツのラッパー */}
+                      {/* サイトタイトル/ロゴ */}
+                      <div className="flex items-center text-2xl text-[#E0E0E0] mr-auto"> {/* mr-autoを追加して右寄せを防ぐ */}
+                        {/* メニューバーアイコン (SVGロゴ) */}
+                        <svg
+                          className={`w-6 h-6 mr-2 text-white ${isIconRotating ? 'icon-subtle-rotation' : ''}`}
+                          viewBox="0 0 141.67 244" // logo_w 2.txtから提供されたviewBox
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          {/* SVG Pathデータ (logo_w 2.txtから) */}
+                          <polygon points="20.95 102.74 98.05 79.02 48.45 145.34 108.83 128.62 15.56 244 54.38 161.51 8.55 189.01 20.95 102.74"/>
+                          <polygon points="0 17.05 16.29 8.71 40.15 84.85 0 17.05"/>
+                          <polygon points="53.41 82.96 64.83 0 84.15 3.03 53.41 82.96"/>
+                          <polygon points="70.64 81.05 126.9 8.71 141.67 22.73 70.64 81.05"/>
+                        </svg>
+                        <a href="#home" onClick={(e) => { e.preventDefault(); scrollToSection('home'); }} className="whitespace-nowrap" style={{ letterSpacing: '0.05em' }}>{t('siteTitle')}</a> {/* whitespace-nowrapを追加 */}
+                      </div>
+                      {/* モバイルメニューボタンとデスクトップナビゲーション */}
+                      <div className="flex items-center md:hidden"> {/* モバイル専用コントロール */}
+                        <a
+                          href="https://www.instagram.com/shingo_viva/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 inline-flex items-center justify-center"
+                          aria-label="Instagram Link"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
+                        </a>
+                        <button
+                          onClick={toggleLanguage}
+                          className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 flex flex-col items-center justify-center pt-0" // pt-4をpt-0に修正
+                          aria-label={language === 'ja' ? '言語を英語に切り替える' : 'Switch language to Japanese'}
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                          <span className="text-xxxs font-semibold whitespace-nowrap text-[#A0A0A0]">JP / EN</span> {/* whitespace-nowrapを追加 */}
+                        </button>
+                        <button
+                          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                          className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300"
+                        >
+                          {isMobileMenuOpen ? (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                          ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                          )}
+                        </button>
+                      </div>
+                      {/* 通常のナビゲーション (デスクトップ) */}
+                      <nav className="hidden md:flex space-x-6 text-lg items-center">
+                        <ul className="flex space-x-6 items-center">
+                          <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('about')}</a></li>
+                          <li><a href="#portfolio" onClick={(e) => { e.preventDefault(); scrollToSection('portfolio'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('portfolio')}</a></li>
+                          <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('services')}</a></li>
+                          <li><a href="#process" onClick={(e) => { e.preventDefault(); scrollToSection('process'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('process')}</a></li>
+                          <li><a href="#faq" onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('faq')}</a></li>
+                          <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }} className="hover:text-[#808080] transition duration-300 text-[#C0C0C0]">{t('contact')}</a></li>
+                          <li> {/* Instagramリンク */}
+                            <a
+                              href="https://www.instagram.com/shingo_viva/"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 inline-flex items-center justify-center"
+                              aria-label="Instagram Link"
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
+                            </a>
+                          </li>
+                          <li> {/* 言語切り替えアイコンを右端に配置 */}
+                            <button
+                              onClick={toggleLanguage}
+                              className="text-[#E0E0E0] focus:outline-none p-2 rounded-md hover:bg-[#262626] transition duration-300 flex flex-col items-center justify-center pt-0 ml-[-2]" // pt-4をpt-0に修正
+                              aria-label={language === 'ja' ? '言語を英語に切り替える' : 'Switch language to Japanese'}
+                            >
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-globe"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                              <span className="text-xxxs font-semibold whitespace-nowrap mt-0.5 text-[#A0A0A0]">JP / EN</span> {/* whitespace-nowrapを追加 */}
+                            </button>
+                          </li>
+                        </ul>
+                      </nav>
+                    </div> {/* ヘッダーコンテンツのラッパー終了 */}
+                    {/* モバイルプルダウンメニュー */}
+                    <div className={`md:hidden ${isMobileMenuOpen ? 'block' : 'hidden'} bg-[#1A1A1A] bg-opacity-90 py-4 transition-all duration-300 ease-in-out`}>
+                      <ul className="flex flex-col items-center space-y-4 text-lg">
+                        <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }} className="block py-2 px-4 hover:bg-[#262626] w-full text-center text-[#C0C0C0]">About</a></li>
+                        <li><a href="#portfolio" onClick={(e) => { e.preventDefault(); scrollToSection('portfolio'); }} className="block py-2 px-4 hover:bg-[#262626] w-full text-center text-[#C0C0C0]">Portfolio</a></li>
+                        <li><a href="#services" onClick={(e) => { e.preventDefault(); scrollToSection('services'); }} className="block py-2 px-4 hover:bg-[#262626] w-full text-center text-[#C0C0C0]">Services</a></li>
+                        <li><a href="#process" onClick={(e) => { e.preventDefault(); scrollToSection('process'); }} className="block py-2 px-4 hover:bg-[#262626] w-full text-center text-[#C0C0C0]">Process</a></li>
+                        <li><a href="#faq" onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }} className="block py-2 px-4 hover:bg-[#262626] w-full text-center text-[#C0C0C0]">FAQ</a></li>
+                        <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }} className="block py-2 px-4 hover:bg-[#262626] w-full text-center text-[#C0C0C0]">Contact</a></li>
+                      </ul>
+                    </div>
+                  </header>
+
+                  {/* ヒーローセクション - サイトのファーストビュー */}
+                  <section
+                    id="home"
+                    className="relative h-screen flex items-center justify-center text-center px-4 py-32 sm:py-40 md:py-56 overflow-hidden" // 縦方向の間隔を広く
+                  >
+                    {/* 現在表示されている画像 (フェードアウトする可能性あり) */}
+                    <img
+                      key={`hero-image-${currentHeroImageIndex}-current`} // より堅牢なユニークキーを生成
+                      src={heroImages[currentHeroImageIndex]}
+                      alt={`ヒーロー背景画像 ${currentHeroImageIndex + 1}`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-10 scale-[0.95] sm:scale-100 ${ // スマホで少し縮小
+                        isFadingIn ? 'opacity-0' : 'opacity-100' // isFadingInがtrueならフェードアウト
+                      }`}
+                      onError={(e) => {
+                        console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
+                        e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; // 1x1 透明ピクセル
+                      }}
+                    />
+                    {/* 次に表示される画像 (フェードインする) */}
+                    {heroImages.length > 1 && ( // 画像が複数枚ある場合のみ次画像をレンダリング
+                      <img
+                        key={`hero-image-${nextHeroImageIndex}-next`} // より堅牢なユニークキーを生成
+                        src={heroImages[nextHeroImageIndex]}
+                        alt={`ヒーロー背景画像 ${nextHeroImageIndex + 1}`}
+                        className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-20 scale-[0.95] sm:scale-100 ${ // スマホで少し縮小
+                          isFadingIn ? 'opacity-100' : 'opacity-0' // isFadingInがtrueならフェードイン
+                        }`}
+                        onError={(e) => {
+                          console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
+                          e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; // 1x1 透明ピクセル
+                        }}
+                      />
+                    )}
+
+                    {/* 画像上のオーバーレイとテキスト */}
+                    <div className="relative z-30 bg-[#1A1A1A] bg-opacity-50 p-6 sm:p-10 shadow-2xl border border-[#333333] mx-4 sm:mx-auto"> {/* 背景色とボーダーをモノトーンに */}
+                      {/* メインキャッチコピー */}
+                      <h1 className="text-3xl sm:text-5xl md:text-7xl text-[#E0E0E0] mb-3 sm:mb-4 leading-tight">
+                        {t('heroHeading')}
+                      </h1>
+                      {/* サブキャッチコピー */}
+                      <p className="text-base sm:text-xl md:text-2xl text-[#A0A0A0] mb-6 sm:mb-8 hero-subheading-spaced">
+                        {t('heroSubheading')}
+                      </p>
+                      {/* ポートフォリオへのボタン */}
+                      <a
+                        href="#portfolio"
+                        onClick={(e) => { e.preventDefault(); scrollToSection('portfolio'); }}
+                        className="inline-block bg-[#333333] hover:bg-[#4D4D4D] text-[#E0E0E0] py-2 px-6 sm:py-3 sm:px-8 shadow-lg transition duration-300 transform hover:scale-105 text-sm sm:text-lg"
+                        style={{ borderRadius: 0 }}
+                      >
+                        {t('viewMyWork')}
+                      </a>
+                    </div>
+                  </section>
+
+                  {/* ポートフォリオセクション - 作品集 */}
+                  <section
+                    id="portfolio"
+                    className="relative min-h-screen px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" // 縦方向の間隔を広く, 背景透明度を調整
+                    style={{ transform: getParallaxTransform(200) }}
+                  >
+                    <div className="container mx-auto py-8 sm:py-16">
+                      {/* セクションタイトル */}
+                      <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12 text-center">{t('portfolio')}</h2>
+                      {/* ポートフォリオのアコーディオン表示 */}
+                      {portfolioUnits.map((unit, unitIndex) => (
+                        <div key={unitIndex} className="mb-8 last:mb-0">
+                          <button
+                            onClick={() => togglePortfolio(unitIndex)}
+                            className="w-full text-left bg-[#262626] hover:bg-[#333333] text-[#E0E0E0] py-3 px-6 sm:py-4 flex justify-between items-center shadow-md border border-[#4D4D4D] transition duration-300"
+                            style={{ borderRadius: 0 }}
+                          >
+                            <h3 className="text-xl sm:text-2xl font-normal">{t('portfolio')} {unitIndex + 1}</h3>
+                            <span className="text-2xl">
+                              {isPortfolioExpanded[unitIndex] ? '−' : '+'}
+                            </span>
+                          </button>
+                          <div className={`accordion-content ${isPortfolioExpanded[unitIndex] ? 'expanded' : ''}`}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mt-6">
+                              {unit.map((image) => (
+                                <div
+                                  key={image.id}
+                                  className="relative group overflow-hidden shadow-lg transition duration-300 transform hover:scale-105 hover:shadow-xl border border-[#4D4D4D] cursor-pointer"
+                                  onClick={() => openImagePopup(image.full)}
+                                >
+                                  <img
+                                    src={image.thumb}
+                                    alt={image.title}
+                                    className="w-full h-64 sm:h-96 md:h-[480px] object-cover transition-transform duration-500 group-hover:scale-110"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-300 flex items-end p-3 sm:p-4">
+                                    <h3 className="text-[#E0E0E0] text-base sm:text-lg">{image.title}</h3>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+
+                  {/* 自己紹介セクション */}
+                  <section
+                    id="about"
+                    className="relative min-h-screen flex items-center justify-center px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" // 縦方向の間隔を広く, 背景透明度を調整
+                    style={{ transform: getParallaxTransform(100) }}
+                  >
+                    <div className="container mx-auto text-center py-8 sm:py-16">
+                      {/* セクションタイトル */}
+                      <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-6 sm:mb-8">About</h2>
+                      <div className="flex flex-col md:flex-row items-center gap-6 sm:gap-8">
+                        <div className="md:w-1/3">
+                          {/* プロフィール写真 */}
+                          <img
+                            src="https://github.com/shingoviva/photo/blob/main/image/prof.jpg?raw=true" // プロフィール写真のURLを更新
+                            alt="Photographer Profile Photo"
+                            className="w-40 h-40 sm:w-48 sm:h-48 md:w-64 md:h-64 object-cover mx-auto shadow-xl border-4 border-[#4D4D4D] rounded-full"
+                          />
+                        </div>
+                        {/* 自己紹介文 */}
+                        <div className="md:w-2/3 text-sm sm:text-base text-[#A0A0A0] text-left px-4 sm:px-0">
+                          <p className="mb-3 sm:mb-4">
+                            {t('aboutMeIntro')}
+                          </p>
+                          <p className="mb-3 sm:mb-4">
+                            {t('aboutMePara2')}
+                          </p>
+                          <p>
+                            {t('aboutMePara3')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* 撮影の流れセクション */}
+                  <section
+                    id="process"
+                    className="relative min-h-screen flex items-center justify-center px-4 py-28 sm:py-36 md:py-48 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-32 sm:my-48 md:my-64 max-w-6xl shadow-2xl border border-[#333333]" // 縦方向の間隔を広く, 背景透明度を調整
+                    style={{ transform: getParallaxTransform(250) }}
+                  >
+                    <div className="container mx-auto text-center py-8 sm:py-16">
+                      {/* セクションタイトル */}
+                      <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12">{t('process')}</h2>
+                      {/* 導入文 */}
+                      <p className="text-base sm:text-lg text-[#A0A0A0] mb-8 sm:mb-12">
+                        {t('processIntro')}
+                      </p>
+                      <div className="flex flex-col md:flex-row justify-center items-start gap-8">
+                        {/* 各ステップ */}
+                        <div className="flex flex-col items-center text-center md:w-1/4">
+                          <div className="bg-[#4D4D4D] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl">1</div>
+                          <h3 className="text-xl text-[#E0E0E0] mb-2">{t('processStep1Title')}</h3>
+                          <p className="text-[#A0A0A0] text-sm">{t('processStep1Desc')}</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center md:w-1/4">
+                          <div className="bg-[#4D4D4D] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl">2</div>
+                          <h3 className="text-xl text-[#E0E0E0] mb-2">{t('processStep2Title')}</h3>
+                          <p className="text-[#A0A0A0] text-sm">{t('processStep2Desc')}</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center md:w-1/4">
+                          <div className="bg-[#4D4D4D] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl">3</div>
+                          <h3 className="text-xl text-[#E0E0E0] mb-2">{t('processStep3Title')}</h3>
+                          <p className="text-[#A0A0A0] text-sm">{t('processStep3Desc')}</p>
+                        </div>
+                        <div className="flex flex-col items-center text-center md:w-1/4">
+                          <div className="bg-[#4D4D4D] text-white rounded-full w-12 h-12 flex items-center justify-center text-xl">4</div>
+                          <h3 className="text-xl text-[#E0E0E0] mb-2">{t('processStep4Title')}</h3>
+                          <p className="text-[#A0A0A0] text-sm">{t('processStep4Desc')}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* お客様の声セクション */}
+                  {/* <section
+                    id="testimonials"
+                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-5xl shadow-2xl border border-[#333333]"
+                    style={{ transform: getParallaxTransform(300) }}
+                  >
+                    <div className="container mx-auto text-center py-8 sm:py-16">
+                      <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12">{t('testimonials')}</h2>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
+                          <p className="italic text-[#A0A0A0] mb-4">
+                            {t('testimonial1')}
+                          </p>
+                          <p className="text-[#E0E0E0]">{t('testimonial1Author')}</p>
+                        </div>
+                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
+                          <p className="italic text-[#A0A0A0] mb-4">
+                            {t('testimonial2')}
+                          </p>
+                          <p className="text-[#E0E0E0]">{t('testimonial2Author')}</p>
+                        </div>
+                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
+                          <p className="italic text-[#A0A0A0] mb-4">
+                            {t('testimonial3')}
+                          </p>
+                          <p className="text-[#E0E0E0]">{t('testimonial3Author')}</p>
+                        </div>
+                        <div className="bg-[#262626] p-6 shadow-lg border border-[#4D4D4D] text-left">
+                          <p className="italic text-[#A0A0A0] mb-4">
+                            {t('testimonial4')}
+                          </p>
+                          <p className="text-[#E0E0E0]">{t('testimonial4Author')}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </section> */}
+
+                  {/* よくある質問セクション */}
+                  <section
+                    id="faq"
+                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-4xl shadow-2xl border border-[#333333]" // 背景色とボーダーをモノトーンに
+                    style={{ transform: getParallaxTransform(350) }}
+                  >
+                    <div className="container mx-auto text-center py-8 sm:py-16">
+                      {/* セクションタイトル */}
+                      <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-8 sm:mb-12">{t('faq')}</h2>
+                      <div className="space-y-6 text-left">
+                        {/* 各質問と回答 */}
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                          <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ1')}</h3>
+                          <p className="text-[#A0A0A0] text-sm sm:text-base">
+                            {t('faqA1')}
+                          </p>
+                        </div>
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                          <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ2')}</h3>
+                          <p className="text-[#A0A0A0] text-sm sm:text-base">
+                            {t('faqA2')}
+                          </p>
+                        </div>
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                          <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ3')}</h3>
+                          <p className="text-[#A0A0A0] text-sm sm:text-base">
+                            {t('faqA3')}
+                          </p>
+                        </div>
+                        <div className="bg-[#262626] p-5 shadow-lg border border-[#4D4D4D]"> {/* 背景色とボーダーをモノトーンに */}
+                          <h3 className="text-lg sm:text-xl text-[#E0E0E0] mb-2">{t('faqQ4')}</h3>
+                          <p className="text-[#A0A0A0] text-sm sm:text-base">
+                            {t('faqA4')}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+
+                  {/* お問い合わせセクション */}
+                  <section
+                    id="contact"
+                    className="relative min-h-screen flex items-center justify-center px-4 py-20 sm:py-28 md:py-36 bg-[#1A1A1A] bg-opacity-70 mx-4 sm:mx-auto my-12 sm:my-20 md:my-28 max-w-4xl shadow-2xl border border-[#333333]" // 背景色とボーダーをモノトーンに
+                    style={{ transform: getParallaxTransform(400) }}
+                  >
+                    <div className="container mx-auto text-center py-8 sm:py-16">
+                      {/* セクションタイトル */}
+                      <h2 className="text-2xl sm:text-4xl md:text-5xl text-[#E0E0E0] mb-6 sm:mb-8">{t('contact')}</h2>
+                      {/* 導入文 */}
+                      <p className="text-base sm:text-lg text-[#A0A0A0] mb-6 sm:mb-8">
+                        {t('contactIntro')}
+                      </p>
+                      {/* お問い合わせフォーム */}
+                      <form className="max-w-lg mx-auto space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
+                        <div>
+                          <label htmlFor="name" className="block text-[#808080] text-left mb-1 sm:mb-2 text-sm sm:text-base">{t('yourName')}</label>
+                          <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" // 背景色、ボーダー、テキスト色、フォーカスリングをモノトーンに
+                            style={{ borderRadius: 0 }}
+                            placeholder={t('yourName')}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="email" className="block text-[#808080] text-left mb-1 sm:mb-2 text-sm sm:text-base">{t('emailAddress')}</label>
+                          <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" // 背景色、ボーダー、テキスト色、フォーカスリングをモノトーンに
+                            style={{ borderRadius: 0 }}
+                            placeholder={t('emailAddress')}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="message" className="block text-[#808080] text-left mb-1 sm:mb-2 text-sm sm:text-base">{t('message')}</label>
+                          <textarea
+                            id="message"
+                            name="message"
+                            rows="4"
+                            className="w-full p-2 sm:p-3 bg-[#262626] border border-[#4D4D4D] text-[#E0E0E0] focus:outline-none focus:ring-2 focus:ring-[#808080] text-sm sm:text-base" // 背景色、ボーダー、テキスト色、フォーカスリングをモノトーンに
+                            style={{ borderRadius: 0 }}
+                            placeholder={t('message')}
+                            required
+                          ></textarea>
+                        </div>
+                        <button
+                          type="submit"
+                          className="w-full bg-[#4D4D4D] hover:bg-[#666666] text-white py-2 sm:py-3 shadow-lg transition duration-300 transform hover:scale-105 text-base sm:text-lg" // ボタン色をモノトーンに
+                          style={{ borderRadius: 0 }}
+                          disabled={formStatus === 'sending'}
+                        >
+                          {formStatus === 'sending' ? 'Sending...' : t('sendMessage')}
+                        </button>
+                        {formStatus === 'success' && (
+                          <p className="text-green-500 mt-2">メッセージが正常に送信されました！メールクライアントが起動します。</p>
+                        )}
+                        {formStatus === 'error' && (
+                          <p className="text-red-500 mt-2">メッセージの送信中にエラーが発生しました。後でもう一度お試しください。</p>
+                        )}
+                      </form>
+                      <p className="text-base sm:text-lg text-[#A0A0A0] mt-4"> {/* メールアドレスのサイズを大きく */}
+                        <a href="mailto:shingo_viva@me.com" className="hover:text-[#C0C0C0] transition duration-300">shingo_viva@me.com</a>
+                      </p>
+                    </div>
+                  </section>
+
+                  {/* Footer - フッターセクションです */}
+                  <footer className="relative z-20 bg-[#1A1A1A] bg-opacity-80 backdrop-blur-sm p-6 sm:p-8 text-center text-[#808080] mt-8 sm:mt-16 text-xs sm:text-sm"> {/* 背景色を最も暗いグレーに */}
+                    {/* 著作権表示 - ここを編集して著作権情報を変更できます */}
+                    <p>{t('copyright')}</p>
+                    {/* Instagramリンク - hrefのURLと表示テキストを編集できます */}
+                    <div className="mt-4">
+                      <a href="https://www.instagram.com/shingo_viva/" target="_blank" rel="noopener noreferrer" className="text-[#808080] hover:text-[#C0C0C0] transition duration-300 inline-flex items-center space-x-2"> {/* ホバー色をモノトーンに */}
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.5" y1="6.5" y2="6.5"/></svg>
+                        <span>{t('instagram')}</span>
+                      </a>
+                    </div>
+                  </footer>
+                </div>
+              </div>
+
+              {/* Image Popup Modal - ポートフォリオ画像クリック時に表示されるポップアップです */}
+              {selectedImage && (
+                <div
+                  className="fixed inset-0 bg-[#1A1A1A] bg-opacity-90 z-[101] flex items-center justify-center p-4 cursor-pointer" // 背景色をモノトーンに
+                  onClick={closeImagePopup}
+                >
+                  <img
+                    src={selectedImage}
+                    alt="Selected Portfolio Image"
+                    className="max-w-full max-h-full object-contain"
+                    onClick={(e) => e.stopPropagation()} // 画像クリックで閉じないようにする
+                  />
+                </div>
+              )}
+            </div>
+          );
+        };
+
+        // LanguageProviderでAppコンポーネントをラップ
+        const RootApp = () => (
+          <LanguageProvider>
+            <App />
+          </LanguageProvider>
+        );
+
+        // ReactアプリケーションをDOMにレンダリング
+        ReactDOM.render(<RootApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
