@@ -756,7 +756,7 @@
               <div
                 ref={threeJsContainerRef}
                 className="fixed inset-0 z-0" 
-                style={{ pointerEvents: 'none', opacity: 1 }} 
+                style={{ pointerEvents: 'none', opacity: mainContentOpacity }} 
               ></div>
 
               <div
@@ -861,7 +861,7 @@
                       key={`hero-image-${currentHeroImageIndex}-current`} 
                       src={heroImages[currentHeroImageIndex]}
                       alt={`ヒーロー背景画像 ${currentHeroImageIndex + 1}`}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-10`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out ${isFadingIn ? 'opacity-0 z-10' : 'opacity-100 z-20'}`}
                       onError={(e) => {
                         console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
                         e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
@@ -873,7 +873,7 @@
                           key={`hero-image-${nextHeroImageIndex}-next`} 
                           src={heroImages[nextHeroImageIndex]}
                           alt={`ヒーロー背景画像 ${nextHeroImageIndex + 1}`}
-                          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-20`}
+                          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out ${isFadingIn ? 'opacity-100 z-20' : 'opacity-0 z-10'}`}
                           onError={(e) => {
                             console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
                             e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
