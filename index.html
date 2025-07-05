@@ -410,9 +410,8 @@
             setShowIntro(false); // イントロアニメーションを非表示にする
             setMainContentOpacity(1); // メインコンテンツをフェードインさせる
             // Three.jsコンテナの透明度も同時に設定
-            if (threeJsContainerRef.current) {
-              threeJsContainerRef.current.style.opacity = 1;
-            }
+            // Three.jsコンテナの透明度を1に設定する処理は不要になりました。
+            // なぜなら、threeJsContainerRefの初期opacityが1になったためです。
           }, []); // 依存配列が空なので、初回レンダリング時のみ作成される
 
           // 画像ポップアップを開くコールバック関数
@@ -465,7 +464,7 @@
 
             // パーティクル配列の初期化
             const particles = [];
-            const numParticles = 150; // パーティクルの数を150に削減
+            const numParticles = 80; // パーティクルの数を80に削減
             // `Three.PlaneGeometry` を `THREE.PlaneGeometry` に修正
             const particleGeometry = new THREE.PlaneGeometry(1, 1); // 各パーティクルのジオメトリ (シンプルな平面)
 
@@ -524,8 +523,8 @@
                     particle.userData.baseZ
                 );
                 // パーティクルのスケールを調整
-                particle.scale.setScalar(200 + Math.random() * 300); // 200から500の範囲でスケールを設定
-
+                particle.scale.setScalar(400 + Math.random() * 600); // 400から1000の範囲でスケールを設定
+                
                 // シーンにパーティクルを追加
                 scene.add(particle);
                 // パーティクル配列に追加
@@ -753,11 +752,11 @@
                 <IntroAnimation onAnimationComplete={handleIntroComplete} />
               )}
 
-              {/* Three.jsコンテナの初期透明度を0に設定し、フェードイン時に1にする */}
+              {/* Three.jsコンテナの初期透明度を1に設定し、フェードイン時に1にする */}
               <div
                 ref={threeJsContainerRef}
-                className="fixed inset-0 z-0 transition-opacity duration-1000"
-                style={{ pointerEvents: 'none', opacity: 0 }} 
+                className="fixed inset-0 z-0" 
+                style={{ pointerEvents: 'none', opacity: 1 }} 
               ></div>
 
               <div
