@@ -129,13 +129,13 @@
             processStep4Desc: "Photo data will be delivered in the specified format. While next-day delivery is possible for urgent requests, I generally recommend allowing ample time for scheduling.",
             faqTitle: "FAQ",
             faqQ1: "Q: How far in advance should I book a session?",
-            faqA1: "A: While it depends on the type of shoot, I recommend booking several months in advance, especially during popular seasons. Please feel free to inquire.",
-            faqQ2: "Q: How do we decide on the shooting location?",
-            faqA2: "A: During our initial consultation, I'll discuss your preferences and ideas to suggest the optimal location. Shoots at your home or special places are also possible.",
-            faqQ3: "Q: How long does it take to receive the photos?",
-            faqA3: "A: Typically, data delivery takes about 2 weeks to 1 month after the shoot. Please consult me if you need urgent delivery.",
-            faqQ4: "Q: How are the fees determined?",
-            faqA4: "A: Fees vary depending on the shoot content, duration, and number of delivered photos. After your inquiry, I will provide a personalized quote. Payment can be made via bank transfer or PayPal.",
+            faqA1: "A: 内容によりますが、人気シーズンは数ヶ月前のご予約を推奨。まずはお問い合わせください。",
+            faqQ2: "Q: 撮影場所は？",
+            faqA2: "A: 事前打ち合わせでご希望を伺い、最適な場所を提案。ご自宅や思い出の場所も可能です。",
+            faqQ3: "Q: 納品期間は？",
+            faqA3: "A: 通常2週間〜1ヶ月。お急ぎの場合はご相談ください。",
+            faqQ4: "Q: 料金は？",
+            faqA4: "A: 内容、時間、枚数で変動。お問い合わせ後、個別にお見積もり。銀行振込、PayPal対応。",
             contactTitle: "Contact",
             contactIntro: "Please feel free to contact me with any questions or inquiries.",
             yourName: "Your Name",
@@ -855,15 +855,13 @@
 
                   <section
                     id="home"
-                    className="relative h-screen flex items-center justify-center text-center px-4 py-32 sm:py-40 md:py-56 overflow-hidden" 
+                    className="relative h-[70vh] md:h-screen flex items-center justify-center text-center py-20 sm:py-40 md:py-56 overflow-hidden" 
                   >
                     <img
                       key={`hero-image-${currentHeroImageIndex}-current`} 
                       src={heroImages[currentHeroImageIndex]}
                       alt={`ヒーロー背景画像 ${currentHeroImageIndex + 1}`}
-                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-10 scale-[0.95] sm:scale-100 ${ 
-                        isFadingIn ? 'opacity-0' : 'opacity-100' 
-                      }`}
+                      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-10`}
                       onError={(e) => {
                         console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
                         e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
@@ -875,9 +873,7 @@
                           key={`hero-image-${nextHeroImageIndex}-next`} 
                           src={heroImages[nextHeroImageIndex]}
                           alt={`ヒーロー背景画像 ${nextHeroImageIndex + 1}`}
-                          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-20 scale-[0.95] sm:scale-100 ${ 
-                            isFadingIn ? 'opacity-100' : 'opacity-0' 
-                          }`}
+                          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[${fadeDurationMs}ms] ease-in-out z-20`}
                           onError={(e) => {
                             console.error(`ヒーロー画像読み込みエラー: ${e.target.src}`);
                             e.target.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="; 
@@ -1143,7 +1139,7 @@
           );
         };
 
-        // LanguageProviderでAppコンポーネントをラップ
+        // LanguageProviderでAppコンポーポネントをラップ
         const RootApp = () => (
           <LanguageProvider>
             <App />
