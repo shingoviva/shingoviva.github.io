@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HYPE FORM / Visual FX Lab v28.2.34</title>
+  <title>HYPE FORM / Visual FX Lab v28.2.35</title>
   <style>
     :root{
       --bg:#070809; --panel:rgba(14,16,18,.9); --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.15);
@@ -283,7 +283,7 @@
 <div class="frame">
   <aside class="panel left-panel" id="leftPanel">
     <div class="panel-scroll">
-      <div class="brand"><div><div class="sub">HYPE FORM</div><h1>Visual FX Lab</h1></div><div><div class="sub" style="text-align:right">v28.2.34</div></div></div>
+      <div class="brand"><div><div class="sub">HYPE FORM</div><h1>Visual FX Lab</h1></div><div><div class="sub" style="text-align:right">v28.2.35</div></div></div>
 
       <nav class="control-tabs" id="controlTabs">
         <button class="control-tab active" data-view="source">SOURCE</button>
@@ -442,6 +442,9 @@ FORM</textarea><div class="note" style="margin-top:7px;padding:8px 10px">長文�
           <div class="field"><label>Format</label><select id="exportFormat"><option value="mp4" selected>MP4 / H.264 — Recommended</option><option value="webm">WebM / VP9 — Fallback</option><option value="pngalpha">PNG Sequence ZIP / Alpha — Material</option></select></div>
           <div class="field"><label>Resolution</label><select id="exportResolution"><option value="draft">Draft — 720px short edge</option><option value="full" selected>Full — 1080px short edge</option><option value="master">Master — 1440px short edge</option></select></div>
           <div class="field"><label>Quality</label><select id="exportQuality"><option value="medium">Medium</option><option value="high" selected>High</option><option value="very-high">Very High / Master</option></select></div>
+          <div class="field"><label>MP4 Engine</label><select id="exportEngine"><option value="auto" selected>Auto — Mac FFmpeg when available</option><option value="native">Mac Native — FFmpeg / VideoToolbox</option><option value="browser">Browser — WebCodecs</option></select></div>
+          <div class="proxy-status" style="margin-top:9px"><strong><i class="proxy-dot"></i><span id="exportEngineStatus">AUTO / CHECK ON EXPORT</span></strong><span id="exportEngineDetail">BROWSER FALLBACK READY</span></div>
+          <div class="note" id="exportProfilerReadout" style="margin-top:9px;padding:10px 12px">Export Profiler: waiting. v28.2.35 measures Frame Render / GPU→CPU Readback / Encode or Native Pipe / Finalize without changing the locked render core.</div>
           <div class="alpha-options" id="alphaOptions" hidden>
             <div class="field"><label>Transparent Material</label><select id="alphaMaterialMode"><option value="typeOverlays" selected>Type + Overlay FX</option><option value="overlays">Overlay FX only</option><option value="cutoutType">Cutout Subject + Type</option></select></div>
             <div class="alpha-note"><strong>ALPHA MATERIAL</strong><br>透明背景のPNG連番をZIP化します。Light Leak / Lens Flare / Pulse系など、透明オーバーレイとして成立するFXに対応します。</div>
@@ -687,7 +690,7 @@ window.addEventListener('error', e => { const s=document.getElementById('statusT
     overlayTitle:$('overlayTitle'), previewGrid:$('previewGrid'), mainCanvas:$('mainCanvas'), stageTarget:$('stageTarget'), syncBadge:$('syncBadge'),
     previewTargetLabel:$('previewTargetLabel'), speed:$('speed'), bpm:$('bpm'), pulseToggle:$('pulseToggle'), pulseBadge:$('pulseBadge'), controlTabs:$('controlTabs'), previewFilters:$('previewFilters'), trail:$('trail'), strobe:$('strobe'), cameraMotion:$('cameraMotion'),
     speedReadout:$('speedReadout'), bpmReadout:$('bpmReadout'), trailReadout:$('trailReadout'), strobeReadout:$('strobeReadout'), cameraReadout:$('cameraReadout'),
-    exportFormat:$('exportFormat'), exportResolution:$('exportResolution'), exportQuality:$('exportQuality'), exportTimelineLength:$('exportTimelineLength'), exportFps:$('exportFps'), alphaOptions:$('alphaOptions'), alphaMaterialMode:$('alphaMaterialMode'), exportRenderOverlay:$('exportRenderOverlay'), exportRenderTitle:$('exportRenderTitle'), exportRenderRing:$('exportRenderRing'), exportRenderPercent:$('exportRenderPercent'), exportRenderBar:$('exportRenderBar'), exportRenderPhase:$('exportRenderPhase'), exportRenderDetail:$('exportRenderDetail'), exportRenderLayers:$('exportRenderLayers'), previewQuality:$('previewQuality'), previewModeLabel:$('previewModeLabel'), previewResolutionReadout:$('previewResolutionReadout'), timelinePanel:$('timelinePanel'), timelineTracks:$('timelineTracks'), timelineRuler:$('timelineRuler'), timelinePlay:$('timelinePlay'), timelineStop:$('timelineStop'), timelineTimeDisplay:$('timelineTimeDisplay'), timelineDuration:$('timelineDuration'), timelineDurationNumber:$('timelineDurationNumber'), timelineIntensity:$('timelineIntensity'), timelineIntensityValue:$('timelineIntensityValue'), timelineEditorName:$('timelineEditorName'), timelineCurveSelect:$('timelineCurveSelect'), timelineCurveBadge:$('timelineCurveBadge'), timelineAddKey:$('timelineAddKey'), timelineDeleteKey:$('timelineDeleteKey'), timelineClearLayer:$('timelineClearLayer'), timelineDeleteLayer:$('timelineDeleteLayer'), fxInspector:$('fxInspector'), undoBtn:$('undoBtn'), redoBtn:$('redoBtn'), saveProjectBtn:$('saveProjectBtn'), openProjectBtn:$('openProjectBtn'), projectFileInput:$('projectFileInput'), viewerFocusBtn:$('viewerFocusBtn'), rightTabs:$('rightTabs'), effectSearch:$('effectSearch'), motionContext:$('motionContext'), motionFxName:$('motionFxName'), motionFxHint:$('motionFxHint'), motionFxScope:$('motionFxScope'), selectedFxMotionCard:$('selectedFxMotionCard'), selectedFxMotionControls:$('selectedFxMotionControls'), openFxInspectorBtn:$('openFxInspectorBtn'), pulseCard:$('pulseCard'), inspectorTargetChip:$('inspectorTargetChip'), timelineZoom:$('timelineZoom'), timelineFitBtn:$('timelineFitBtn'), timelineScroll:$('timelineScroll'), rulerViewport:$('rulerViewport'), timelineTrackReadout:$('timelineTrackReadout'), masterLookPanel:$('masterLookPanel'), masterLookBadge:$('masterLookBadge'), finalExposure:$('finalExposure'), finalContrast:$('finalContrast'), finalHighlights:$('finalHighlights'), finalShadows:$('finalShadows'), finalSaturation:$('finalSaturation'), finalTemperature:$('finalTemperature'), finalTint:$('finalTint'), finalExposureReadout:$('finalExposureReadout'), finalContrastReadout:$('finalContrastReadout'), finalHighlightsReadout:$('finalHighlightsReadout'), finalShadowsReadout:$('finalShadowsReadout'), finalSaturationReadout:$('finalSaturationReadout'), finalTemperatureReadout:$('finalTemperatureReadout'), finalTintReadout:$('finalTintReadout'), resetFinalLook:$('resetFinalLook'), frame:document.querySelector('.frame'), leftPanel:$('leftPanel'), centerPanel:$('centerPanel'), rightPanel:$('rightPanel'), leftResizer:$('leftResizer'), rightResizer:$('rightResizer'), timelineResizer:$('timelineResizer')
+    exportFormat:$('exportFormat'), exportResolution:$('exportResolution'), exportQuality:$('exportQuality'), exportEngine:$('exportEngine'), exportEngineStatus:$('exportEngineStatus'), exportEngineDetail:$('exportEngineDetail'), exportProfilerReadout:$('exportProfilerReadout'), exportTimelineLength:$('exportTimelineLength'), exportFps:$('exportFps'), alphaOptions:$('alphaOptions'), alphaMaterialMode:$('alphaMaterialMode'), exportRenderOverlay:$('exportRenderOverlay'), exportRenderTitle:$('exportRenderTitle'), exportRenderRing:$('exportRenderRing'), exportRenderPercent:$('exportRenderPercent'), exportRenderBar:$('exportRenderBar'), exportRenderPhase:$('exportRenderPhase'), exportRenderDetail:$('exportRenderDetail'), exportRenderLayers:$('exportRenderLayers'), previewQuality:$('previewQuality'), previewModeLabel:$('previewModeLabel'), previewResolutionReadout:$('previewResolutionReadout'), timelinePanel:$('timelinePanel'), timelineTracks:$('timelineTracks'), timelineRuler:$('timelineRuler'), timelinePlay:$('timelinePlay'), timelineStop:$('timelineStop'), timelineTimeDisplay:$('timelineTimeDisplay'), timelineDuration:$('timelineDuration'), timelineDurationNumber:$('timelineDurationNumber'), timelineIntensity:$('timelineIntensity'), timelineIntensityValue:$('timelineIntensityValue'), timelineEditorName:$('timelineEditorName'), timelineCurveSelect:$('timelineCurveSelect'), timelineCurveBadge:$('timelineCurveBadge'), timelineAddKey:$('timelineAddKey'), timelineDeleteKey:$('timelineDeleteKey'), timelineClearLayer:$('timelineClearLayer'), timelineDeleteLayer:$('timelineDeleteLayer'), fxInspector:$('fxInspector'), undoBtn:$('undoBtn'), redoBtn:$('redoBtn'), saveProjectBtn:$('saveProjectBtn'), openProjectBtn:$('openProjectBtn'), projectFileInput:$('projectFileInput'), viewerFocusBtn:$('viewerFocusBtn'), rightTabs:$('rightTabs'), effectSearch:$('effectSearch'), motionContext:$('motionContext'), motionFxName:$('motionFxName'), motionFxHint:$('motionFxHint'), motionFxScope:$('motionFxScope'), selectedFxMotionCard:$('selectedFxMotionCard'), selectedFxMotionControls:$('selectedFxMotionControls'), openFxInspectorBtn:$('openFxInspectorBtn'), pulseCard:$('pulseCard'), inspectorTargetChip:$('inspectorTargetChip'), timelineZoom:$('timelineZoom'), timelineFitBtn:$('timelineFitBtn'), timelineScroll:$('timelineScroll'), rulerViewport:$('rulerViewport'), timelineTrackReadout:$('timelineTrackReadout'), masterLookPanel:$('masterLookPanel'), masterLookBadge:$('masterLookBadge'), finalExposure:$('finalExposure'), finalContrast:$('finalContrast'), finalHighlights:$('finalHighlights'), finalShadows:$('finalShadows'), finalSaturation:$('finalSaturation'), finalTemperature:$('finalTemperature'), finalTint:$('finalTint'), finalExposureReadout:$('finalExposureReadout'), finalContrastReadout:$('finalContrastReadout'), finalHighlightsReadout:$('finalHighlightsReadout'), finalShadowsReadout:$('finalShadowsReadout'), finalSaturationReadout:$('finalSaturationReadout'), finalTemperatureReadout:$('finalTemperatureReadout'), finalTintReadout:$('finalTintReadout'), resetFinalLook:$('resetFinalLook'), frame:document.querySelector('.frame'), leftPanel:$('leftPanel'), centerPanel:$('centerPanel'), rightPanel:$('rightPanel'), leftResizer:$('leftResizer'), rightResizer:$('rightResizer'), timelineResizer:$('timelineResizer')
   };
 
   const mainCtx=els.mainCanvas.getContext('2d',{alpha:false});
@@ -769,7 +772,7 @@ window.addEventListener('error', e => { const s=document.getElementById('statusT
   const scratch=document.createElement('canvas'); scratch.width=W; scratch.height=H; const scratchCtx=scratch.getContext('2d',{alpha:false,willReadFrequently:true});
   const lumaProbe=document.createElement('canvas'); lumaProbe.width=32; lumaProbe.height=18; const lumaProbeCtx=lumaProbe.getContext('2d',{alpha:false,willReadFrequently:true});
   const sampleWork=document.createElement('canvas'); sampleWork.width=64; sampleWork.height=64; const sampleWorkCtx=sampleWork.getContext('2d',{alpha:false,willReadFrequently:true});
-  // v28.2.34 — Source-first analysis buffers. These are intentionally separate from sampleWork so
+  // v28.2.35 — Source-first analysis buffers. These are intentionally separate from sampleWork so
   // optical/analog FX can inspect the current layer input without colliding with other sampled FX.
   const sourceAnalysisCanvas=document.createElement('canvas'); sourceAnalysisCanvas.width=72; sourceAnalysisCanvas.height=48; const sourceAnalysisCtx=sourceAnalysisCanvas.getContext('2d',{alpha:false,willReadFrequently:true});
   const sourceHighlightSmall=document.createElement('canvas'); sourceHighlightSmall.width=240; sourceHighlightSmall.height=160; const sourceHighlightSmallCtx=sourceHighlightSmall.getContext('2d',{alpha:true,willReadFrequently:true});
@@ -799,7 +802,7 @@ window.addEventListener('error', e => { const s=document.getElementById('statusT
     activeSampleName:null, activePreset:0, chain:['original','original','original'], projectFormat:'source', fitMode:'cover', sourceAspect:0.75, sourceDuration:0, clipIn:0, clipOut:0, clipLoop:true, clipReverse:false, clipFreeze:false, freezeAt:0,
     intensity:.78,motion:.72,typeLevel:1.0,speed:1,bpm:120,pulseEnabled:false,trail:0,strobe:0,cameraMotion:0,
     finalExposure:0,finalContrast:0,finalHighlights:0,finalShadows:0,finalSaturation:1,finalTemperature:0,finalTint:0,
-    frame:0, previewApplyStage:0, exporting:false, offlineRendering:false, exportRenderLock:false, exportSession:null, exportProgressStartedAt:0, previewQuality:'auto', autoPreviewLong:720, frameTimeEMA:8, autoQualityCooldown:0, timelineTrackHeight:104,
+    frame:0, previewApplyStage:0, exporting:false, offlineRendering:false, exportRenderLock:false, exportSession:null, exportProgressStartedAt:0, exportProfiler:null, nativeHelper:null, nativeHelperLastProbe:0, previewQuality:'auto', autoPreviewLong:720, frameTimeEMA:8, autoQualityCooldown:0, timelineTrackHeight:104,
     renderDirty:true,previewRefreshRemaining:0,previewCursor:0,viewerFrameInterval:16.0,viewerFpsTier:60,renderProfile:'high',lastInteractionAt:0,autoPreviewPendingLong:null,liveMatteLastRequest:0,liveDepthLastRequest:0,liveMatteScheduled:false,liveDepthScheduled:false,previewLongFrames:0,previewMaxCost:0,previewOverBudgetFrames:0,previewUnderBudgetFrames:0,viewerDisplayW:0,viewerDisplayH:0,viewerLayoutAvailW:0,viewerLayoutAvailH:0,viewerLayoutRatio:0,
     compositionMode:'sourceType', bgColor:'#0a0b0d', accentColor:'#d3ff52', textColor:'#f5f4ee', subjectBgMode:'solid',
     textEnabled:false, textMain:'HYPE\nFORM', textSub:'VISUAL FX LAB / PERSONAL MOTION SKETCH', textFxRouting:'independent', fontFamily:'Arial', textLayout:'center', fontSize:140, tracking:0, leading:1.0, fontWeight:'700', textAlign:'center', scaleX:1,
@@ -898,7 +901,7 @@ window.addEventListener('error', e => { const s=document.getElementById('statusT
       if(state.sourceType==='video'&&state.sourceVideo)syncVideoPreviewToTimeline(state.currentTime,true);
       invalidateRender(true);
     }finally{state.historyLock=false;}
-    if(!history)setStatus('v28.2.34 Project loaded.');
+    if(!history)setStatus('v28.2.35 Project loaded.');
   }
   function undo(){if(!state.history.length)return;const current=historySnapshot();state.future.push(current);const snap=state.history.pop();restoreProjectPayload(snap,{history:true});updateHistoryButtons();setStatus(`Undo${snap.label?`: ${snap.label}`:''}`);}
   function redo(){if(!state.future.length)return;const current=historySnapshot();state.history.push(current);const snap=state.future.pop();restoreProjectPayload(snap,{history:true});updateHistoryButtons();setStatus('Redo');}
@@ -3827,6 +3830,7 @@ function renderFxInspector(){
     updateExportProgress(0,'Preflight','Locking render graph and validating layers…');
   }
   function updateExportProgress(progress=0,phase='Rendering',detail=''){
+    if(state.exportProfiler)markExportProfilerPhase(state.exportProfiler,phase);
     const p=clamp(Number(progress)||0,0,1),pct=Math.round(p*100),elapsed=Math.max(0,(performance.now()-(state.exportProgressStartedAt||performance.now()))/1000),eta=p>.01?Math.max(0,elapsed*(1-p)/p):0;
     if(els.exportRenderRing)els.exportRenderRing.style.setProperty('--progress',String(pct));if(els.exportRenderPercent)els.exportRenderPercent.textContent=`${pct}%`;if(els.exportRenderBar)els.exportRenderBar.style.width=`${pct}%`;if(els.exportRenderPhase)els.exportRenderPhase.textContent=phase;if(els.exportRenderDetail)els.exportRenderDetail.textContent=`${detail}${p>.01&&p<1?` · ETA ~${eta.toFixed(1)}s`:''}`;
   }
@@ -3872,6 +3876,206 @@ function renderFxInspector(){
 
   function downloadBlob(blob, filename){
     const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),15000);
+  }
+
+
+  // v28.2.35 — Native FFmpeg / VideoToolbox bridge.
+  // The 13 EXPORT_PIPELINE_LOCK protected function bodies remain unchanged.
+  // Native export consumes renderOfflineFrame(), so visual output still comes from the locked final-composite renderer.
+  const NATIVE_EXPORT_PORT=48735;
+  const NATIVE_EXPORT_BASE=(['127.0.0.1','localhost'].includes(location.hostname)&&String(location.port)===String(NATIVE_EXPORT_PORT))
+    ? `${location.origin}/v1`
+    : `http://127.0.0.1:${NATIVE_EXPORT_PORT}/v1`;
+
+  function beginExportProfiler(engine,meta={}){
+    const p={engine,startedAt:performance.now(),finishedAt:0,totalMs:0,frameRenderMs:0,readbackMs:0,encodeMs:0,finalizeMs:0,frames:0,bytes:0,phaseMarks:{},meta:{...meta},helper:null,status:'running'};
+    state.exportProfiler=p;updateExportProfilerUI(p);return p;
+  }
+  function markExportProfilerPhase(p,phase){
+    if(!p||!phase)return;const key=String(phase);
+    if(!(key in p.phaseMarks))p.phaseMarks[key]=performance.now();
+  }
+  function exportProfilerPct(ms,total){return total>0?Math.round(ms/total*100):0;}
+  function updateExportProfilerUI(p){
+    if(!els.exportProfilerReadout||!p)return;
+    const total=p.totalMs||Math.max(1,performance.now()-p.startedAt);
+    let render=p.frameRenderMs;
+    if(!render&&p.engine==='browser'){
+      const first=Object.entries(p.phaseMarks).find(([k])=>k.startsWith('Rendering final composite'))?.[1];
+      const fin=p.phaseMarks['Finalizing MP4'];
+      if(first&&fin)render=Math.max(0,fin-first-p.encodeMs);
+    }
+    const label=p.engine==='native'?'MAC NATIVE':p.engine==='browser'?'BROWSER':'EXPORT';
+    const parts=[
+      `${label} · ${p.frames||'—'} frames`,
+      `Frame Render ${(render/1000).toFixed(2)}s (${exportProfilerPct(render,total)}%)`
+    ];
+    if(p.readbackMs)parts.push(`Readback ${(p.readbackMs/1000).toFixed(2)}s (${exportProfilerPct(p.readbackMs,total)}%)`);
+    parts.push(`${p.engine==='native'?'Native Pipe / Encode':'Encode'} ${(p.encodeMs/1000).toFixed(2)}s (${exportProfilerPct(p.encodeMs,total)}%)`);
+    parts.push(`Finalize ${(p.finalizeMs/1000).toFixed(2)}s (${exportProfilerPct(p.finalizeMs,total)}%)`);
+    if(p.finishedAt)parts.push(`Total ${(p.totalMs/1000).toFixed(2)}s`);
+    if(p.helper?.encoder)parts.push(p.helper.encoder);
+    els.exportProfilerReadout.textContent=`Export Profiler: ${parts.join(' · ')}`;
+  }
+  function finishExportProfiler(p,status='complete',extra={}){
+    if(!p)return;p.finishedAt=performance.now();p.totalMs=p.finishedAt-p.startedAt;p.status=status;Object.assign(p,extra);updateExportProfilerUI(p);
+    console.info('[HYPE FORM] Export Profiler',JSON.parse(JSON.stringify({...p,phaseMarks:Object.fromEntries(Object.entries(p.phaseMarks).map(([k,v])=>[k,Math.round(v-p.startedAt)]))})));
+    return p;
+  }
+  function setNativeEngineStatus(title,detail){
+    if(els.exportEngineStatus)els.exportEngineStatus.textContent=title;
+    if(els.exportEngineDetail)els.exportEngineDetail.textContent=detail;
+  }
+  async function nativeFetch(path,opts={},timeoutMs=2500){
+    const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),timeoutMs);
+    try{
+      const res=await fetch(`${NATIVE_EXPORT_BASE}${path}`,{cache:'no-store',...opts,signal:ctrl.signal});
+      const text=await res.text();let data={};try{data=text?JSON.parse(text):{};}catch{data={message:text};}
+      if(!res.ok)throw new Error(data.error||data.message||`Native helper HTTP ${res.status}`);
+      return data;
+    }finally{clearTimeout(timer);}
+  }
+  async function probeNativeExportHelper({silent=false,force=false}={}){
+    const now=performance.now();
+    if(!force&&state.nativeHelper&&now-state.nativeHelperLastProbe<5000)return state.nativeHelper;
+    state.nativeHelperLastProbe=now;
+    try{
+      const info=await nativeFetch('/health',{},900);
+      state.nativeHelper=info;
+      if(info?.ok&&info?.ffmpeg){
+        const enc=info.encoder||'FFmpeg';
+        setNativeEngineStatus('MAC HELPER READY',enc==='h264_videotoolbox'?'VIDEOTOOLBOX / HARDWARE':String(enc).toUpperCase());
+      }else{
+        state.nativeHelper=null;setNativeEngineStatus('MAC HELPER DEGRADED','BROWSER FALLBACK');
+      }
+      return info?.ok&&info?.ffmpeg?info:null;
+    }catch(err){
+      state.nativeHelper=null;setNativeEngineStatus('BROWSER FALLBACK READY','MAC HELPER NOT DETECTED');
+      if(!silent)console.info('[HYPE FORM] Native helper unavailable; browser export remains active.',err?.message||err);
+      return null;
+    }
+  }
+  function nativeBitrateMbps(w,h,fps,quality){
+    const q=quality==='very-high'?1.55:quality==='medium'?.72:1;
+    const pxScale=(w*h)/(1080*1920),fpsScale=Math.max(.55,Math.min(2,Number(fps||30)/30));
+    return Math.max(6,Math.min(60,18*pxScale*fpsScale*q));
+  }
+  async function nativeExportStart(meta){
+    return nativeFetch('/export/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(meta)},8000);
+  }
+  async function nativeExportFrame(sessionId,index,bytes){
+    return nativeFetch('/export/frame',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Hype-Session':sessionId,'X-Hype-Frame':String(index)},body:bytes},120000);
+  }
+  async function nativeExportFinish(sessionId){
+    return nativeFetch('/export/finish',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:sessionId})},300000);
+  }
+  async function nativeExportCancel(sessionId){
+    if(!sessionId)return;try{await nativeFetch('/export/cancel',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({session_id:sessionId})},3000);}catch(e){}
+  }
+
+  async function exportMp4NativeFramePerfect(nativeInfo,profiler){
+    const duration=state.duration,fps=+els.exportFps.value,{w,h}=getExportSize(),guard=state.exportSession?.guard||validateExportPreflight();
+    if((w&1)||(h&1))throw new Error(`Internal export-size error: ${w}×${h}. AVC requires even dimensions.`);
+    const totalFrames=Math.max(1,Math.round(duration*fps)),previewRestore={w:W,h:H};
+    const exportCanvas=document.createElement('canvas');exportCanvas.width=w;exportCanvas.height=h;
+    const exportCtx=exportCanvas.getContext('2d',{alpha:false,willReadFrequently:true});exportCtx.imageSmoothingEnabled=true;try{exportCtx.imageSmoothingQuality='high';}catch(e){}
+    const bitrate=nativeBitrateMbps(w,h,fps,els.exportQuality.value);
+    let nativeSession=null;
+    updateExportProgress(.01,'Starting Mac Native Export',`FFmpeg helper · ${nativeInfo.encoder||'auto'} · ${bitrate.toFixed(1)} Mbps`);
+    const started=await nativeExportStart({width:w,height:h,fps,total_frames:totalFrames,bitrate_mbps:bitrate,quality:els.exportQuality.value,filename:`hype-form-motion-${Date.now()}.mp4`,preferred_encoder:'h264_videotoolbox'});
+    nativeSession=started.session_id;profiler.helper=started;updateExportProfilerUI(profiler);
+    resizeProjectCanvases(w,h);resetLayerRuntime();clearFrameHistory(frameHistory);clearMasterFeedback();resetMotionFlow();if(state.sourceVideo)state.sourceVideo.pause();
+    try{
+      for(let i=0;i<totalFrames;i++){
+        const t=i/fps,rs=performance.now(),audit=await renderOfflineFrame(t,exportCanvas,exportCtx,guard);profiler.frameRenderMs+=performance.now()-rs;
+        const rbs=performance.now(),rgba=exportCtx.getImageData(0,0,w,h);profiler.readbackMs+=performance.now()-rbs;
+        const es=performance.now();await nativeExportFrame(nativeSession,i,rgba.data);profiler.encodeMs+=performance.now()-es;profiler.frames=i+1;profiler.bytes+=rgba.data.byteLength;
+        if(i%Math.max(1,Math.round(fps/4))===0||i===totalFrames-1){
+          const progress=.02+(i+1)/totalFrames*.92;
+          updateExportProgress(progress,'Rendering → Native FFmpeg',`Frame ${i+1} / ${totalFrames} · source ${Number.isFinite(audit.sourceDecoded)?audit.sourceDecoded.toFixed(2)+'s':'n/a'} · ${audit.appliedLayerIds.length} FX · raw RGBA → FFmpeg`);
+          updateExportProfilerUI(profiler);setStatus(`Mac Native MP4… ${Math.round((i+1)/totalFrames*100)}% (${i+1}/${totalFrames})`);await new Promise(r=>setTimeout(r,0));
+        }
+      }
+      updateExportProgress(.96,'Finalizing Native MP4','Closing raw frame pipe and flushing FFmpeg / VideoToolbox…');
+      const fs=performance.now(),result=await nativeExportFinish(nativeSession);profiler.finalizeMs+=performance.now()-fs;profiler.helper=result;nativeSession=null;
+      updateExportProgress(1,'Export complete',`${totalFrames} frames · ${fps} FPS · ${w}×${h} · ${result.encoder||nativeInfo.encoder||'FFmpeg'}`);
+      setStatus(`Mac Native Export complete → ${result.path||'~/Downloads/HYPE_FORM_Exports'}`);
+      return result;
+    }finally{
+      if(nativeSession)await nativeExportCancel(nativeSession);
+      resizeProjectCanvases(previewRestore.w,previewRestore.h);updatePreviewQualityUI();
+    }
+  }
+
+  async function exportVideoNative(nativeInfo){
+    if(state.exporting)return;
+    const oldLabel=els.exportBtn.textContent,{w,h}=getExportSize(),fps=+els.exportFps.value,v=state.sourceVideo;
+    const session={wasPlaying:state.playing,savedCurrentTime:state.currentTime,savedVideoTime:v?Number(v.currentTime)||0:0,videoWasPaused:v?v.paused:true,guard:null,lastSourceLock:null};
+    const profiler=beginExportProfiler('native',{width:w,height:h,fps});
+    state.exporting=true;state.offlineRendering=true;state.exportRenderLock=true;state.exportSession=session;state.playing=false;state.playAnchorPerf=0;state.playAnchorTime=0;state.aiEpoch++;if(v)v.pause();els.exportBtn.disabled=true;els.exportBtn.textContent='Native Rendering…';
+    let succeeded=false,error=null;
+    try{
+      if(document.fonts?.ready)await document.fonts.ready;
+      session.guard=validateExportPreflight();showExportProgress({title:'Mac Native MP4 / FFmpeg + VideoToolbox',layers:session.guard.layers,width:w,height:h,fps});
+      resetLayerRuntime();clearFrameHistory(frameHistory);clearMasterFeedback();resetMotionFlow();setRenderQualityProfile('high');
+      await exportMp4NativeFramePerfect(nativeInfo,profiler);succeeded=true;await new Promise(r=>setTimeout(r,180));
+    }catch(e){
+      error=e;console.error(e);updateExportProgress(1,'NATIVE EXPORT FAILED',e.message||String(e));setStatus(`Native Export error: ${e.message}`);
+    }finally{
+      state.exportRenderLock=false;state.offlineRendering=false;state.exporting=false;state.exportSession=null;resetLayerRuntime();clearFrameHistory(frameHistory);clearMasterFeedback();resetMotionFlow();els.exportBtn.disabled=false;els.exportBtn.textContent=oldLabel;state.currentTime=session.savedCurrentTime;
+      if(v){const target=resolveProjectSourceTime(state.currentTime);try{const locked=await waitForExactVideoFrame(v,target,+els.exportFps.value||30);cacheDecodedVideoFrame(v,locked.mediaTime);}catch{await waitForVideoSeek(v,target).catch(()=>{});cacheDecodedVideoFrame(v,Number(v.currentTime)||target);}}
+      state.playing=session.wasPlaying;if(state.playing){resetPlayAnchor(performance.now());if(v&&!state.clipReverse&&!state.clipFreeze)v.play().catch(()=>{});}lastMainMs=0;lastPreviewMs=0;hideExportProgress();invalidateRender(true);updateTimelinePlayhead();
+      finishExportProfiler(profiler,succeeded?'complete':'failed');state.exportProfiler=null;
+      if(succeeded)setStatus(`Native Export complete. ${session.guard.layers} enabled FX layer${session.guard.layers===1?'':'s'} rendered through the locked final-composite pipeline.`);
+    }
+    if(error)throw error;
+  }
+
+  async function exportBrowserWithProfiler(){
+    const {w,h}=getExportSize(),fps=+els.exportFps.value,p=beginExportProfiler('browser',{width:w,height:h,fps});
+    let restoreAdd=null,restoreFinalize=null;
+    try{
+      if(els.exportFormat.value==='mp4'){
+        try{
+          const mb=await ensureMediabunny();
+          const ap=mb.CanvasSource?.prototype,op=mb.Output?.prototype;
+          if(ap&&typeof ap.add==='function'){
+            const original=ap.add;restoreAdd=()=>{ap.add=original;};
+            ap.add=async function(...args){const s=performance.now();try{return await original.apply(this,args);}finally{p.encodeMs+=performance.now()-s;p.frames++;updateExportProfilerUI(p);}};
+          }
+          if(op&&typeof op.finalize==='function'){
+            const original=op.finalize;restoreFinalize=()=>{op.finalize=original;};
+            op.finalize=async function(...args){const s=performance.now();try{return await original.apply(this,args);}finally{p.finalizeMs+=performance.now()-s;}};
+          }
+        }catch(err){console.warn('[HYPE FORM] Browser profiler instrumentation unavailable:',err);}
+      }
+      await exportVideo();
+    }finally{
+      if(restoreAdd)restoreAdd();if(restoreFinalize)restoreFinalize();
+      const first=Object.entries(p.phaseMarks).find(([k])=>k.startsWith('Rendering final composite'))?.[1],fin=p.phaseMarks['Finalizing MP4'];
+      if(first&&fin)p.frameRenderMs=Math.max(0,fin-first-p.encodeMs);
+      finishExportProfiler(p,p.phaseMarks['EXPORT FAILED']?'failed':'complete');state.exportProfiler=null;
+    }
+  }
+
+  async function exportVideoV2835(){
+    if(state.exporting)return;
+    if(els.exportFormat.value!=='mp4')return exportVideo();
+    const engine=els.exportEngine?.value||'auto';
+    if(engine==='browser'){setNativeEngineStatus('BROWSER ENGINE','WEBCODECS / LOCKED FALLBACK');return exportBrowserWithProfiler();}
+    const nativeInfo=await probeNativeExportHelper({silent:true,force:true});
+    if(nativeInfo){
+      try{return await exportVideoNative(nativeInfo);}
+      catch(err){
+        console.warn('[HYPE FORM] Native export failed; retrying with protected Browser Export.',err);
+        setNativeEngineStatus('NATIVE FAILED → FALLBACK','BROWSER / WEBCODECS');
+        setStatus(`Native helper failed (${err.message}). Retrying with Browser Export…`);
+        return exportBrowserWithProfiler();
+      }
+    }
+    setNativeEngineStatus('MAC HELPER NOT FOUND','BROWSER / WEBCODECS FALLBACK');
+    setStatus('Mac Native Helper / FFmpeg not detected. Using protected Browser Export fallback.');
+    return exportBrowserWithProfiler();
   }
 
   async function ensureMediabunny(){
@@ -4291,7 +4495,7 @@ function renderFxInspector(){
   }
 
   const PROJECT_RESTORE_CONTRACT=Object.freeze({
-    baseline:'v28.2.34-portable-session-v2',
+    baseline:'v28.2.35-portable-session-v2',
     rules:Object.freeze(['complete master controls','timeline/keyframe graph','portable source media','portable selected local font','AI mask/depth cache','pre-mutation project validation','restore-order sync','post-load state fingerprint'])
   });
   function validateProjectRestoreContract(){
@@ -4406,8 +4610,9 @@ function renderFxInspector(){
     els.clipReverseBtn.onclick=()=>{pushHistory('Toggle Reverse');state.clipReverse=!state.clipReverse;resetLayerRuntime();clearFrameHistory(frameHistory);clearMasterFeedback();resetMotionFlow();updateVideoClipUI();syncVideoPreviewToTimeline(state.currentTime,true);setStatus(`Reverse ${state.clipReverse?'ON':'OFF'}.`);};
     els.clipFreezeBtn.onclick=()=>{pushHistory('Toggle Freeze');const frame=resolveProjectSourceTime(state.currentTime);state.clipFreeze=!state.clipFreeze;if(state.clipFreeze)state.freezeAt=frame;resetLayerRuntime();clearFrameHistory(frameHistory);clearMasterFeedback();resetMotionFlow();updateVideoClipUI();syncVideoPreviewToTimeline(state.currentTime,true);setStatus(`Freeze ${state.clipFreeze?'ON':'OFF'}.`);};
     els.matchClipBtn.onclick=()=>{pushHistory('Match Clip');matchProjectToClip();};els.resetClipBtn.onclick=()=>{pushHistory('Full Source Range');resetVideoClipControls();setStatus('IN / OUT range reset to the full source. Playback modes are unchanged.');};
-    els.resetBtn.onclick=()=>{pushHistory('Reset');resetNeutral();}; els.randomizeBtn.onclick=()=>{pushHistory('Randomize');randomizeChain();}; els.captureBtn.onclick=capturePNG; els.exportBtn.onclick=exportVideo; els.segmentBtn.onclick=()=>runSegmentation(false); els.clearMaskBtn.onclick=clearMask; els.depthBtn.onclick=()=>runDepthEstimate(false); els.clearDepthBtn.onclick=clearDepth; if(els.viewerDepthRun)els.viewerDepthRun.onclick=e=>{e.stopPropagation();runDepthEstimate(false);};
+    els.resetBtn.onclick=()=>{pushHistory('Reset');resetNeutral();}; els.randomizeBtn.onclick=()=>{pushHistory('Randomize');randomizeChain();}; els.captureBtn.onclick=capturePNG; els.exportBtn.onclick=exportVideoV2835; els.segmentBtn.onclick=()=>runSegmentation(false); els.clearMaskBtn.onclick=clearMask; els.depthBtn.onclick=()=>runDepthEstimate(false); els.clearDepthBtn.onclick=clearDepth; if(els.viewerDepthRun)els.viewerDepthRun.onclick=e=>{e.stopPropagation();runDepthEstimate(false);};
     els.exportFormat.onchange=()=>{const f=els.exportFormat.value;els.exportBtn.textContent=f==='mp4'?'EXPORT MP4':(f==='pngalpha'?'EXPORT ALPHA ZIP':'EXPORT WEBM');els.alphaOptions.hidden=f!=='pngalpha';};
+    if(els.exportEngine)els.exportEngine.onchange=()=>{const mode=els.exportEngine.value;if(mode==='browser')setNativeEngineStatus('BROWSER ENGINE','WEBCODECS / LOCKED FALLBACK');else probeNativeExportHelper({silent:true,force:true});};
 
     els.fileInput.onchange=e=>{const file=e.target.files?.[0];try{processSourceFile(file);}finally{e.target.value='';}};
     if(els.sourceOpenBtn)els.sourceOpenBtn.onclick=()=>{els.sourceOpenBtn.blur();openSourcePicker();}; if(els.sourceReplaceBtn)els.sourceReplaceBtn.onclick=()=>{els.sourceReplaceBtn.blur();openSourcePicker();};
@@ -4487,7 +4692,7 @@ function renderFxInspector(){
   if(__paramAudit.invalidRules.length)console.warn('[HYPE FORM] Invalid parameter capability rules',__paramAudit.invalidRules);
   // Read-only diagnostics hook for automated smoke tests. Keeps internals private while exposing invariants.
   window.__HYPE_DIAGNOSTICS__=Object.freeze({
-    version:'v28.2.34',
+    version:'v28.2.35',
     runtimePreflight:()=>runtimePreflight(),
     exportPreflight:()=>{const g=validateExportPreflight();return{layers:g.layers,width:W,height:H};},
     renderGraphAt:(t=state.currentTime)=>{const audit={};renderProjectFrame(clamp(Number(t)||0,0,state.duration),{mode:'diagnostic',includeAudition:false,audit});return{expected:exportActiveLayerIds(clamp(Number(t)||0,0,state.duration)),applied:[...audit.appliedLayerIds],width:audit.width,height:audit.height};},
