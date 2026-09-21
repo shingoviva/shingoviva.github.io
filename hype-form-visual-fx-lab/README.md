@@ -1,7 +1,29 @@
-# HYPE FORM / Visual FX Lab v28.2.34
+# HYPE FORM / Visual FX Lab v28.2.35
 
 Production Tool / Core Stability Audit + Smooth Preview Runtime + Portable Project Restore + Source-First FX + Export Regression Lock
 
+
+## v28.2.35
+
+### Mac Fast Export — native FFmpeg / VideoToolbox + Export Profiler
+
+This release adds a **second, optional MP4 export engine** without rewriting the locked Browser Export core. The existing 13 protected export functions are byte-for-byte unchanged from v28.2.34.
+
+- Added **Export Engine**: `Auto — Mac Fast when available`, `Mac Fast — FFmpeg / VideoToolbox`, or the existing `Browser — Compatible / Locked Baseline`.
+- Added `START_MAC_FAST_EXPORT.command`. It starts a loopback-only helper and opens the app at `http://127.0.0.1:47832/`. This local launch is the recommended Mac Fast workflow.
+- Added `mac_fast_export/native_export_helper.py`. The browser still generates each final visual frame through the existing `renderOfflineFrame()` path; the helper receives raw RGBA and pipes it to native FFmpeg.
+- On macOS FFmpeg, the helper prefers **`h264_videotoolbox`**. The helper validates frame order, exact byte size, output dimensions, FPS and total frame count before finalizing MP4.
+- Mac Fast output is saved to `~/Downloads/HYPE_FORM_EXPORTS/`. Output paths are chosen by the helper; browser requests cannot write arbitrary filesystem paths.
+- Added an **Export Profiler** showing `RENDER / READBACK / FEED+ENCODE / FINALIZE`. This is important because FFmpeg only accelerates the encoding side: if `RENDER` dominates, the next optimization target is source decoding / final-composite rendering rather than H.264.
+- `Auto` falls back to the existing Browser Export when the helper is not running. PNG Alpha and WebM remain on their existing paths.
+- Added `MAC_FAST_EXPORT.md`, `NATIVE_EXPORT_CONTRACT.md`, `verify_native_export.py`, `verify_export_contract.py`, and `verify_release.py`.
+- Project schema remains **313**; Export Engine is an environment preference, not project content.
+
+### Native helper QA
+
+The helper protocol was exercised end-to-end in the development container using FFmpeg's `libx264` fallback: three ordered 64×64 RGBA frames were streamed through `/start -> /frame -> /finish`, producing a valid H.264 / yuv420p / 30fps MP4 with exactly 3 frames. The container is Linux and therefore cannot validate Apple's VideoToolbox hardware encoder; that final hardware-speed check must be performed on the target Mac.
+
+Run `python3 verify_release.py` for the static release checks.
 
 ## v28.2.34
 
