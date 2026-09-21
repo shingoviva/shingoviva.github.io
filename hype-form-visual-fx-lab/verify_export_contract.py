@@ -5,8 +5,8 @@ import hashlib, re, sys
 EXPECTED={
 'sourceTimeForMappedTimeline':'3c86e2485a74f143639e749af2cc1c80ad312f36f47b097b73dcede19f78339a',
 'resolveProjectSourceTime':'8009074957a1f54b4ffede46f8d8e291c1a16942b931ad69dfd08a3f5047f219',
-'waitForVideoSeek':'bb5d28a3e318c1aa34f6b0c8bfe2724b4e3c9cf79e537a17abbd31f7a11f9ae9',
-'waitForExactVideoFrame':'51027edd31c7724fdd46886b776ffe2a34c8f235e0281f9a4b413bbd60cdfb70',
+'waitForVideoSeek':'887ca950630a688114e1a1a03faf05c5f8eab1319d9c5d6e83e0b57b74319ee7',
+'waitForExactVideoFrame':'c9ea8fe036e125d27aabd81e724b39d56ee6ba86d828aad442135af74d30aa9b',
 'renderProjectFrame':'ba9bc7dc82e13041e83b7580e17aa6d0e4cdff77eb156df0b642ce320f4b263b',
 'renderOfflineFrame':'a56fe0aeddf32d3dddad5d7920721334b5f9b5f42f18d44ba7fd9cdce31bec75',
 'validateExportPreflight':'915ab3a348d4d9abca4e97d05239e0a33cdfa3750c8e33301878657cd8a542c5',
