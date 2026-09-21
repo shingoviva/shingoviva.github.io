@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HYPE FORM / Visual FX Lab v28.2.36</title>
+  <title>HYPE FORM FX Lab · v28.2.36</title>
+  <meta name="application-name" content="HYPE FORM FX Lab" />
+  <meta name="theme-color" content="#070809" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="alternate icon" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="hype-form-fx-lab-icon.svg" />
+  <link rel="manifest" href="site.webmanifest" />
   <style>
     :root{
       --bg:#070809; --panel:rgba(14,16,18,.9); --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.15);
@@ -37,7 +43,10 @@
     .timeline-panel{grid-column:2/4;grid-row:2;position:relative;min-height:150px}
     .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);backdrop-filter:blur(18px);overflow:hidden;min-height:0}
     .panel-scroll{height:100%;overflow:auto;padding:18px 22px 18px 18px;scrollbar-gutter:stable}
-    .brand{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:18px}
+    .brand{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}
+    .brand-main{display:flex;align-items:center;gap:10px;min-width:0}
+    .brand-icon{width:38px;height:38px;flex:0 0 38px;border-radius:10px;box-shadow:0 7px 20px rgba(0,0,0,.32)}
+    .brand-copy{min-width:0}
     .brand .sub,.section-title,.mini-title,.chip{letter-spacing:.16em;text-transform:uppercase}
     .brand .sub{font-size:.76rem;color:var(--lime);font-weight:700}
     .brand h1{margin:0;font-size:1.42rem;letter-spacing:.06em;line-height:1.05}
@@ -285,7 +294,7 @@
 <div class="frame">
   <aside class="panel left-panel" id="leftPanel">
     <div class="panel-scroll">
-      <div class="brand"><div><div class="sub">HYPE FORM</div><h1>Visual FX Lab</h1></div><div><div class="sub" style="text-align:right">v28.2.36</div></div></div>
+      <div class="brand"><div class="brand-main"><img class="brand-icon" src="hype-form-fx-lab-icon.svg" alt=""><div class="brand-copy"><div class="sub">HYPE FORM</div><h1>FX Lab</h1></div></div><div><div class="sub" style="text-align:right">v28.2.36</div></div></div>
 
       <nav class="control-tabs" id="controlTabs">
         <button class="control-tab active" data-view="source">SOURCE</button>
@@ -438,7 +447,7 @@ FORM</textarea><div class="note" style="margin-top:7px;padding:8px 10px">長文�
       </div>
 
       <div class="control-view" data-control-view="export">
-        <div class="export-hero"><strong>Silent short-form export</strong><span>音声トラックは扱いません。Visual FX Labは短尺の映像素材生成に特化します。Previewでは軽さを優先し、停止時とExportでは高品質レンダリングへ切り替えます。</span></div>
+        <div class="export-hero"><strong>Silent short-form export</strong><span>音声トラックは扱いません。HYPE FORM FX Labは短尺の映像素材生成に特化します。Previewでは軽さを優先し、停止時とExportでは高品質レンダリングへ切り替えます。</span></div>
         <div class="section-card">
           <div class="compact-head"><h3 class="section-title">Output</h3><span class="chip">05</span></div>
           <div class="field"><label>Format</label><select id="exportFormat"><option value="mp4" selected>MP4 / H.264 — Recommended</option><option value="webm">WebM / VP9 — Fallback</option><option value="pngalpha">PNG Sequence ZIP / Alpha — Material</option></select></div>
