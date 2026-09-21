@@ -5,10 +5,12 @@
 - JavaScript `node --check`: PASS
 - Python helper `py_compile`: PASS
 - Export Contract: PASS — 13 protected Browser Export functions unchanged
-- Native Export Contract: PASS — 15 checks
+- Native Export Contract: PASS — 17 checks
 - DOM IDs: 217 unique
 - Named functions: 313 unique
 - FX definitions: 53
+- Helper-missing automatic Browser fallback: PASS
+- Native-export-failure automatic Browser fallback: PASS
 
 ## Native helper protocol smoke test
 
@@ -29,7 +31,14 @@ Result:
 - resolution: 64×64
 - frame rate: 30/1
 - frame count: 3
+- duration: 0.100 s (= 3 / 30 fps)
 - protocol frame-order / byte-count validation: PASS
+
+A separate 90-frame / 30fps raw-RGBA FFmpeg transport test produced exactly 90 H.264 frames and 3.000 s duration.
+
+## Browser runtime smoke limitation in this execution environment
+
+A full Chromium → localhost-helper UI run was attempted, but the hosted Chromium policy blocks loopback navigation with `ERR_BLOCKED_BY_ADMINISTRATOR`. The application/static JS and helper protocol are independently verified, but this environment cannot reproduce the user's Mac browser-to-loopback path end-to-end.
 
 ## Mac-only acceptance test still required
 
@@ -40,3 +49,5 @@ The target Mac should confirm:
 - Export Profiler phase percentages are sensible
 - output is created in `~/Downloads/HYPE_FORM_EXPORTS/`
 - measured total export time improves on Browser Export for the user's normal project
+
+The profiler exists specifically because FFmpeg cannot accelerate exact source decode / `renderOfflineFrame()` if frame rendering is the dominant cost.
