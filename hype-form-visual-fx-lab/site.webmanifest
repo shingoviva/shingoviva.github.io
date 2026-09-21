@@ -1,0 +1,17 @@
+{
+  "name": "HYPE FORM FX Lab",
+  "short_name": "FX Lab",
+  "description": "HYPE FORM FX Lab — browser-based visual effects laboratory.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#070809",
+  "theme_color": "#070809",
+  "icons": [
+    {
+      "src": "hype-form-fx-lab-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
