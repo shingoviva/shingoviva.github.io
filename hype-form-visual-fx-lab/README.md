@@ -1,4 +1,6 @@
-# HYPE FORM / Visual FX Lab v28.2.35
+# HYPE FORM FX Lab
+
+Current stable release: **v28.2.36**
 
 Production Tool / Core Stability Audit + Smooth Preview Runtime + Portable Project Restore + Source-First FX + Export Regression Lock
 
