@@ -490,6 +490,45 @@ class Handler(BaseHTTPRequestHandler):
             self._json(200, {"ok": False, "error": "Reveal is available on macOS only.", "outputPath": str(sess.output_path)})
 
 
+def _open_app_browser(url: str) -> None:
+    """Open a dedicated Chrome/Chromium app window with export throttling disabled.
+
+    A separate user-data-dir is intentional: Chrome ignores process flags when a URL is
+    forwarded to an already-running browser process. The dedicated HYPE FORM profile
+    keeps the renderer alive even when another browser tab/window becomes active.
+    """
+    if sys.platform == "darwin":
+        candidates = [
+            Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+            Path.home()/"Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+            Path("/Applications/Google Chrome Beta.app/Contents/MacOS/Google Chrome Beta"),
+            Path("/Applications/Chromium.app/Contents/MacOS/Chromium"),
+        ]
+        browser = next((str(x) for x in candidates if x.exists()), None)
+        if browser:
+            profile = Path.home()/"Library"/"Application Support"/"HYPE FORM"/"ChromeExportProfile"
+            profile.mkdir(parents=True, exist_ok=True)
+            args = [
+                browser,
+                f"--app={url}",
+                f"--user-data-dir={profile}",
+                "--no-first-run",
+                "--no-default-browser-check",
+                "--disable-background-timer-throttling",
+                "--disable-renderer-backgrounding",
+                "--disable-backgrounding-occluded-windows",
+                "--disable-features=CalculateNativeWinOcclusion",
+            ]
+            try:
+                subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                print("Browser: dedicated Chrome export window (background throttling disabled)")
+                return
+            except Exception as exc:
+                print(f"Chrome app launch fallback: {exc}")
+    webbrowser.open(url)
+    print("Browser: system default (background throttling depends on browser settings)")
+
+
 def main() -> int:
     print("HYPE FORM / Visual FX Lab — Mac Fast Export Helper")
     print(f"Helper: v{HELPER_VERSION}")
@@ -510,7 +549,7 @@ def main() -> int:
     print(f"Exports: {_export_dir()}")
     print("Keep this Terminal window open while using Mac Fast Export.\n")
     if os.environ.get("HYPE_FORM_NO_BROWSER") != "1":
-        threading.Timer(0.65, lambda: webbrowser.open(f"http://{HOST}:{PORT}/")).start()
+        threading.Timer(0.65, lambda: _open_app_browser(f"http://{HOST}:{PORT}/")).start()
     try:
         server.serve_forever(poll_interval=0.25)
     except KeyboardInterrupt:
