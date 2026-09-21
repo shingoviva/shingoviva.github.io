@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HYPE FORM / Visual FX Lab v28.2.35</title>
+  <title>HYPE FORM / Visual FX Lab v28.2.36</title>
   <style>
     :root{
       --bg:#070809; --panel:rgba(14,16,18,.9); --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.15);
@@ -285,7 +285,7 @@
 <div class="frame">
   <aside class="panel left-panel" id="leftPanel">
     <div class="panel-scroll">
-      <div class="brand"><div><div class="sub">HYPE FORM</div><h1>Visual FX Lab</h1></div><div><div class="sub" style="text-align:right">v28.2.35</div></div></div>
+      <div class="brand"><div><div class="sub">HYPE FORM</div><h1>Visual FX Lab</h1></div><div><div class="sub" style="text-align:right">v28.2.36</div></div></div>
 
       <nav class="control-tabs" id="controlTabs">
         <button class="control-tab active" data-view="source">SOURCE</button>
@@ -904,7 +904,7 @@ window.addEventListener('error', e => { const s=document.getElementById('statusT
       if(state.sourceType==='video'&&state.sourceVideo)syncVideoPreviewToTimeline(state.currentTime,true);
       invalidateRender(true);
     }finally{state.historyLock=false;}
-    if(!history)setStatus('v28.2.35 Project loaded.');
+    if(!history)setStatus('v28.2.36 Project loaded.');
   }
   function undo(){if(!state.history.length)return;const current=historySnapshot();state.future.push(current);const snap=state.history.pop();restoreProjectPayload(snap,{history:true});updateHistoryButtons();setStatus(`Undo${snap.label?`: ${snap.label}`:''}`);}
   function redo(){if(!state.future.length)return;const current=historySnapshot();state.history.push(current);const snap=state.future.pop();restoreProjectPayload(snap,{history:true});updateHistoryButtons();setStatus('Redo');}
@@ -3838,18 +3838,24 @@ function renderFxInspector(){
   }
   function hideExportProgress(){document.body.classList.remove('exporting-ui');if(els.exportRenderOverlay){els.exportRenderOverlay.classList.remove('active');els.exportRenderOverlay.setAttribute('aria-hidden','true');}}
 
+  function addExportProfileTime(key,ms){
+    const profile=state.exportSession?.profile;if(!profile||!Number.isFinite(ms))return;profile[key]=(profile[key]||0)+Math.max(0,ms);
+  }
   async function waitForVideoSeek(video, time){
     if(!video || !Number.isFinite(video.duration) || video.duration<=0) return;
     const clamped=Math.max(0,Math.min(video.duration-0.001,time));
     if(Math.abs(video.currentTime-clamped)<0.002 && !video.seeking) return;
-    await new Promise((resolve,reject)=>{
-      const timer=setTimeout(()=>{cleanup();reject(new Error(`Video seek timeout at ${clamped.toFixed(3)}s (current ${Number(video.currentTime||0).toFixed(3)}s)`));},3000);
-      const done=()=>{const err=Math.abs(video.currentTime-clamped);cleanup();err<.035?resolve():reject(new Error(`Video seek landed ${Math.round(err*1000)}ms away from target.`));};
-      const fail=()=>{cleanup();reject(new Error('Video seek failed'));};
-      const cleanup=()=>{clearTimeout(timer);video.removeEventListener('seeked',done);video.removeEventListener('error',fail);};
-      video.addEventListener('seeked',done,{once:true});video.addEventListener('error',fail,{once:true});
-      try{video.currentTime=clamped;}catch(e){cleanup();reject(e);}
-    });
+    const started=performance.now();
+    try{
+      await new Promise((resolve,reject)=>{
+        const timer=setTimeout(()=>{cleanup();reject(new Error(`Video seek timeout at ${clamped.toFixed(3)}s (current ${Number(video.currentTime||0).toFixed(3)}s)`));},3000);
+        const done=()=>{const err=Math.abs(video.currentTime-clamped);cleanup();err<.035?resolve():reject(new Error(`Video seek landed ${Math.round(err*1000)}ms away from target.`));};
+        const fail=()=>{cleanup();reject(new Error('Video seek failed'));};
+        const cleanup=()=>{clearTimeout(timer);video.removeEventListener('seeked',done);video.removeEventListener('error',fail);};
+        video.addEventListener('seeked',done,{once:true});video.addEventListener('error',fail,{once:true});
+        try{video.currentTime=clamped;}catch(e){cleanup();reject(e);}
+      });
+    }finally{if(state.offlineRendering)addExportProfileTime('seekMs',performance.now()-started);}
   }
 
 
@@ -3858,12 +3864,17 @@ function renderFxInspector(){
     const target=Math.max(0,Math.min(video.duration-0.001,time));
     await waitForVideoSeek(video,target);
     let mediaTime=Number(video.currentTime)||target;
-    if(typeof video.requestVideoFrameCallback==='function'){
+    // v28.2.36: during deterministic offline export, the seeked event is the decode barrier.
+    // Waiting for requestVideoFrameCallback here added up to ~220ms per frame and can be suspended
+    // when Chrome hides the tab. Preview/scrubbing still keeps the rVFC confirmation path below.
+    if(!state.offlineRendering&&typeof video.requestVideoFrameCallback==='function'){
+      const confirmStarted=performance.now();
       mediaTime=await new Promise(resolve=>{
         let settled=false;const finish=(mt)=>{if(settled)return;settled=true;clearTimeout(timer);resolve(Number.isFinite(mt)?mt:(Number(video.currentTime)||target));};
         const timer=setTimeout(()=>finish(Number(video.currentTime)||target),220);
         video.requestVideoFrameCallback((_,meta)=>finish(Number(meta?.mediaTime)));
       });
+      addExportProfileTime('decodeConfirmMs',performance.now()-confirmStarted);
     }
     const err=Math.abs(mediaTime-target),tol=Math.max(.018,1.25/Math.max(1,fps));
     if(err>tol)throw new Error(`Export source-frame mismatch: requested ${target.toFixed(3)}s, decoded ${mediaTime.toFixed(3)}s (${Math.round(err*1000)}ms).`);
@@ -3917,10 +3928,16 @@ function renderFxInspector(){
     const r=await fetch(`${NATIVE_HELPER_BASE}/frame`,{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Hype-Token':info.token,'X-Hype-Session':sessionId,'X-Hype-Frame':String(index)},body:rgba});let data=null;try{data=await r.json();}catch{}if(!r.ok||!data?.ok)throw new Error(data?.error||`Native frame ${index} failed (HTTP ${r.status}).`);return data;
   }
   function formatMs(v){return `${Math.round(v)}ms`;}
+  function exportCooperativeYield(){
+    if(document.hidden)return Promise.resolve();
+    if(globalThis.scheduler?.yield)return scheduler.yield();
+    return new Promise(resolve=>{const ch=new MessageChannel();ch.port1.onmessage=()=>{ch.port1.close();ch.port2.close();resolve();};ch.port2.postMessage(0);});
+  }
   function updateExportProfileReadout(profile=state.lastExportProfile){
     if(!els.exportProfileReadout)return;if(!profile){els.exportProfileReadout.innerHTML='<strong>EXPORT PROFILER</strong> · No completed Fast Export yet.';return;}
-    const measured=Math.max(1,profile.renderMs+profile.readbackMs+profile.feedMs+profile.finalizeMs),pct=v=>Math.round(v/measured*100),speed=profile.elapsedMs>0?profile.duration/(profile.elapsedMs/1000):0;
-    els.exportProfileReadout.innerHTML=`<strong>LAST FAST EXPORT</strong> · <b>RENDER ${pct(profile.renderMs)}%</b> · READBACK ${pct(profile.readbackMs)}% · FEED/ENCODE ${pct(profile.feedMs)}% · FINALIZE ${pct(profile.finalizeMs)}%<br>${profile.frames} frames · ${profile.width}×${profile.height} · ${profile.fps}fps · ${speed.toFixed(2)}× realtime · ${profile.encoder}`;
+    const seek=profile.seekMs||0,confirm=profile.decodeConfirmMs||0,renderCore=Math.max(0,(profile.renderMs||0)-seek-confirm),readback=profile.readbackMs||0,feed=profile.feedMs||0,finalize=profile.finalizeMs||0;
+    const measured=Math.max(1,renderCore+seek+confirm+readback+feed+finalize),pct=v=>Math.round(v/measured*100),speed=profile.elapsedMs>0?profile.duration/(profile.elapsedMs/1000):0;
+    els.exportProfileReadout.innerHTML=`<strong>LAST FAST EXPORT</strong> · <b>FX RENDER ${pct(renderCore)}%</b> · SEEK ${pct(seek)}% · READBACK ${pct(readback)}% · PIPE WAIT ${pct(feed)}% · FINALIZE ${pct(finalize)}%<br>${profile.frames} frames · ${profile.width}×${profile.height} · ${profile.fps}fps · ${speed.toFixed(2)}× realtime · ${profile.encoder}${profile.pipeMs?` · FFmpeg pipe ${(profile.pipeMs/1000).toFixed(2)}s`:''}`;
   }
   async function exportNativeFastMp4(){
     if(state.exporting)return;if(els.exportFormat.value!=='mp4')return exportVideo();
@@ -3929,19 +3946,24 @@ function renderFxInspector(){
     const session={wasPlaying:state.playing,savedCurrentTime:state.currentTime,savedVideoTime:v?Number(v.currentTime)||0:0,videoWasPaused:v?v.paused:true,guard:null};
     state.exporting=true;state.offlineRendering=true;state.exportRenderLock=true;state.exportSession=session;state.playing=false;state.playAnchorPerf=0;state.playAnchorTime=0;state.aiEpoch++;if(v)v.pause();els.exportBtn.disabled=true;els.exportBtn.textContent='MAC FAST…';
     const previewRestore={w:W,h:H};const exportCanvas=document.createElement('canvas');exportCanvas.width=w;exportCanvas.height=h;const exportCtx=exportCanvas.getContext('2d',{alpha:false,willReadFrequently:true});exportCtx.imageSmoothingEnabled=true;try{exportCtx.imageSmoothingQuality='high';}catch(e){}
-    let nativeSessionId=null,succeeded=false;const p={renderMs:0,readbackMs:0,feedMs:0,finalizeMs:0,elapsedMs:0,frames:totalFrames,width:w,height:h,fps,duration,encoder:helper.encoder||'FFmpeg'};const exportStart=performance.now();
+    let nativeSessionId=null,succeeded=false;const p={renderMs:0,seekMs:0,decodeConfirmMs:0,readbackMs:0,feedMs:0,pipeMs:0,finalizeMs:0,elapsedMs:0,frames:totalFrames,width:w,height:h,fps,duration,encoder:helper.encoder||'FFmpeg'};session.profile=p;const exportStart=performance.now();
     try{
       if(document.fonts?.ready)await document.fonts.ready;session.guard=validateExportPreflight();showExportProgress({title:'Mac Fast MP4 / H.264',layers:session.guard.layers,width:w,height:h,fps});
       resetLayerRuntime();clearFrameHistory(frameHistory);clearMasterFeedback();resetMotionFlow();setRenderQualityProfile('high');
       const stamp=new Date().toISOString().replace(/[-:]/g,'').replace(/T/,'-').replace(/\..*$/,'');
       const start=await nativeJson('/start',{width:w,height:h,fps,frames:totalFrames,quality:els.exportQuality.value,filename:`hype-form-motion-${stamp}.mp4`});nativeSessionId=start.session;p.encoder=start.encoder||p.encoder;state.lastNativeSession={id:nativeSessionId,outputPath:start.outputPath||'',encoder:p.encoder};
       resizeProjectCanvases(w,h);resetLayerRuntime();clearFrameHistory(frameHistory);clearMasterFeedback();resetMotionFlow();if(v)v.pause();
+      let pendingFeed=null;
       for(let i=0;i<totalFrames;i++){
         const t=i/fps,r0=performance.now(),audit=await renderOfflineFrame(t,exportCanvas,exportCtx,session.guard);p.renderMs+=performance.now()-r0;
         const q0=performance.now(),pixels=exportCtx.getImageData(0,0,w,h);p.readbackMs+=performance.now()-q0;
-        const f0=performance.now();await nativeFrame(nativeSessionId,i,pixels.data);p.feedMs+=performance.now()-f0;
-        if(i%Math.max(1,Math.round(fps/4))===0||i===totalFrames-1){const progress=.02+(i+1)/totalFrames*.92,active=audit.appliedLayerIds.length;updateExportProgress(progress,'Mac Fast · render + native encode',`Frame ${i+1} / ${totalFrames} · project ${t.toFixed(2)}s → source ${Number.isFinite(audit.sourceDecoded)?audit.sourceDecoded.toFixed(2)+'s':'n/a'} · ${active} FX · ${w}×${h} · ${p.encoder}`);setStatus(`Mac Fast rendering… ${Math.round((i+1)/totalFrames*100)}% (${i+1}/${totalFrames})`);await new Promise(r=>setTimeout(r,0));}
+        // Keep one frame upload in flight while the browser renders the next frame. This overlaps
+        // FFmpeg/VideoToolbox work with renderProjectFrame without allowing out-of-order frames.
+        if(pendingFeed){const wait0=performance.now(),prev=await pendingFeed;p.feedMs+=performance.now()-wait0;p.pipeMs+=Number(prev?.pipeMs)||0;}
+        pendingFeed=nativeFrame(nativeSessionId,i,pixels.data);
+        if(i%Math.max(1,Math.round(fps/4))===0||i===totalFrames-1){const progress=.02+(i+1)/totalFrames*.92,active=audit.appliedLayerIds.length;updateExportProgress(progress,'Mac Fast · pipelined render + native encode',`Frame ${i+1} / ${totalFrames} · project ${t.toFixed(2)}s → source ${Number.isFinite(audit.sourceDecoded)?audit.sourceDecoded.toFixed(2)+'s':'n/a'} · ${active} FX · ${w}×${h} · ${p.encoder}`);setStatus(`Mac Fast rendering… ${Math.round((i+1)/totalFrames*100)}% (${i+1}/${totalFrames})`);await exportCooperativeYield();}
       }
+      if(pendingFeed){const wait0=performance.now(),last=await pendingFeed;p.feedMs+=performance.now()-wait0;p.pipeMs+=Number(last?.pipeMs)||0;}
       updateExportProgress(.95,'Finalizing native MP4','Flushing FFmpeg / VideoToolbox and writing MP4…');const z0=performance.now(),finish=await nativeJson('/finish',{session:nativeSessionId});p.finalizeMs=performance.now()-z0;p.elapsedMs=performance.now()-exportStart;p.encoder=finish.encoder||p.encoder;state.lastNativeSession={id:nativeSessionId,outputPath:finish.outputPath||'',encoder:p.encoder};state.lastExportProfile=p;updateExportProfileReadout(p);
       updateExportProgress(1,'Mac Fast Export complete',`${totalFrames} frames · ${fps} FPS · ${w}×${h} · ${p.encoder}`);setStatus(`Mac Fast Export complete: ${finish.outputPath||finish.filename||'MP4'} · ${p.encoder}`);succeeded=true;await new Promise(r=>setTimeout(r,650));
     }catch(e){console.error(e);if(nativeSessionId)await nativeJson('/cancel',{session:nativeSessionId}).catch(()=>{});updateExportProgress(1,'MAC FAST EXPORT FAILED',e.message||String(e));setStatus(`Mac Fast Export error: ${e.message} · Browser Exportへ自動Fallbackします。`);await new Promise(r=>setTimeout(r,450));state.exportSession.nativeFallbackError=e;}
@@ -4378,7 +4400,7 @@ function renderFxInspector(){
   }
 
   const PROJECT_RESTORE_CONTRACT=Object.freeze({
-    baseline:'v28.2.35-portable-session-v2',
+    baseline:'v28.2.36-portable-session-v2',
     rules:Object.freeze(['complete master controls','timeline/keyframe graph','portable source media','portable selected local font','AI mask/depth cache','pre-mutation project validation','restore-order sync','post-load state fingerprint'])
   });
   function validateProjectRestoreContract(){
@@ -4575,7 +4597,7 @@ function renderFxInspector(){
   if(__paramAudit.invalidRules.length)console.warn('[HYPE FORM] Invalid parameter capability rules',__paramAudit.invalidRules);
   // Read-only diagnostics hook for automated smoke tests. Keeps internals private while exposing invariants.
   window.__HYPE_DIAGNOSTICS__=Object.freeze({
-    version:'v28.2.35',
+    version:'v28.2.36',
     runtimePreflight:()=>runtimePreflight(),
     exportPreflight:()=>{const g=validateExportPreflight();return{layers:g.layers,width:W,height:H};},
     renderGraphAt:(t=state.currentTime)=>{const audit={};renderProjectFrame(clamp(Number(t)||0,0,state.duration),{mode:'diagnostic',includeAudition:false,audit});return{expected:exportActiveLayerIds(clamp(Number(t)||0,0,state.duration)),applied:[...audit.appliedLayerIds],width:audit.width,height:audit.height};},
