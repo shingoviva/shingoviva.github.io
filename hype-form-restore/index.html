@@ -6,7 +6,219 @@
   <title>HYPE FORM RESTORE Player v1.5</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23090a0c%22/%3E%3Cpath d=%22M18 31a14 14 0 0 1 24-10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M42 21v10H32%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M46 33a14 14 0 0 1-24 10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M22 43V33h10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3C/svg%3E" />
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23090a0c%22/%3E%3Cpath d=%22M18 31a14 14 0 0 1 24-10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M42 21v10H32%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M46 33a14 14 0 0 1-24 10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M22 43V33h10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3C/svg%3E" />
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090a0c;
+      --panel: #111318;
+      --panel-2: #171a20;
+      --line: #2a2e37;
+      --text: #f3f5f7;
+      --muted: #969da8;
+      --accent: #d8ff42;
+      --accent-ink: #111500;
+      --danger: #ff6d7a;
+      --radius: 16px;
+      --panel-height: 250px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; }
+    body { min-height: 100vh; overflow-x: hidden; overscroll-behavior: none; }
+    body.browser-guard { user-select: none; -webkit-user-select: none; }
+    body.browser-guard video, body.browser-guard canvas, body.browser-guard button { -webkit-user-drag: none; }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    .app { min-height: 100vh; display: grid; grid-template-rows: auto minmax(0,1fr) 8px var(--panel-height); position: relative; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 10px 14px; border-bottom: 1px solid var(--line); background: rgba(9,10,12,.94);
+      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(16px);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .app-logo { width: 28px; height: 28px; border-radius: 7px; flex: 0 0 auto; }
+    .brand-copy { display: flex; align-items: baseline; gap: 10px; min-width: 0; }
+    .brand strong { letter-spacing: .08em; font-size: 14px; white-space: nowrap; }
+    .brand span { color: var(--muted); font-size: 12px; white-space: nowrap; }
+    .top-actions {
+      display: grid; align-items: center; justify-content: end; gap: 8px;
+      grid-template-columns: 66px 82px 160px 128px 118px 182px 130px;
+      grid-template-areas:
+        "status history guard auto bidir upscale enhance"
+        ". . . . . . import";
+      min-width: 0;
+    }
+    #status { grid-area: status; width: 66px; text-align: right; overflow: hidden; text-overflow: ellipsis; }
+    #historyBtn { grid-area: history; width: 82px; }
+    #guardBtn { grid-area: guard; width: 160px; }
+    #autoBtn { grid-area: auto; width: 128px; }
+    #bidirBtn { grid-area: bidir; width: 118px; }
+    #upscaleBtn { grid-area: upscale; width: 182px; }
+    #enhanceBtn { grid-area: enhance; width: 130px; }
+    #importBtn { grid-area: import; width: 130px; }
+    .top-actions .btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+    @media (max-width: 1180px) {
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .top-actions { justify-content: start; }
+    }
+    @media (max-width: 960px) {
+      .top-actions {
+        width: 100%;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-areas:
+          "status history guard auto"
+          "bidir upscale enhance import";
+      }
+      #status, #historyBtn, #guardBtn, #autoBtn, #bidirBtn, #upscaleBtn, #enhanceBtn, #importBtn { width: 100%; }
+    }
+    .btn {
+      border: 1px solid var(--line); background: var(--panel-2); color: var(--text); min-height: 34px;
+      border-radius: 9px; padding: 0 10px; cursor: pointer; transition: .15s ease; font-size: 12px;
+    }
+    .btn:hover { border-color: #4a505c; background: #1c2027; }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
+    .btn.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 800; }
+    .btn:disabled { opacity: .45; cursor: default; transform: none; }
+    .stage-wrap { display: grid; place-items: center; padding: 18px 24px; min-height: 0; }
+    .stage {
+      width: min(100%, 1440px); height: auto; aspect-ratio: 16/9; background: #000; border: 1px solid #22262d;
+      border-radius: var(--radius); overflow: hidden; position: relative; box-shadow: 0 30px 80px rgba(0,0,0,.35);
+      outline: none;
+    }
+    .stage.dragover { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(216,255,66,.18), 0 30px 80px rgba(0,0,0,.35); }
+    .stage:fullscreen { width: 100% !important; height: 100% !important; max-width: none !important; border-radius: 0; border: 0; }
+    .media-surface { position: absolute; inset: 0; overflow: hidden; background: #000; }
+    .media-surface video, .media-surface #nativeCanvas, .media-surface #gpuCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; background: #000; }
+    /* The <video> remains the decoder/audio clock, but presentation is canvas-driven.
+       A tiny non-zero opacity keeps Chromium's video pipeline active without leaking visually
+       through the opaque presenter canvases. */
+    .media-surface video { z-index: 0; object-fit: fill; visibility: visible; opacity: .001; pointer-events: none; }
+    #nativeCanvas { z-index: 1; cursor: pointer; pointer-events: auto; opacity: 1; visibility: visible; }
+    #nativeCanvas.inactive { opacity: 0; pointer-events: none; }
+    #gpuCanvas { z-index: 2; cursor: pointer; pointer-events: none; opacity: 0; visibility: visible; }
+    #gpuCanvas.visible { opacity: 1; pointer-events: auto; }
+    .empty {
+      position: absolute; inset: 0; z-index: 8; display: grid; place-items: center; padding: 24px;
+      background: radial-gradient(circle at 50% 35%, #17191f 0, #0b0c0f 55%, #050506 100%);
+    }
+    .empty[hidden] { display: none; }
+    .drop-card { text-align: center; max-width: 560px; }
+    .drop-mark { width: 76px; height: 76px; border-radius: 22px; margin: 0 auto 20px; display: grid; place-items: center; border: 1px solid #343946; background: #14171c; overflow: hidden; }
+    .drop-mark img { width: 100%; height: 100%; display: block; }
+    .drop-card h1 { margin: 0 0 8px; font-size: clamp(22px, 3vw, 34px); letter-spacing: -.03em; }
+    .drop-card p { margin: 0 auto 20px; color: var(--muted); line-height: 1.65; font-size: 14px; }
+    .file-name {
+      position: absolute; left: 14px; top: 14px; z-index: 5; max-width: min(42%, 620px);
+      background: rgba(0,0,0,.58); border: 1px solid rgba(255,255,255,.12); border-radius: 9px;
+      padding: 7px 10px; font-size: 12px; color: #d9dde4; backdrop-filter: blur(12px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .file-name[hidden] { display: none; }
+    .mode-badge {
+      position: absolute; right: 14px; top: 14px; z-index: 5; padding: 7px 10px; border-radius: 9px; max-width: min(42%, 520px);
+      background: rgba(0,0,0,.58); border: 1px solid rgba(255,255,255,.12); color: #d9dde4; font-size: 11px;
+      letter-spacing: .06em; backdrop-filter: blur(12px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .mode-badge.enhanced { color: var(--accent); border-color: rgba(216,255,66,.35); }
+    .mode-badge[hidden] { display: none; }
+    .file-name, .mode-badge { transition: opacity .25s ease, transform .25s ease; pointer-events: none; }
+    .stage.hud-hidden .file-name, .stage.hud-hidden .mode-badge { opacity: 0; transform: translateY(-5px); }
+    .toast {
+      position: absolute; left: 50%; top: 52px; transform: translateX(-50%); z-index: 10;
+      background: rgba(20,22,27,.94); border: 1px solid #3a404c; border-radius: 10px; padding: 9px 12px;
+      font-size: 12px; color: #eef1f5; opacity: 0; pointer-events: none; transition: opacity .18s ease;
+    }
+    .toast.show { opacity: 1; }
+    .panel-splitter { height: 8px; cursor: ns-resize; touch-action: none; position: relative; background: #0b0d10; border-top: 1px solid #20242b; border-bottom: 1px solid #20242b; z-index: 25; }
+    .panel-splitter::after { content: ""; position: absolute; width: 54px; height: 3px; border-radius: 999px; background: #3b414c; left: 50%; top: 2px; transform: translateX(-50%); }
+    .panel-splitter:hover::after, .panel-splitter.dragging::after, .panel-splitter:focus-visible::after { background: var(--accent); }
+    .panel-splitter:focus { outline: none; }
+    .controls {
+      border-top: 0; background: #0d0f12; padding: 10px 14px 12px; height: var(--panel-height); min-height: 142px; max-height: 58vh; overflow-y: auto; overscroll-behavior: contain;
+      display: grid; gap: 8px; align-content: start; scrollbar-gutter: stable;
+    }
+    .transport-row { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; }
+    .transport-btn {
+      min-width: 48px; height: 40px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel-2);
+      display: inline-grid; place-items: center; cursor: pointer; color: var(--text); padding: 0 12px;
+    }
+    .transport-btn:hover { background: #1e2229; border-color: #4a505c; }
+    .transport-btn.play { width: 44px; min-width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+    .transport-btn svg { width: 19px; height: 19px; display: block; }
+    .skip-glyph { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 800; letter-spacing: .01em; }
+    .skip-glyph svg { width: 20px; height: 20px; }
+    .timeline-row { display: grid; grid-template-columns: 76px minmax(0,1fr) 76px auto; align-items: center; gap: 10px; }
+    .time { font-variant-numeric: tabular-nums; font-size: 11px; color: var(--muted); text-align: center; letter-spacing: .01em; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+    .seek-wrap { position: relative; min-width: 0; height: 24px; display: flex; align-items: center; }
+    #seek { height: 24px; margin: 0; pointer-events: none; }
+    .seek-hit { position: absolute; inset: 0; cursor: pointer; touch-action: none; }
+    .seek-hit.disabled { pointer-events: none; cursor: default; }
+    .seek-tools { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .seek-zoom-btn { min-height: 28px; padding: 0 8px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); font-size: 10px; font-weight: 750; cursor: pointer; }
+    .seek-window { font-size: 10px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 100px; text-align: right; }
+    #seek::-webkit-slider-runnable-track { height: 4px; border-radius: 999px; background: #30353f; }
+    #seek::-webkit-slider-thumb { margin-top: -4px; width: 12px; height: 12px; }
+    .controls-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-width: 0; }
+    .left-controls, .right-controls { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--line); background: var(--panel-2);
+      display: grid; place-items: center; cursor: pointer; font-size: 17px;
+    }
+    .icon-btn:hover { background: #1e2229; }
+    .icon-btn:disabled { opacity: .42; cursor: default; }
+    .volume { width: 110px !important; }
+    .meta { color: var(--muted); font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .status { color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .processing-row {
+      display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center;
+      padding-top: 10px; border-top: 1px solid #20242b;
+    }
+    .processing-title { font-size: 11px; letter-spacing: .08em; color: var(--muted); white-space: nowrap; }
+    .param { display: grid; grid-template-columns: auto minmax(82px, 1fr) 28px; align-items: center; gap: 8px; flex: 1 1 170px; min-width: 150px; }
+    .param label { color: #c9ced6; font-size: 11px; white-space: nowrap; }
+    .param output { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; text-align: right; }
+    .gpu-info { color: var(--muted); font-size: 11px; white-space: nowrap; }
+    .history-popover { position: absolute; right: 14px; top: 54px; width: min(430px, calc(100vw - 28px)); max-height: min(520px, calc(100vh - 80px)); overflow: auto; z-index: 80; border: 1px solid #303641; border-radius: 13px; background: rgba(15,17,21,.97); backdrop-filter: blur(18px); box-shadow: 0 24px 70px rgba(0,0,0,.45); padding: 10px; }
+    .history-popover[hidden] { display: none; }
+    .history-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:4px 4px 9px; border-bottom:1px solid #252a32; }
+    .history-head strong { font-size:11px; letter-spacing:.08em; }
+    .history-list { display:grid; gap:5px; padding-top:7px; }
+    .history-empty { color:var(--muted); font-size:12px; padding:18px 8px; text-align:center; }
+    .history-item { display:grid; grid-template-columns: minmax(0,1fr) auto; align-items:center; gap:8px; width:100%; border:1px solid transparent; background:#15181e; color:var(--text); border-radius:10px; padding:8px 9px; text-align:left; cursor:pointer; }
+    .history-item:hover { border-color:#3c424e; background:#191d24; }
+    .history-name { display:block; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; }
+    .history-meta { display:block; color:var(--muted); font-size:10px; margin-top:3px; font-variant-numeric:tabular-nums; }
+    .history-open { color:var(--accent); font-size:10px; font-weight:800; }
+    .app.theater { position: fixed; inset: 0; z-index: 9999; width: 100%; height: 100vh; min-height: 0; overflow: hidden; display:block; background:#000; }
+    .app.theater .stage-wrap { position:absolute; inset:0; padding:0; display:block; }
+    .app.theater .stage { position:absolute; inset:0; width:100% !important; height:100% !important; max-width:none !important; border:0; border-radius:0; box-shadow:none; }
+    .app.theater .topbar { position:absolute; left:0; right:0; top:0; z-index:60; border:0; background:linear-gradient(to bottom, rgba(4,5,7,.88), rgba(4,5,7,.20), transparent); }
+    .app.theater .panel-splitter { display:none; }
+    .app.theater .controls { position:absolute; left:0; right:0; bottom:0; z-index:60; height:auto; max-height:min(var(--panel-height), 48vh); min-height:0; border:0; background:linear-gradient(to top, rgba(7,8,10,.96) 0%, rgba(7,8,10,.82) 72%, rgba(7,8,10,.18) 100%); backdrop-filter:blur(12px); padding-top:24px; }
+    .app.theater .file-name, .app.theater .mode-badge { top: 58px; }
+    .app.theater .toast { top: 98px; }
+    .app.theater .history-popover { position:fixed; }
+    .app.theater .transport-row { transition: opacity .24s ease, transform .24s ease; }
+    .app.theater.ui-idle .transport-row { opacity: 0; transform: translateY(7px); pointer-events: none; }
+    body.theater-mode { overflow:hidden; }
+    #fileInput { display: none; }
+    @media (max-width: 780px) {
+      .stage-wrap { padding: 10px; }
+      .topbar { padding: 10px 12px; }
+      .brand span { display: none; }
+      .controls { padding: 10px; }
+      .timeline-row { grid-template-columns: 62px minmax(0,1fr) 62px; gap: 7px; }
+      .seek-tools { grid-column: 1 / -1; justify-content:flex-end; }
+      .seek-window { min-width:0; }
+      .transport-row { gap: 8px; }
+      .transport-btn { height: 40px; }
+      .volume { width: 78px !important; }
+      .meta, .status { display: none; }
+      .btn { min-height: 34px; }
+      .processing-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+      .processing-title, .gpu-info { display: none; }
+    }
+  </style>
 </head>
 <body>
   <div class="app" id="app">
@@ -34,6 +246,7 @@
       <div class="history-head"><strong>RECENT VIDEOS</strong><button class="btn" id="historyClearBtn" type="button">CLEAR</button></div>
       <div class="history-list" id="historyList"></div>
     </aside>
+
     <main class="stage-wrap">
       <section class="stage" id="stage" tabindex="0" aria-label="Video player. Drop a video file here.">
         <div class="media-surface" id="mediaSurface">
@@ -46,15 +259,17 @@
         <div class="toast" id="toast" role="status" aria-live="polite"></div>
         <div class="empty" id="emptyState">
           <div class="drop-card">
-            <div class="drop-mark"><img src="app-icon.svg" alt="HYPE FORM RESTORE icon" /></div>
+            <div class="drop-mark"><img src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23090a0c%22/%3E%3Cpath d=%22M18 31a14 14 0 0 1 24-10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M42 21v10H32%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M46 33a14 14 0 0 1-24 10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3Cpath d=%22M22 43V33h10%22 fill=%22none%22 stroke=%22%23d8ff42%22 stroke-width=%225%22/%3E%3C/svg%3E" alt="HYPE FORM RESTORE icon" /></div>
             <h1>DROP A VIDEO</h1>
-            <p>MP4 / MOV / WebM をここへドロップするか、Importから選択してください。v1.5では可変パネル、履歴、細密シーク、ブラウザ内シアターモード、HUD自動フェード、さらに高品質なFSR SUPERモードを追加しています。</p>
+            <p>MP4 / MOV / WebM をここへドロップするか、Importから選択してください。v1.1では可変パネル、履歴、細密シーク、ブラウザ内シアターモード、HUD自動フェード、さらに高品質なFSR SUPERモードを追加しています。</p>
             <button class="btn primary" id="emptyImportBtn" type="button">CHOOSE VIDEO</button>
           </div>
         </div>
       </section>
     </main>
+
     <div class="panel-splitter" id="panelSplitter" role="separator" aria-orientation="horizontal" aria-label="Resize control panel" tabindex="0"></div>
+
     <footer class="controls" id="controlsPanel">
       <div class="transport-row" aria-label="Playback controls">
         <button class="transport-btn" id="backBtn" type="button" aria-label="Back 10 seconds" disabled>
@@ -90,17 +305,2161 @@
       <div class="processing-row">
         <div class="processing-title">REALTIME GPU</div>
         <div class="gpu-info" id="analysisInfo">AUTO · waiting for media</div>
-        <div class="param"><label for="denoise">SPATIAL</label><input id="denoise" type="range" min="0" max="100" value="28" step="1" disabled /><output id="denoiseValue">28</output></div>
-        <div class="param"><label for="temporal">TEMPORAL</label><input id="temporal" type="range" min="0" max="100" value="38" step="1" disabled /><output id="temporalValue">38</output></div>
-        <div class="param"><label for="motion">MOTION</label><input id="motion" type="range" min="0" max="100" value="62" step="1" disabled /><output id="motionValue">62</output></div>
-        <div class="param"><label for="deblock">DEBLOCK</label><input id="deblock" type="range" min="0" max="100" value="34" step="1" disabled /><output id="deblockValue">34</output></div>
-        <div class="param"><label for="dering">DERING</label><input id="dering" type="range" min="0" max="100" value="30" step="1" disabled /><output id="deringValue">30</output></div>
-        <div class="param"><label for="detail">DETAIL</label><input id="detail" type="range" min="0" max="100" value="18" step="1" disabled /><output id="detailValue">18</output></div>
-        <div class="param"><label for="fsrSharp">FSR SHARP</label><input id="fsrSharp" type="range" min="0" max="100" value="52" step="1" disabled /><output id="fsrSharpValue">52</output></div>
+        <div class="param">
+          <label for="denoise">SPATIAL</label>
+          <input id="denoise" type="range" min="0" max="100" value="28" step="1" disabled />
+          <output id="denoiseValue">28</output>
+        </div>
+        <div class="param">
+          <label for="temporal">TEMPORAL</label>
+          <input id="temporal" type="range" min="0" max="100" value="38" step="1" disabled />
+          <output id="temporalValue">38</output>
+        </div>
+        <div class="param">
+          <label for="motion">MOTION</label>
+          <input id="motion" type="range" min="0" max="100" value="62" step="1" disabled />
+          <output id="motionValue">62</output>
+        </div>
+        <div class="param">
+          <label for="deblock">DEBLOCK</label>
+          <input id="deblock" type="range" min="0" max="100" value="34" step="1" disabled />
+          <output id="deblockValue">34</output>
+        </div>
+        <div class="param">
+          <label for="dering">DERING</label>
+          <input id="dering" type="range" min="0" max="100" value="30" step="1" disabled />
+          <output id="deringValue">30</output>
+        </div>
+        <div class="param">
+          <label for="detail">DETAIL</label>
+          <input id="detail" type="range" min="0" max="100" value="18" step="1" disabled />
+          <output id="detailValue">18</output>
+        </div>
+        <div class="param">
+          <label for="fsrSharp">FSR SHARP</label>
+          <input id="fsrSharp" type="range" min="0" max="100" value="52" step="1" disabled />
+          <output id="fsrSharpValue">52</output>
+        </div>
         <div class="gpu-info" id="gpuInfo">WebGL2 initializing…</div>
       </div>
     </footer>
   </div>
-  <script src="app.js"></script>
+
+  <script>
+    (() => {
+      'use strict';
+      const $ = (id) => document.getElementById(id);
+      const app = $('app');
+      const video = $('video');
+      const nativeCanvas = $('nativeCanvas');
+      const nativeCtx = nativeCanvas.getContext('2d', { alpha: false, desynchronized: true });
+      const canvas = $('gpuCanvas');
+      const stage = $('stage');
+      const mediaSurface = $('mediaSurface');
+      const emptyState = $('emptyState');
+      const importBtn = $('importBtn');
+      const emptyImportBtn = $('emptyImportBtn');
+      const fileInput = $('fileInput');
+      const playBtn = $('playBtn');
+      const backBtn = $('backBtn');
+      const forwardBtn = $('forwardBtn');
+      const muteBtn = $('muteBtn');
+      const volume = $('volume');
+      const seek = $('seek');
+      const seekHit = $('seekHit');
+      const currentTimeEl = $('currentTime');
+      const durationEl = $('duration');
+      const fullscreenBtn = $('fullscreenBtn');
+      const theaterBtn = $('theaterBtn');
+      const seekZoomBtn = $('seekZoomBtn');
+      const seekWindowEl = $('seekWindow');
+      const panelSplitter = $('panelSplitter');
+      const controlsPanel = $('controlsPanel');
+      const historyBtn = $('historyBtn');
+      const historyPopover = $('historyPopover');
+      const historyList = $('historyList');
+      const historyClearBtn = $('historyClearBtn');
+      const statusEl = $('status');
+      const fileNameEl = $('fileName');
+      const modeBadge = $('modeBadge');
+      const metaEl = $('meta');
+      const toast = $('toast');
+      const guardBtn = $('guardBtn');
+      const autoBtn = $('autoBtn');
+      const bidirBtn = $('bidirBtn');
+      const upscaleBtn = $('upscaleBtn');
+      const enhanceBtn = $('enhanceBtn');
+      const denoise = $('denoise');
+      const temporal = $('temporal');
+      const motion = $('motion');
+      const deblock = $('deblock');
+      const dering = $('dering');
+      const detail = $('detail');
+      const fsrSharp = $('fsrSharp');
+      const denoiseValue = $('denoiseValue');
+      const temporalValue = $('temporalValue');
+      const motionValue = $('motionValue');
+      const deblockValue = $('deblockValue');
+      const deringValue = $('deringValue');
+      const detailValue = $('detailValue');
+      const fsrSharpValue = $('fsrSharpValue');
+      const gpuInfo = $('gpuInfo');
+      const analysisInfo = $('analysisInfo');
+
+      let objectUrl = null;
+      let isSeeking = false;
+      let toastTimer = null;
+      let hudTimer = null;
+      let enhanced = false;
+      let renderHandle = 0;
+      let renderHandleKind = '';
+      let nativeRenderHandle = 0;
+      let nativeRenderHandleKind = '';
+      let nativeFrameSerial = 0;
+      let gl = null;
+      let glProgram = null;
+      let glTexture = null;
+      let glPrevTexture = null;
+      let glNextTexture = null;
+      let glUniforms = null;
+      let glScaleProgram = null;
+      let glScaleUniforms = null;
+      let glPostProgram = null;
+      let glPostUniforms = null;
+      let glRestoreTexture = null;
+      let glRestoreFbo = null;
+      let glRestoreWidth = 0;
+      let glRestoreHeight = 0;
+      let glUpscaleTexture = null;
+      let glUpscaleFbo = null;
+      let glUpscaleWidth = 0;
+      let glUpscaleHeight = 0;
+      let glUpscaleTexture2 = null;
+      let glUpscaleFbo2 = null;
+      let glUpscale2Width = 0;
+      let glUpscale2Height = 0;
+      let glUpscaleTexture3 = null;
+      let glUpscaleFbo3 = null;
+      let glUpscale3Width = 0;
+      let glUpscale3Height = 0;
+      let glMaxTextureSize = 4096;
+      let temporalBufferCount = 0;
+      let lastMediaTime = null;
+      let lastCapturedMediaTime = null;
+      let bidirectional = true;
+      let upscaleMode = 2; // 0=OFF, 1=BICUBIC 2X, 2=FSR 1.0 2X, 3=FSR HQ cascade, 4=FSR SUPER oversampled
+      let browserGuard = true;
+      let glReady = false;
+      let frameCount = 0;
+      let fpsStart = performance.now();
+      let fps = 0;
+      let currentFile = null;
+      let analysisGeneration = 0;
+      let autoAnalyzing = false;
+      let lastAnalysis = null;
+      let codecDiagnosis = null;
+      let loadCandidates = [];
+      let loadAttemptIndex = 0;
+      let loadGeneration = 0;
+      let seekZoom = 1;
+      let seekWindowStart = 0;
+      let seekWindowEnd = 0;
+      let theaterMode = false;
+      let panelHeight = 250;
+      const recentSessionFiles = new Map();
+      let historyMemory = [];
+      let currentSourceHandle = null;
+      let pendingHistoryId = null;
+      const HISTORY_KEY = 'HF_RESTORE_HISTORY_V1';
+      const PANEL_KEY = 'HF_RESTORE_PANEL_HEIGHT';
+      const SEEK_ZOOMS = [1, 10, 100, 1000];
+
+      const controls = [playBtn, backBtn, forwardBtn, muteBtn, volume, seek, fullscreenBtn, theaterBtn, seekZoomBtn];
+      const processingControls = [autoBtn, bidirBtn, upscaleBtn, enhanceBtn, denoise, temporal, motion, deblock, dering, detail, fsrSharp];
+
+      function setControlsEnabled(enabled) {
+        controls.forEach((el) => { el.disabled = !enabled; });
+        seekHit.classList.toggle('disabled', !enabled);
+        processingControls.forEach((el) => { el.disabled = !enabled || !glReady; });
+      }
+
+      function formatTime(value) {
+        if (!Number.isFinite(value) || value < 0) return '00:00';
+        const total = Math.floor(value);
+        const h = Math.floor(total / 3600);
+        const m = Math.floor((total % 3600) / 60);
+        const sec = total % 60;
+        if (h > 0) return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+        return `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      }
+
+      function formatTimePrecise(value) {
+        if (!Number.isFinite(value) || value < 0) return '00:00.000';
+        const msTotal = Math.max(0, Math.round(value * 1000));
+        const h = Math.floor(msTotal / 3600000);
+        const m = Math.floor((msTotal % 3600000) / 60000);
+        const sec = Math.floor((msTotal % 60000) / 1000);
+        const ms = msTotal % 1000;
+        const body = `${String(m).padStart(2, '0')}:${String(sec).padStart(2, '0')}.${String(ms).padStart(3, '0')}`;
+        return h > 0 ? `${String(h).padStart(2, '0')}:${body}` : body;
+      }
+
+      function safeLocalGet(key) { try { return localStorage.getItem(key); } catch (_) { return null; } }
+      function safeLocalSet(key, value) { try { localStorage.setItem(key, value); } catch (_) {} }
+      function safeLocalRemove(key) { try { localStorage.removeItem(key); } catch (_) {} }
+
+      function showToast(message) {
+        clearTimeout(toastTimer);
+        toast.textContent = message;
+        toast.classList.add('show');
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+        showHudTemporarily();
+      }
+
+      function showHudTemporarily(delay = 2600) {
+        clearTimeout(hudTimer);
+        stage.classList.remove('hud-hidden');
+        app.classList.remove('ui-idle');
+        if (!video.src) return;
+        hudTimer = setTimeout(() => {
+          stage.classList.add('hud-hidden');
+          if (theaterMode && !video.paused) app.classList.add('ui-idle');
+        }, delay);
+      }
+
+      function applyPanelHeight(next, persist = true) {
+        const max = Math.max(142, Math.min(520, window.innerHeight * 0.58));
+        panelHeight = Math.max(142, Math.min(max, Number(next) || 250));
+        document.documentElement.style.setProperty('--panel-height', `${Math.round(panelHeight)}px`);
+        panelSplitter.setAttribute('aria-valuenow', String(Math.round(panelHeight)));
+        if (persist) safeLocalSet(PANEL_KEY, String(Math.round(panelHeight)));
+        requestAnimationFrame(fitStageToViewport);
+      }
+
+      function historyIdFor(file) {
+        return `${file.name}::${file.size}::${file.lastModified || 0}`;
+      }
+
+      function getHistory() {
+        try {
+          const raw = safeLocalGet(HISTORY_KEY);
+          if (raw) { const value = JSON.parse(raw); if (Array.isArray(value)) { historyMemory = value.slice(0, 16); return historyMemory.slice(); } }
+        } catch (_) {}
+        return historyMemory.slice();
+      }
+
+      function saveHistory(items) {
+        historyMemory = items.slice(0, 16);
+        safeLocalSet(HISTORY_KEY, JSON.stringify(historyMemory));
+        renderHistory();
+      }
+
+      function rememberHistory(file, extra = {}) {
+        if (!file) return null;
+        const id = historyIdFor(file);
+        recentSessionFiles.set(id, file);
+        const items = getHistory().filter((item) => item.id !== id);
+        items.unshift({
+          id, name: file.name, size: file.size, lastModified: file.lastModified || 0,
+          duration: Number.isFinite(video.duration) ? video.duration : (extra.duration || 0),
+          width: video.videoWidth || extra.width || 0, height: video.videoHeight || extra.height || 0,
+          lastOpened: Date.now()
+        });
+        saveHistory(items);
+        return id;
+      }
+
+      function renderHistory() {
+        const items = getHistory();
+        historyBtn.textContent = items.length ? `HISTORY ${items.length}` : 'HISTORY';
+        historyList.replaceChildren();
+        if (!items.length) {
+          const empty = document.createElement('div');
+          empty.className = 'history-empty';
+          empty.textContent = 'No recent videos yet.';
+          historyList.appendChild(empty);
+          return;
+        }
+        for (const item of items) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'history-item';
+          const left = document.createElement('span');
+          left.style.minWidth = '0';
+          const name = document.createElement('span');
+          name.className = 'history-name';
+          name.textContent = item.name;
+          const meta = document.createElement('span');
+          meta.className = 'history-meta';
+          const size = item.width && item.height ? `${item.width}×${item.height}` : 'video';
+          meta.textContent = `${size} · ${formatTimePrecise(item.duration || 0)} · ${(item.size / 1048576).toFixed(1)} MB`;
+          const open = document.createElement('span');
+          open.className = 'history-open';
+          open.textContent = 'PLAY';
+          left.append(name, meta); button.append(left, open);
+          button.addEventListener('click', () => openHistoryItem(item));
+          historyList.appendChild(button);
+        }
+      }
+
+      function openHistoryDB() {
+        return new Promise((resolve, reject) => {
+          if (!('indexedDB' in window)) return reject(new Error('IndexedDB unavailable'));
+          const req = indexedDB.open('HYPE_FORM_RESTORE_DB', 1);
+          req.onupgradeneeded = () => { if (!req.result.objectStoreNames.contains('handles')) req.result.createObjectStore('handles'); };
+          req.onsuccess = () => resolve(req.result); req.onerror = () => reject(req.error);
+        });
+      }
+
+      async function storeFileHandle(id, handle) {
+        if (!handle) return;
+        try {
+          const db = await openHistoryDB();
+          await new Promise((resolve, reject) => { const tx = db.transaction('handles', 'readwrite'); tx.objectStore('handles').put(handle, id); tx.oncomplete = resolve; tx.onerror = () => reject(tx.error); });
+          db.close();
+        } catch (_) {}
+      }
+
+      async function getFileHandle(id) {
+        try {
+          const db = await openHistoryDB();
+          const handle = await new Promise((resolve, reject) => { const req = db.transaction('handles', 'readonly').objectStore('handles').get(id); req.onsuccess = () => resolve(req.result || null); req.onerror = () => reject(req.error); });
+          db.close(); return handle;
+        } catch (_) { return null; }
+      }
+
+      async function openHistoryItem(item) {
+        historyPopover.hidden = true;
+        const sessionFile = recentSessionFiles.get(item.id);
+        if (sessionFile) { loadFile(sessionFile); return; }
+        const handle = await getFileHandle(item.id);
+        if (handle) {
+          try {
+            let permission = await handle.queryPermission({ mode: 'read' });
+            if (permission !== 'granted') permission = await handle.requestPermission({ mode: 'read' });
+            if (permission === 'granted') { const file = await handle.getFile(); loadFile(file, { handle }); return; }
+          } catch (_) {}
+        }
+        pendingHistoryId = item.id;
+        showToast('History file needs relink · select the original file');
+        fileInput.click();
+      }
+
+      function setBrowserGuard(next, announce = true) {
+        browserGuard = Boolean(next);
+        document.body.classList.toggle('browser-guard', browserGuard);
+        guardBtn.classList.toggle('active', browserGuard);
+        guardBtn.textContent = browserGuard ? 'BROWSER GUARD: ON' : 'BROWSER GUARD: OFF';
+        guardBtn.setAttribute('aria-pressed', String(browserGuard));
+        if (announce) showToast(browserGuard ? 'Browser-origin input blocked' : 'Browser Guard OFF');
+      }
+
+      function resetTemporalHistory() {
+        temporalBufferCount = 0;
+        lastMediaTime = null;
+        lastCapturedMediaTime = null;
+      }
+
+      function syncOutputVisibility() {
+        // The decoder <video> is never display:none/hidden. Output switching happens only
+        // between two canvases, avoiding Chromium hardware-video-layer repaint stalls.
+        video.hidden = false;
+        video.style.display = 'block';
+        video.style.visibility = 'visible';
+        video.style.opacity = '.001';
+        const showGpu = Boolean(enhanced && glReady);
+        nativeCanvas.classList.toggle('inactive', showGpu);
+        nativeCanvas.style.pointerEvents = showGpu ? 'none' : 'auto';
+        canvas.classList.toggle('visible', showGpu);
+        canvas.style.pointerEvents = showGpu ? 'auto' : 'none';
+      }
+
+      function releaseGpuWorkingSet() {
+        if (!glReady || !gl) {
+          canvas.width = 2;
+          canvas.height = 2;
+          return;
+        }
+        // GPU OFF should also release large backing stores. The selected upscale mode
+        // remains remembered, but no GPU allocation/rendering occurs until CLEAN is ON.
+        const textures = [glTexture, glPrevTexture, glNextTexture, glRestoreTexture, glUpscaleTexture, glUpscaleTexture2, glUpscaleTexture3];
+        for (const texture of textures) {
+          if (!texture) continue;
+          gl.bindTexture(gl.TEXTURE_2D, texture);
+          try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, null); } catch (_) {}
+        }
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        glRestoreWidth = glRestoreHeight = 0;
+        glUpscaleWidth = glUpscaleHeight = 0;
+        glUpscale2Width = glUpscale2Height = 0;
+        glUpscale3Width = glUpscale3Height = 0;
+        canvas.width = 2;
+        canvas.height = 2;
+      }
+
+      function isEditableTarget(target) {
+        if (!target) return false;
+        return target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName);
+      }
+
+      const PLAY_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.2 5.8c0-1 1.1-1.6 2-1l7.8 5.1c.9.6.9 1.9 0 2.5l-7.8 5.1c-.9.6-2-.1-2-1V5.8Z"/></svg>';
+      const PAUSE_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="5" width="3.4" height="14" rx="1"/><rect x="13.6" y="5" width="3.4" height="14" rx="1"/></svg>';
+      const SOUND_ICON = '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true"><path d="M5 10v4h4l5 4V6l-5 4H5Z" fill="currentColor"/><path d="M17 9a4 4 0 0 1 0 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      const MUTE_ICON = '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" aria-hidden="true"><path d="M5 10v4h4l5 4V6l-5 4H5Z" fill="currentColor"/><path d="m17 10 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+      function updatePlayButton() {
+        playBtn.innerHTML = video.paused ? PLAY_ICON : PAUSE_ICON;
+        playBtn.setAttribute('aria-label', video.paused ? 'Play' : 'Pause');
+        statusEl.textContent = video.paused ? 'PAUSED' : 'PLAYING';
+      }
+
+      function updateMuteButton() {
+        const silent = video.muted || video.volume === 0;
+        muteBtn.innerHTML = silent ? MUTE_ICON : SOUND_ICON;
+        muteBtn.setAttribute('aria-label', silent ? 'Unmute' : 'Mute');
+      }
+
+      function updateSeekWindow(center = video.currentTime, force = false) {
+        const duration = Number(video.duration);
+        if (!Number.isFinite(duration) || duration <= 0) return;
+        if (seekZoom === 1) { seekWindowStart = 0; seekWindowEnd = duration; }
+        else {
+          const span = Math.max(0.5, duration / seekZoom);
+          const shouldRecenter = force || !Number.isFinite(seekWindowEnd) || center < seekWindowStart || center > seekWindowEnd;
+          if (shouldRecenter) {
+            seekWindowStart = Math.max(0, Math.min(duration - span, center - span * 0.5));
+            seekWindowEnd = Math.min(duration, seekWindowStart + span);
+          }
+        }
+        seek.min = String(Math.round(seekWindowStart * 1000));
+        seek.max = String(Math.max(Number(seek.min) + 1, Math.round(seekWindowEnd * 1000)));
+        seek.step = '1';
+        seekZoomBtn.textContent = `SEEK ${seekZoom}X`;
+        seekWindowEl.textContent = seekZoom === 1 ? 'FULL' : `${formatTimePrecise(seekWindowStart)} – ${formatTimePrecise(seekWindowEnd)}`;
+      }
+
+      function setSeekZoom(next, announce = true) {
+        const index = Math.max(0, SEEK_ZOOMS.indexOf(seekZoom));
+        seekZoom = Number.isFinite(next) && SEEK_ZOOMS.includes(next) ? next : SEEK_ZOOMS[(index + 1) % SEEK_ZOOMS.length];
+        updateSeekWindow(video.currentTime, true);
+        if (!isSeeking) seek.value = String(Math.round(video.currentTime * 1000));
+        if (announce) showToast(seekZoom === 1 ? 'Timeline full range' : `Timeline zoom ${seekZoom}X`);
+      }
+
+      function updateTimeline() {
+        if (!isSeeking && Number.isFinite(video.duration) && video.duration > 0) {
+          if (seekZoom > 1 && (video.currentTime < seekWindowStart || video.currentTime > seekWindowEnd)) updateSeekWindow(video.currentTime, true);
+          seek.value = String(Math.round(video.currentTime * 1000));
+        }
+        currentTimeEl.textContent = formatTimePrecise(video.currentTime);
+      }
+
+      async function togglePlay() {
+        if (!video.src) return;
+        try {
+          if (video.paused) await video.play();
+          else video.pause();
+        } catch (error) {
+          showToast('Playback could not start');
+          console.error(error);
+        }
+      }
+
+      function skip(seconds) {
+        if (!Number.isFinite(video.duration)) return;
+        video.currentTime = Math.min(video.duration, Math.max(0, video.currentTime + seconds));
+        showToast(`${seconds > 0 ? '+' : ''}${seconds} sec`);
+      }
+
+      function compileShader(type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+          const message = gl.getShaderInfoLog(shader) || 'Shader compile error';
+          gl.deleteShader(shader);
+          throw new Error(message);
+        }
+        return shader;
+      }
+
+      function createProgram(vertexSource, fragmentSource) {
+        const program = gl.createProgram();
+        const vs = compileShader(gl.VERTEX_SHADER, vertexSource);
+        const fs = compileShader(gl.FRAGMENT_SHADER, fragmentSource);
+        gl.attachShader(program, vs);
+        gl.attachShader(program, fs);
+        gl.linkProgram(program);
+        gl.deleteShader(vs);
+        gl.deleteShader(fs);
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+          const message = gl.getProgramInfoLog(program) || 'Shader link error';
+          gl.deleteProgram(program);
+          throw new Error(message);
+        }
+        return program;
+      }
+
+      function initGPU() {
+        try {
+          gl = canvas.getContext('webgl2', {
+            alpha: false,
+            antialias: false,
+            depth: false,
+            stencil: false,
+            preserveDrawingBuffer: false,
+            powerPreference: 'high-performance',
+            desynchronized: true
+          });
+          if (!gl) throw new Error('WebGL2 is unavailable');
+
+          const vertexSource = `#version 300 es
+            layout(location = 0) in vec2 a_position;
+            out vec2 v_uv;
+            void main() {
+              v_uv = a_position * 0.5 + 0.5;
+              gl_Position = vec4(a_position, 0.0, 1.0);
+            }
+          `;
+
+          const fragmentSource = `#version 300 es
+            precision highp float;
+            uniform sampler2D u_tex;
+            uniform sampler2D u_prev;
+            uniform sampler2D u_next;
+            uniform vec2 u_srcSize;
+            uniform float u_denoise;
+            uniform float u_temporal;
+            uniform float u_motion;
+            uniform float u_deblock;
+            uniform float u_dering;
+            uniform float u_hasPrev;
+            uniform float u_hasNext;
+            uniform float u_detail;
+            in vec2 v_uv;
+            out vec4 outColor;
+
+            vec4 cubic(float v) {
+              vec4 n = vec4(1.0, 2.0, 3.0, 4.0) - v;
+              vec4 s = n * n * n;
+              float x = s.x;
+              float y = s.y - 4.0 * s.x;
+              float z = s.z - 4.0 * s.y + 6.0 * s.x;
+              float w = 6.0 - x - y - z;
+              return vec4(x, y, z, w) / 6.0;
+            }
+
+            vec4 bicubic(vec2 uv) {
+              vec2 texSize = u_srcSize;
+              vec2 invSize = 1.0 / texSize;
+              vec2 coord = uv * texSize - 0.5;
+              vec2 f = fract(coord);
+              coord -= f;
+              vec4 xc = cubic(f.x);
+              vec4 yc = cubic(f.y);
+              vec4 c = coord.xxyy + vec2(-0.5, 1.5).xyxy;
+              vec4 s = vec4(xc.xz + xc.yw, yc.xz + yc.yw);
+              vec4 offset = c + vec4(xc.yw, yc.yw) / s;
+              offset *= invSize.xxyy;
+              vec4 s0 = texture(u_tex, offset.xz);
+              vec4 s1 = texture(u_tex, offset.yz);
+              vec4 s2 = texture(u_tex, offset.xw);
+              vec4 s3 = texture(u_tex, offset.yw);
+              float sx = s.x / (s.x + s.y);
+              float sy = s.z / (s.z + s.w);
+              return mix(mix(s3, s2, sx), mix(s1, s0, sx), sy);
+            }
+
+            float luma(vec3 c) {
+              return dot(c, vec3(0.2126, 0.7152, 0.0722));
+            }
+
+            vec3 denoise8(vec2 uv, vec3 center) {
+              vec2 p = 1.0 / u_srcSize;
+              vec2 offsets[8] = vec2[](
+                vec2(-1.0,  0.0), vec2(1.0,  0.0),
+                vec2( 0.0, -1.0), vec2(0.0,  1.0),
+                vec2(-1.0, -1.0), vec2(1.0, -1.0),
+                vec2(-1.0,  1.0), vec2(1.0,  1.0)
+              );
+              float centerY = luma(center);
+              vec3 sum = center * 2.8;
+              float weightSum = 2.8;
+              for (int i = 0; i < 8; i++) {
+                vec3 n = texture(u_tex, uv + offsets[i] * p).rgb;
+                float d = abs(luma(n) - centerY);
+                float edge = exp(-d * d * 150.0);
+                float spatial = i < 4 ? 0.75 : 0.48;
+                float w = edge * spatial;
+                sum += n * w;
+                weightSum += w;
+              }
+              vec3 filtered = sum / weightSum;
+              return mix(center, filtered, clamp(u_denoise, 0.0, 1.0));
+            }
+
+            float boundaryPulse(float coord, float period) {
+              float d = abs(mod(coord + period * 0.5, period) - period * 0.5);
+              return 1.0 - smoothstep(0.20, 1.35, d);
+            }
+
+            vec3 compressionClean(vec2 uv, vec3 center) {
+              vec2 p = 1.0 / u_srcSize;
+              vec3 l1 = texture(u_tex, clamp(uv + vec2(-p.x, 0.0), vec2(0.0), vec2(1.0))).rgb;
+              vec3 r1 = texture(u_tex, clamp(uv + vec2( p.x, 0.0), vec2(0.0), vec2(1.0))).rgb;
+              vec3 u1 = texture(u_tex, clamp(uv + vec2(0.0, -p.y), vec2(0.0), vec2(1.0))).rgb;
+              vec3 d1 = texture(u_tex, clamp(uv + vec2(0.0,  p.y), vec2(0.0), vec2(1.0))).rgb;
+              vec3 l2 = texture(u_tex, clamp(uv + vec2(-2.0 * p.x, 0.0), vec2(0.0), vec2(1.0))).rgb;
+              vec3 r2 = texture(u_tex, clamp(uv + vec2( 2.0 * p.x, 0.0), vec2(0.0), vec2(1.0))).rgb;
+              vec3 u2 = texture(u_tex, clamp(uv + vec2(0.0, -2.0 * p.y), vec2(0.0), vec2(1.0))).rgb;
+              vec3 d2 = texture(u_tex, clamp(uv + vec2(0.0,  2.0 * p.y), vec2(0.0), vec2(1.0))).rgb;
+
+              vec2 src = uv * u_srcSize;
+              float bx = max(boundaryPulse(src.x, 8.0), boundaryPulse(src.x, 16.0) * 0.72);
+              float by = max(boundaryPulse(src.y, 8.0), boundaryPulse(src.y, 16.0) * 0.72);
+
+              float crossX = abs(luma(l1) - luma(r1));
+              float crossY = abs(luma(u1) - luma(d1));
+              float flatX = exp(-crossX * crossX * 95.0);
+              float flatY = exp(-crossY * crossY * 95.0);
+
+              vec3 horizontal = (l2 + l1 * 2.0 + center * 2.0 + r1 * 2.0 + r2) / 8.0;
+              vec3 vertical = (u2 + u1 * 2.0 + center * 2.0 + d1 * 2.0 + d2) / 8.0;
+              float wx = bx * flatX * clamp(u_deblock, 0.0, 1.0) * 0.62;
+              float wy = by * flatY * clamp(u_deblock, 0.0, 1.0) * 0.62;
+              vec3 deblocked = mix(center, horizontal, wx);
+              deblocked = mix(deblocked, vertical, wy);
+
+              vec3 crossAvg = (l1 + r1 + u1 + d1) * 0.25;
+              float edge = 0.5 * (abs(luma(r1) - luma(l1)) + abs(luma(d1) - luma(u1)));
+              float hf = abs(luma(deblocked) - luma(crossAvg));
+              float halo = smoothstep(0.008, 0.070, hf) * smoothstep(0.018, 0.18, edge);
+              float protectHardEdge = 1.0 - smoothstep(0.30, 0.62, edge);
+              float deringWeight = clamp(u_dering, 0.0, 1.0) * halo * protectHardEdge * 0.46;
+
+              vec3 nMin = min(min(l1, r1), min(u1, d1));
+              vec3 nMax = max(max(l1, r1), max(u1, d1));
+              vec3 clipped = clamp(deblocked, nMin - vec3(0.010), nMax + vec3(0.010));
+              vec3 deringed = mix(deblocked, clipped, deringWeight);
+
+              vec3 chromaBase = mix(crossAvg, deblocked, 0.58);
+              float y = luma(deringed);
+              float chromaGate = clamp(u_dering, 0.0, 1.0) * (1.0 - smoothstep(0.18, 0.55, edge)) * 0.16;
+              vec3 chromaSoft = chromaBase + vec3(y - luma(chromaBase));
+              return mix(deringed, chromaSoft, chromaGate);
+            }
+
+            vec3 temporalSample(float side, vec2 uv) {
+              if (side < 0.5) return texture(u_prev, uv).rgb;
+              return texture(u_next, uv).rgb;
+            }
+
+            float motionPatchCost(float side, vec2 uv, vec2 offsetPx, float c0, float cx, float cy, float patchStep) {
+              vec2 p = 1.0 / u_srcSize;
+              vec2 off = offsetPx * p;
+              float p0 = luma(temporalSample(side, clamp(uv + off, vec2(0.0), vec2(1.0))));
+              float px = luma(temporalSample(side, clamp(uv + off + vec2(p.x * patchStep, 0.0), vec2(0.0), vec2(1.0))));
+              float py = luma(temporalSample(side, clamp(uv + off + vec2(0.0, p.y * patchStep), vec2(0.0), vec2(1.0))));
+              return abs(p0 - c0) * 0.58 + abs(px - cx) * 0.21 + abs(py - cy) * 0.21;
+            }
+
+            vec3 motionTemporalMatch(float side, vec2 uv, vec3 current, out float confidence, out float motionAmount) {
+              vec2 p = 1.0 / u_srcSize;
+              float resolutionScale = clamp(u_srcSize.x / 640.0, 1.0, 3.0);
+              float radiusScale = mix(0.48, 1.42, clamp(u_motion, 0.0, 1.0)) * resolutionScale;
+              float patchStep = max(1.0, resolutionScale * 0.72);
+
+              float c0 = luma(texture(u_tex, uv).rgb);
+              float cx = luma(texture(u_tex, clamp(uv + vec2(p.x * patchStep, 0.0), vec2(0.0), vec2(1.0))).rgb);
+              float cy = luma(texture(u_tex, clamp(uv + vec2(0.0, p.y * patchStep), vec2(0.0), vec2(1.0))).rgb);
+
+              vec2 coarse[13] = vec2[](
+                vec2( 0.0,  0.0),
+                vec2(-2.0,  0.0), vec2( 2.0,  0.0), vec2( 0.0, -2.0), vec2( 0.0,  2.0),
+                vec2(-4.0,  0.0), vec2( 4.0,  0.0), vec2( 0.0, -4.0), vec2( 0.0,  4.0),
+                vec2(-3.0, -3.0), vec2( 3.0, -3.0), vec2(-3.0,  3.0), vec2( 3.0,  3.0)
+              );
+
+              vec2 bestOffset = vec2(0.0);
+              float bestCost = 999.0;
+              for (int i = 0; i < 13; i++) {
+                vec2 candidateOffset = coarse[i] * radiusScale;
+                float cost = motionPatchCost(side, uv, candidateOffset, c0, cx, cy, patchStep);
+                cost += length(candidateOffset) / max(1.0, resolutionScale) * 0.00055;
+                if (cost < bestCost) {
+                  bestCost = cost;
+                  bestOffset = candidateOffset;
+                }
+              }
+
+              vec2 fine[5] = vec2[](
+                vec2(0.0, 0.0), vec2(-1.0, 0.0), vec2(1.0, 0.0), vec2(0.0, -1.0), vec2(0.0, 1.0)
+              );
+              float fineStep = max(0.75, resolutionScale * 0.55);
+              for (int i = 0; i < 5; i++) {
+                vec2 candidateOffset = bestOffset + fine[i] * fineStep;
+                float cost = motionPatchCost(side, uv, candidateOffset, c0, cx, cy, patchStep);
+                cost += length(candidateOffset) / max(1.0, resolutionScale) * 0.00055;
+                if (cost < bestCost) {
+                  bestCost = cost;
+                  bestOffset = candidateOffset;
+                }
+              }
+
+              vec2 matchUV = clamp(uv + bestOffset * p, vec2(0.0), vec2(1.0));
+              vec3 best = temporalSample(side, matchUV);
+              float residualY = abs(luma(best) - luma(current));
+              float residualRGB = length(best - current) * 0.16;
+              float residual = residualY + residualRGB;
+
+              float patchTrust = exp(-bestCost * bestCost * 245.0);
+              float residualTrust = 1.0 - smoothstep(0.055, 0.19, residual);
+              motionAmount = length(bestOffset) / max(1.0, resolutionScale);
+              float extremeMotionGate = 1.0 - smoothstep(5.4, 8.5, motionAmount) * 0.22;
+              confidence = clamp(patchTrust * residualTrust * extremeMotionGate, 0.0, 1.0);
+              return best;
+            }
+
+            void main() {
+              vec2 p = 1.0 / u_srcSize;
+              vec3 hq = bicubic(v_uv).rgb;
+              vec3 spatialClean = denoise8(v_uv, hq);
+              vec3 compressionFiltered = compressionClean(v_uv, spatialClean);
+
+              float pastConfidence = 0.0;
+              float pastMotion = 0.0;
+              float futureConfidence = 0.0;
+              float futureMotion = 0.0;
+              vec3 matchedPast = compressionFiltered;
+              vec3 matchedFuture = compressionFiltered;
+              if (u_hasPrev > 0.5) matchedPast = motionTemporalMatch(0.0, v_uv, compressionFiltered, pastConfidence, pastMotion);
+              if (u_hasNext > 0.5) matchedFuture = motionTemporalMatch(1.0, v_uv, compressionFiltered, futureConfidence, futureMotion);
+              pastConfidence *= u_hasPrev;
+              futureConfidence *= u_hasNext;
+
+              float edgeNow = length(texture(u_tex, clamp(v_uv + vec2(p.x, 0.0), vec2(0.0), vec2(1.0))).rgb -
+                                     texture(u_tex, clamp(v_uv - vec2(p.x, 0.0), vec2(0.0), vec2(1.0))).rgb);
+              float edgeProtection = 1.0 - smoothstep(0.32, 0.78, edgeNow) * 0.34;
+              float avgMotion = (pastMotion * pastConfidence + futureMotion * futureConfidence) / max(0.001, pastConfidence + futureConfidence);
+              float motionProtection = 1.0 - smoothstep(2.5, 7.0, avgMotion) * 0.18;
+
+              float neighborAgreement = 1.0;
+              if (u_hasPrev > 0.5 && u_hasNext > 0.5) {
+                float sideDiff = abs(luma(matchedPast) - luma(matchedFuture)) + length(matchedPast - matchedFuture) * 0.10;
+                neighborAgreement = 1.0 - smoothstep(0.075, 0.24, sideDiff);
+              }
+
+              float pastW = pastConfidence;
+              float futureW = futureConfidence;
+              float sideSum = pastW + futureW;
+              vec3 temporalReference = compressionFiltered;
+              if (sideSum > 0.001) temporalReference = (matchedPast * pastW + matchedFuture * futureW) / sideSum;
+
+              vec3 localMin = min(min(texture(u_tex, clamp(v_uv + vec2(-p.x, 0.0), vec2(0.0), vec2(1.0))).rgb,
+                                      texture(u_tex, clamp(v_uv + vec2( p.x, 0.0), vec2(0.0), vec2(1.0))).rgb),
+                                  min(texture(u_tex, clamp(v_uv + vec2(0.0, -p.y), vec2(0.0), vec2(1.0))).rgb,
+                                      texture(u_tex, clamp(v_uv + vec2(0.0,  p.y), vec2(0.0), vec2(1.0))).rgb));
+              vec3 localMax = max(max(texture(u_tex, clamp(v_uv + vec2(-p.x, 0.0), vec2(0.0), vec2(1.0))).rgb,
+                                      texture(u_tex, clamp(v_uv + vec2( p.x, 0.0), vec2(0.0), vec2(1.0))).rgb),
+                                  max(texture(u_tex, clamp(v_uv + vec2(0.0, -p.y), vec2(0.0), vec2(1.0))).rgb,
+                                      texture(u_tex, clamp(v_uv + vec2(0.0,  p.y), vec2(0.0), vec2(1.0))).rgb));
+              temporalReference = clamp(temporalReference, localMin - vec3(0.025), localMax + vec3(0.025));
+
+              float confidence = clamp(sideSum * 0.62, 0.0, 1.0);
+              float consensusGate = mix(0.78, 1.0, neighborAgreement);
+              float temporalWeight = clamp(u_temporal, 0.0, 1.0) * confidence * edgeProtection * motionProtection * consensusGate * 0.74;
+              vec3 temporalClean = mix(compressionFiltered, temporalReference, temporalWeight);
+
+              vec3 n0 = texture(u_tex, v_uv + vec2(-p.x, 0.0)).rgb;
+              vec3 n1 = texture(u_tex, v_uv + vec2( p.x, 0.0)).rgb;
+              vec3 n2 = texture(u_tex, v_uv + vec2(0.0, -p.y)).rgb;
+              vec3 n3 = texture(u_tex, v_uv + vec2(0.0,  p.y)).rgb;
+              vec3 localBlur = (n0 + n1 + n2 + n3) * 0.25;
+              vec3 detailSignal = hq - localBlur;
+              vec3 result = temporalClean + detailSignal * u_detail * 0.68;
+
+              outColor = vec4(clamp(result, 0.0, 1.0), 1.0);
+            }
+          `;
+
+          const scaleFragmentSource = `#version 300 es
+            precision highp float;
+            uniform sampler2D u_input;
+            uniform vec2 u_srcSize;
+            uniform vec2 u_outSize;
+            uniform float u_mode;
+            in vec2 v_uv;
+            out vec4 outColor;
+
+            vec4 cubic(float v) {
+              vec4 n = vec4(1.0,2.0,3.0,4.0)-v;
+              vec4 ss=n*n*n;
+              float x=ss.x, y=ss.y-4.0*ss.x, z=ss.z-4.0*ss.y+6.0*ss.x;
+              float w=6.0-x-y-z;
+              return vec4(x,y,z,w)/6.0;
+            }
+            vec3 bicubicSample(vec2 uv) {
+              vec2 invSize=1.0/u_srcSize;
+              vec2 coord=uv*u_srcSize-0.5;
+              vec2 f=fract(coord); coord-=f;
+              vec4 xc=cubic(f.x), yc=cubic(f.y);
+              vec4 c=coord.xxyy+vec2(-0.5,1.5).xyxy;
+              vec4 ss=vec4(xc.xz+xc.yw,yc.xz+yc.yw);
+              vec4 offset=c+vec4(xc.yw,yc.yw)/ss;
+              offset*=invSize.xxyy;
+              vec3 s0=texture(u_input,offset.xz).rgb;
+              vec3 s1=texture(u_input,offset.yz).rgb;
+              vec3 s2=texture(u_input,offset.xw).rgb;
+              vec3 s3=texture(u_input,offset.yw).rgb;
+              float sx=ss.x/(ss.x+ss.y), sy=ss.z/(ss.z+ss.w);
+              return mix(mix(s3,s2,sx),mix(s1,s0,sx),sy);
+            }
+
+            // AMD FSR 1.0 EASU adapted to WebGL2.
+            vec3 fsrSample(vec2 p){ return texture(u_input,clamp(p,vec2(0.0),vec2(1.0))).rgb; }
+            void easuSet(inout vec2 dir,inout float len,float w,float lA,float lB,float lC,float lD,float lE){
+              float lenX=max(abs(lD-lC),abs(lC-lB)); float dirX=lD-lB;
+              dir.x+=dirX*w; lenX=clamp(abs(dirX)/max(lenX,1e-5),0.0,1.0); len+=lenX*lenX*w;
+              float lenY=max(abs(lE-lC),abs(lC-lA)); float dirY=lE-lA;
+              dir.y+=dirY*w; lenY=clamp(abs(dirY)/max(lenY,1e-5),0.0,1.0); len+=lenY*lenY*w;
+            }
+            void easuTap(inout vec3 aC,inout float aW,vec2 off,vec2 dir,vec2 len2,float lob,float clp,vec3 c){
+              vec2 v=vec2(dot(off,dir),dot(off,vec2(-dir.y,dir.x))); v*=len2;
+              float d2=min(dot(v,v),clp); float wB=0.4*d2-1.0; float wA=lob*d2-1.0;
+              wB*=wB; wA*=wA; wB=1.5625*wB-0.5625; float w=wB*wA;
+              aC+=c*w; aW+=w;
+            }
+            vec3 easu(vec2 ip){
+              vec4 con0=vec4(u_srcSize.x/u_outSize.x,u_srcSize.y/u_outSize.y,0.5*u_srcSize.x/u_outSize.x-0.5,0.5*u_srcSize.y/u_outSize.y-0.5);
+              vec4 con1=vec4(1.0,1.0,1.0,-1.0)/u_srcSize.xyxy;
+              vec4 con2=vec4(-1.0,2.0,1.0,2.0)/u_srcSize.xyxy;
+              vec4 con3=vec4(0.0,4.0,0.0,0.0)/u_srcSize.xyxy;
+              vec2 pp=ip*con0.xy+con0.zw; vec2 fp=floor(pp); pp-=fp;
+              vec2 p0=fp*con1.xy+con1.zw; vec2 p1=p0+con2.xy; vec2 p2=p0+con2.zw; vec2 p3=p0+con3.xy;
+              vec4 off=vec4(-0.5,0.5,-0.5,0.5)*con1.xxyy;
+              vec3 bC=fsrSample(p0+off.xw); float bL=bC.g+0.5*(bC.r+bC.b);
+              vec3 cC=fsrSample(p0+off.yw); float cL=cC.g+0.5*(cC.r+cC.b);
+              vec3 iC=fsrSample(p1+off.xw); float iL=iC.g+0.5*(iC.r+iC.b);
+              vec3 jC=fsrSample(p1+off.yw); float jL=jC.g+0.5*(jC.r+jC.b);
+              vec3 fC=fsrSample(p1+off.yz); float fL=fC.g+0.5*(fC.r+fC.b);
+              vec3 eC=fsrSample(p1+off.xz); float eL=eC.g+0.5*(eC.r+eC.b);
+              vec3 kC=fsrSample(p2+off.xw); float kL=kC.g+0.5*(kC.r+kC.b);
+              vec3 lC=fsrSample(p2+off.yw); float lL=lC.g+0.5*(lC.r+lC.b);
+              vec3 hC=fsrSample(p2+off.yz); float hL=hC.g+0.5*(hC.r+hC.b);
+              vec3 gC=fsrSample(p2+off.xz); float gL=gC.g+0.5*(gC.r+gC.b);
+              vec3 oC=fsrSample(p3+off.yz); float oL=oC.g+0.5*(oC.r+oC.b);
+              vec3 nC=fsrSample(p3+off.xz); float nL=nC.g+0.5*(nC.r+nC.b);
+              vec2 dir=vec2(0.0); float len=0.0;
+              easuSet(dir,len,(1.0-pp.x)*(1.0-pp.y),bL,eL,fL,gL,jL);
+              easuSet(dir,len,pp.x*(1.0-pp.y),cL,fL,gL,hL,kL);
+              easuSet(dir,len,(1.0-pp.x)*pp.y,fL,iL,jL,kL,nL);
+              easuSet(dir,len,pp.x*pp.y,gL,jL,kL,lL,oL);
+              float dirR=dot(dir,dir); bool zro=dirR<(1.0/32768.0); dirR=inversesqrt(max(dirR,1e-8));
+              dir=zro?vec2(1.0,0.0):dir*dirR; len*=0.5; len*=len;
+              float stretch=dot(dir,dir)/max(max(abs(dir.x),abs(dir.y)),1e-5);
+              vec2 len2=vec2(1.0+(stretch-1.0)*len,1.0-0.5*len); float lob=0.5-0.29*len; float clp=1.0/lob;
+              vec3 min4=min(min(fC,gC),min(jC,kC)); vec3 max4=max(max(fC,gC),max(jC,kC));
+              vec3 aC=vec3(0.0); float aW=0.0;
+              easuTap(aC,aW,vec2(0,-1)-pp,dir,len2,lob,clp,bC); easuTap(aC,aW,vec2(1,-1)-pp,dir,len2,lob,clp,cC);
+              easuTap(aC,aW,vec2(-1,1)-pp,dir,len2,lob,clp,iC); easuTap(aC,aW,vec2(0,1)-pp,dir,len2,lob,clp,jC);
+              easuTap(aC,aW,vec2(0,0)-pp,dir,len2,lob,clp,fC); easuTap(aC,aW,vec2(-1,0)-pp,dir,len2,lob,clp,eC);
+              easuTap(aC,aW,vec2(1,1)-pp,dir,len2,lob,clp,kC); easuTap(aC,aW,vec2(2,1)-pp,dir,len2,lob,clp,lC);
+              easuTap(aC,aW,vec2(2,0)-pp,dir,len2,lob,clp,hC); easuTap(aC,aW,vec2(1,0)-pp,dir,len2,lob,clp,gC);
+              easuTap(aC,aW,vec2(1,2)-pp,dir,len2,lob,clp,oC); easuTap(aC,aW,vec2(0,2)-pp,dir,len2,lob,clp,nC);
+              return clamp(aC/max(aW,1e-5),min4,max4);
+            }
+            void main(){
+              vec3 c=u_mode>1.5?easu(gl_FragCoord.xy):(u_mode>0.5?bicubicSample(v_uv):texture(u_input,v_uv).rgb);
+              outColor=vec4(clamp(c,0.0,1.0),1.0);
+            }
+          `;
+
+          const postFragmentSource = `#version 300 es
+            precision highp float;
+            uniform sampler2D u_input;
+            uniform vec2 u_resolution;
+            uniform vec2 u_outputResolution;
+            uniform float u_sharpness;
+            uniform float u_enableRcas;
+            in vec2 v_uv;
+            out vec4 outColor;
+            vec3 rcasLoad(vec2 p){ return texture(u_input,p/u_resolution).rgb; }
+            vec3 rcas(vec2 ip,float sharpnessStops){
+              vec3 b=rcasLoad(ip+vec2(0,-1)), d=rcasLoad(ip+vec2(-1,0)), e=rcasLoad(ip), f=rcasLoad(ip+vec2(1,0)), h=rcasLoad(ip+vec2(0,1));
+              float bL=b.g+0.5*(b.b+b.r), dL=d.g+0.5*(d.b+d.r), eL=e.g+0.5*(e.b+e.r), fL=f.g+0.5*(f.b+f.r), hL=h.g+0.5*(h.b+h.r);
+              float nz=0.25*(bL+dL+fL+hL)-eL; float range=max(max(bL,dL),max(eL,max(fL,hL)))-min(min(bL,dL),min(eL,min(fL,hL)));
+              nz=1.0-0.5*clamp(abs(nz)/max(range,1e-5),0.0,1.0);
+              vec3 mn4=min(b,min(f,h)), mx4=max(b,max(f,h));
+              vec3 hitMin=mn4/max(4.0*mx4,vec3(1e-5)); vec3 hitMax=(vec3(1.0)-mx4)/min(4.0*mn4-vec3(4.0),vec3(-1e-5));
+              vec3 lobeRGB=max(-hitMin,hitMax); float lobe=max(-(0.25-1.0/16.0),min(max(lobeRGB.r,max(lobeRGB.g,lobeRGB.b)),0.0));
+              lobe*=exp2(-sharpnessStops)*nz; return (lobe*(b+d+h+f)+e)/(4.0*lobe+1.0);
+            }
+            vec3 bicubicPost(vec2 uv){
+              vec2 p=uv*u_resolution-0.5, i=floor(p), f=fract(p);
+              float wx[4]; float wy[4];
+              wx[0]=(-0.5*f.x+f.x*f.x-0.5*f.x*f.x*f.x); wx[1]=(1.0-2.5*f.x*f.x+1.5*f.x*f.x*f.x); wx[2]=(0.5*f.x+2.0*f.x*f.x-1.5*f.x*f.x*f.x); wx[3]=(-0.5*f.x*f.x+0.5*f.x*f.x*f.x);
+              wy[0]=(-0.5*f.y+f.y*f.y-0.5*f.y*f.y*f.y); wy[1]=(1.0-2.5*f.y*f.y+1.5*f.y*f.y*f.y); wy[2]=(0.5*f.y+2.0*f.y*f.y-1.5*f.y*f.y*f.y); wy[3]=(-0.5*f.y*f.y+0.5*f.y*f.y*f.y);
+              vec3 sum=vec3(0.0);
+              for(int yy=0;yy<4;yy++) for(int xx=0;xx<4;xx++){ vec2 q=(i+vec2(float(xx-1),float(yy-1))+0.5)/u_resolution; sum+=texture(u_input,q).rgb*wx[xx]*wy[yy]; }
+              return sum;
+            }
+            void main(){
+              vec2 ip=v_uv*u_resolution;
+              bool down=u_resolution.x>u_outputResolution.x*1.05 || u_resolution.y>u_outputResolution.y*1.05;
+              vec3 c;
+              if(u_enableRcas>0.5){
+                if(down){
+                  vec2 o=0.25/u_outputResolution;
+                  c=0.25*(
+                    rcas((v_uv+vec2(-o.x,-o.y))*u_resolution,u_sharpness)+
+                    rcas((v_uv+vec2( o.x,-o.y))*u_resolution,u_sharpness)+
+                    rcas((v_uv+vec2(-o.x, o.y))*u_resolution,u_sharpness)+
+                    rcas((v_uv+vec2( o.x, o.y))*u_resolution,u_sharpness));
+                }else c=rcas(ip,u_sharpness);
+              }else c=down?bicubicPost(v_uv):texture(u_input,v_uv).rgb;
+              outColor=vec4(clamp(c,0.0,1.0),1.0);
+            }
+          `;
+
+          glProgram = createProgram(vertexSource, fragmentSource);
+          glScaleProgram = createProgram(vertexSource, scaleFragmentSource);
+          glPostProgram = createProgram(vertexSource, postFragmentSource);
+          gl.useProgram(glProgram);
+
+          const buffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1, -1,  1, -1, -1,  1,
+            -1,  1,  1, -1,  1,  1
+          ]), gl.STATIC_DRAW);
+
+          const position = gl.getAttribLocation(glProgram, 'a_position');
+          gl.enableVertexAttribArray(position);
+          gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+          function makeTexture() {
+            const texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 255]));
+            return texture;
+          }
+
+          glTexture = makeTexture();
+          glPrevTexture = makeTexture();
+          glNextTexture = makeTexture();
+          function makeRenderTexture() {
+            const texture = gl.createTexture();
+            gl.bindTexture(gl.TEXTURE_2D, texture);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            return texture;
+          }
+          glRestoreTexture = makeRenderTexture();
+          glUpscaleTexture = makeRenderTexture();
+          glUpscaleTexture2 = makeRenderTexture();
+          glUpscaleTexture3 = makeRenderTexture();
+          glRestoreFbo = gl.createFramebuffer();
+          glUpscaleFbo = gl.createFramebuffer();
+          glUpscaleFbo2 = gl.createFramebuffer();
+          glUpscaleFbo3 = gl.createFramebuffer();
+          glMaxTextureSize = Math.max(2048, gl.getParameter(gl.MAX_TEXTURE_SIZE) || 4096);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+          glUniforms = {
+            tex: gl.getUniformLocation(glProgram, 'u_tex'),
+            prev: gl.getUniformLocation(glProgram, 'u_prev'),
+            next: gl.getUniformLocation(glProgram, 'u_next'),
+            srcSize: gl.getUniformLocation(glProgram, 'u_srcSize'),
+            denoise: gl.getUniformLocation(glProgram, 'u_denoise'),
+            temporal: gl.getUniformLocation(glProgram, 'u_temporal'),
+            motion: gl.getUniformLocation(glProgram, 'u_motion'),
+            deblock: gl.getUniformLocation(glProgram, 'u_deblock'),
+            dering: gl.getUniformLocation(glProgram, 'u_dering'),
+            hasPrev: gl.getUniformLocation(glProgram, 'u_hasPrev'),
+            hasNext: gl.getUniformLocation(glProgram, 'u_hasNext'),
+            detail: gl.getUniformLocation(glProgram, 'u_detail')
+          };
+          gl.uniform1i(glUniforms.tex, 0);
+          gl.uniform1i(glUniforms.prev, 1);
+          gl.uniform1i(glUniforms.next, 2);
+          glScaleUniforms = {
+            input: gl.getUniformLocation(glScaleProgram, 'u_input'),
+            srcSize: gl.getUniformLocation(glScaleProgram, 'u_srcSize'),
+            outSize: gl.getUniformLocation(glScaleProgram, 'u_outSize'),
+            mode: gl.getUniformLocation(glScaleProgram, 'u_mode')
+          };
+          glPostUniforms = {
+            input: gl.getUniformLocation(glPostProgram, 'u_input'),
+            resolution: gl.getUniformLocation(glPostProgram, 'u_resolution'),
+            outputResolution: gl.getUniformLocation(glPostProgram, 'u_outputResolution'),
+            sharpness: gl.getUniformLocation(glPostProgram, 'u_sharpness'),
+            enableRcas: gl.getUniformLocation(glPostProgram, 'u_enableRcas')
+          };
+          gl.useProgram(glScaleProgram); gl.uniform1i(glScaleUniforms.input, 3);
+          gl.useProgram(glPostProgram); gl.uniform1i(glPostUniforms.input, 4);
+          gl.useProgram(glProgram);
+          glReady = true;
+          gpuInfo.textContent = `WebGL2 · restore / FSR · max texture ${glMaxTextureSize}`;
+          return true;
+        } catch (error) {
+          console.error(error);
+          glReady = false;
+          gpuInfo.textContent = 'GPU CLEAN unavailable';
+          enhanceBtn.disabled = true;
+          denoise.disabled = true;
+          deblock.disabled = true;
+          dering.disabled = true;
+          detail.disabled = true;
+          upscaleBtn.disabled = true;
+          fsrSharp.disabled = true;
+          return false;
+        }
+      }
+
+      function mediaAspect() {
+        const w = Number(video.videoWidth) || 16;
+        const h = Number(video.videoHeight) || 9;
+        return Math.max(0.05, Math.min(20, w / h));
+      }
+
+      function layoutMediaSurface() {
+        const sw = Math.max(2, stage.clientWidth);
+        const sh = Math.max(2, stage.clientHeight);
+        const aspect = mediaAspect();
+        let width = sw;
+        let height = width / aspect;
+        if (height > sh) {
+          height = sh;
+          width = height * aspect;
+        }
+        const left = Math.max(0, (sw - width) * 0.5);
+        const top = Math.max(0, (sh - height) * 0.5);
+        mediaSurface.style.left = `${left}px`;
+        mediaSurface.style.top = `${top}px`;
+        mediaSurface.style.width = `${Math.max(2, width)}px`;
+        mediaSurface.style.height = `${Math.max(2, height)}px`;
+      }
+
+      function fitStageToViewport() {
+        if (theaterMode) {
+          stage.style.aspectRatio = 'auto'; stage.style.width = '100%'; stage.style.height = '100%';
+          layoutMediaSurface(); requestAnimationFrame(resizeCanvas); return;
+        }
+        if (document.fullscreenElement === stage) {
+          layoutMediaSurface();
+          requestAnimationFrame(resizeCanvas);
+          return;
+        }
+        const wrap = document.querySelector('.stage-wrap');
+        const topbar = document.querySelector('.topbar');
+        const controlsEl = controlsPanel;
+        if (!wrap || !topbar || !controlsEl) return;
+
+        const wrapStyle = getComputedStyle(wrap);
+        const padX = (parseFloat(wrapStyle.paddingLeft) || 0) + (parseFloat(wrapStyle.paddingRight) || 0);
+        const padY = (parseFloat(wrapStyle.paddingTop) || 0) + (parseFloat(wrapStyle.paddingBottom) || 0);
+        const availableWidth = Math.max(120, wrap.clientWidth - padX);
+        const reservedHeight = topbar.getBoundingClientRect().height + controlsEl.getBoundingClientRect().height + padY + 8;
+        const availableHeight = Math.max(100, window.innerHeight - reservedHeight);
+        const aspect = mediaAspect();
+
+        let width = Math.min(1440, availableWidth);
+        let height = width / aspect;
+        if (height > availableHeight) {
+          height = availableHeight;
+          width = height * aspect;
+        }
+        width = Math.max(2, Math.floor(width));
+        height = Math.max(2, Math.floor(height));
+        stage.style.aspectRatio = 'auto';
+        stage.style.width = `${width}px`;
+        stage.style.height = `${height}px`;
+        layoutMediaSurface();
+        requestAnimationFrame(resizeCanvas);
+      }
+
+      function requestedUpscaleFactor() {
+        return upscaleMode === 4 ? 8 : (upscaleMode === 3 ? 4 : (upscaleMode === 0 ? 1 : 2));
+      }
+
+      function resizeCanvas() {
+        if (!glReady || !enhanced) return;
+        layoutMediaSurface();
+        const rect = mediaSurface.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        let width = Math.max(2, Math.round(rect.width * dpr));
+        let height = Math.max(2, Math.round(rect.height * dpr));
+        const upscaleFactor = requestedUpscaleFactor();
+        const sourceMaxW = video.videoWidth ? video.videoWidth * upscaleFactor : 2560;
+        const sourceMaxH = video.videoHeight ? video.videoHeight * upscaleFactor : 1440;
+        const maxW = Math.min(glMaxTextureSize, sourceMaxW);
+        const maxH = Math.min(glMaxTextureSize, sourceMaxH);
+        const scale = Math.min(1, maxW / width, maxH / height);
+        width = Math.max(2, Math.round(width * scale));
+        height = Math.max(2, Math.round(height * scale));
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+        }
+      }
+
+      function calculateViewport() {
+        return { x: 0, y: 0, width: canvas.width, height: canvas.height };
+      }
+
+      function ensureRenderTarget(texture, fbo, width, height, kind) {
+        if (!width || !height) return;
+        const same = kind === 'restore'
+          ? (glRestoreWidth === width && glRestoreHeight === height)
+          : kind === 'upscale3'
+            ? (glUpscale3Width === width && glUpscale3Height === height)
+            : kind === 'upscale2'
+              ? (glUpscale2Width === width && glUpscale2Height === height)
+              : (glUpscaleWidth === width && glUpscaleHeight === height);
+        if (same) return;
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
+        const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        if (status !== gl.FRAMEBUFFER_COMPLETE) throw new Error(`${kind} framebuffer incomplete 0x${status.toString(16)} ${width}x${height}`);
+        if (kind === 'restore') { glRestoreWidth = width; glRestoreHeight = height; }
+        else if (kind === 'upscale3') { glUpscale3Width = width; glUpscale3Height = height; }
+        else if (kind === 'upscale2') { glUpscale2Width = width; glUpscale2Height = height; }
+        else { glUpscaleWidth = width; glUpscaleHeight = height; }
+      }
+
+      function uploadVideoFrame(textureUnit, texture) {
+        gl.activeTexture(textureUnit);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, video);
+      }
+
+      function upscaleLabel(short = false) {
+        const labels = short ? ['1X', 'BICUBIC', 'FSR 2X', 'FSR HQ', 'FSR SUPER'] : ['OFF', 'BICUBIC 2X', 'FSR 2X', 'FSR HQ 4X', 'FSR SUPER SS'];
+        return labels[upscaleMode] || labels[0];
+      }
+
+      function runScalePass(inputTexture, srcW, srcH, outputFbo, outW, outH, mode) {
+        gl.bindFramebuffer(gl.FRAMEBUFFER, outputFbo);
+        gl.useProgram(glScaleProgram);
+        gl.activeTexture(gl.TEXTURE3);
+        gl.bindTexture(gl.TEXTURE_2D, inputTexture);
+        gl.uniform2f(glScaleUniforms.srcSize, srcW, srcH);
+        gl.uniform2f(glScaleUniforms.outSize, outW, outH);
+        gl.uniform1f(glScaleUniforms.mode, mode);
+        gl.viewport(0, 0, outW, outH);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      }
+
+      function renderBufferedFrame(hasPrev, hasNext) {
+        const vp = calculateViewport();
+        const srcW = video.videoWidth;
+        const srcH = video.videoHeight;
+        ensureRenderTarget(glRestoreTexture, glRestoreFbo, srcW, srcH, 'restore');
+
+        // Pass 1: restoration at native source resolution.
+        gl.bindFramebuffer(gl.FRAMEBUFFER, glRestoreFbo);
+        gl.useProgram(glProgram);
+        gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, glTexture);
+        gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, glPrevTexture);
+        gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, glNextTexture);
+        gl.uniform2f(glUniforms.srcSize, srcW, srcH);
+        gl.uniform1f(glUniforms.denoise, Number(denoise.value) / 100);
+        gl.uniform1f(glUniforms.temporal, Number(temporal.value) / 100);
+        gl.uniform1f(glUniforms.motion, Number(motion.value) / 100);
+        gl.uniform1f(glUniforms.deblock, Number(deblock.value) / 100);
+        gl.uniform1f(glUniforms.dering, Number(dering.value) / 100);
+        gl.uniform1f(glUniforms.hasPrev, hasPrev ? 1 : 0);
+        gl.uniform1f(glUniforms.hasNext, hasNext ? 1 : 0);
+        gl.uniform1f(glUniforms.detail, Number(detail.value) / 100);
+        gl.viewport(0, 0, srcW, srcH);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+        let finalTexture = glUpscaleTexture;
+        let finalW = vp.width;
+        let finalH = vp.height;
+        const needsUpscale = vp.width > srcW * 1.01 || vp.height > srcH * 1.01;
+
+        if (upscaleMode >= 3 && needsUpscale) {
+          // HQ/SUPER: cascade EASU with each enlargement held to <=2x.
+          // HQ allows up to 4x source reconstruction; SUPER allows up to 8x and
+          // optionally renders above the display backing resolution for a cleaner downsample.
+          const sourceCap = upscaleMode === 4 ? 8 : 4;
+          const ss = upscaleMode === 4 ? 1.35 : 1.0;
+          const targetW = Math.max(2, Math.min(glMaxTextureSize, Math.round(srcW * sourceCap), Math.round(vp.width * ss)));
+          const targetH = Math.max(2, Math.min(glMaxTextureSize, Math.round(srcH * sourceCap), Math.round(vp.height * ss)));
+          let curTexture = glRestoreTexture, curW = srcW, curH = srcH;
+
+          const pass1W = Math.min(targetW, Math.max(2, Math.round(curW * 2)));
+          const pass1H = Math.min(targetH, Math.max(2, Math.round(curH * 2)));
+          ensureRenderTarget(glUpscaleTexture, glUpscaleFbo, pass1W, pass1H, 'upscale');
+          runScalePass(curTexture, curW, curH, glUpscaleFbo, pass1W, pass1H, 2);
+          curTexture = glUpscaleTexture; curW = pass1W; curH = pass1H;
+
+          if (curW < targetW - 1 || curH < targetH - 1) {
+            const pass2W = Math.min(targetW, Math.max(2, Math.round(curW * 2)));
+            const pass2H = Math.min(targetH, Math.max(2, Math.round(curH * 2)));
+            ensureRenderTarget(glUpscaleTexture2, glUpscaleFbo2, pass2W, pass2H, 'upscale2');
+            runScalePass(curTexture, curW, curH, glUpscaleFbo2, pass2W, pass2H, 2);
+            curTexture = glUpscaleTexture2; curW = pass2W; curH = pass2H;
+          }
+
+          if (curW < targetW - 1 || curH < targetH - 1) {
+            ensureRenderTarget(glUpscaleTexture3, glUpscaleFbo3, targetW, targetH, 'upscale3');
+            runScalePass(curTexture, curW, curH, glUpscaleFbo3, targetW, targetH, 2);
+            curTexture = glUpscaleTexture3; curW = targetW; curH = targetH;
+          }
+          finalTexture = curTexture; finalW = curW; finalH = curH;
+        } else {
+          ensureRenderTarget(glUpscaleTexture, glUpscaleFbo, vp.width, vp.height, 'upscale');
+          const effectiveMode = needsUpscale ? Math.min(upscaleMode, 2) : (upscaleMode === 0 ? 0 : 1);
+          runScalePass(glRestoreTexture, srcW, srcH, glUpscaleFbo, vp.width, vp.height, effectiveMode);
+        }
+
+        // Final RCAS at exact display backing resolution.
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.viewport(0, 0, canvas.width, canvas.height);
+        gl.clearColor(0, 0, 0, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.useProgram(glPostProgram);
+        gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, finalTexture);
+        gl.uniform2f(glPostUniforms.resolution, finalW, finalH);
+        gl.uniform2f(glPostUniforms.outputResolution, canvas.width, canvas.height);
+        gl.uniform1f(glPostUniforms.enableRcas, needsUpscale && upscaleMode >= 2 ? 1 : 0);
+        gl.uniform1f(glPostUniforms.sharpness, 2.0 - 1.85 * (Number(fsrSharp.value) / 100));
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+        frameCount += 1;
+        const now = performance.now();
+        const elapsed = now - fpsStart;
+        if (elapsed >= 1000) {
+          fps = Math.round((frameCount * 1000) / elapsed);
+          frameCount = 0;
+          fpsStart = now;
+          const temporalMode = bidirectional ? '2-SIDED · LOOKAHEAD 1F' : '1-SIDED · LOW LATENCY';
+          const scaleInfo = finalW !== canvas.width || finalH !== canvas.height ? `${finalW}×${finalH}→${canvas.width}×${canvas.height}` : `${canvas.width}×${canvas.height}`;
+          gpuInfo.textContent = `WebGL2 · ${upscaleLabel(false)} · ${temporalMode} · ${scaleInfo} · ${fps} fps`;
+        }
+      }
+
+      function drawStaticFrame() {
+        if (!enhanced || !glReady || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return;
+        resizeCanvas();
+        resetTemporalHistory();
+        try {
+          uploadVideoFrame(gl.TEXTURE0, glTexture);
+        } catch (error) {
+          console.error(error);
+          setEnhanced(false, false);
+          showToast('GPU frame upload failed');
+          return;
+        }
+        temporalBufferCount = bidirectional ? 1 : 0;
+        renderBufferedFrame(false, false);
+      }
+
+      function drawFrame(mediaTime = null) {
+        if (!enhanced || !glReady || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return;
+        resizeCanvas();
+        if (Number.isFinite(mediaTime) && lastCapturedMediaTime !== null && Math.abs(mediaTime - lastCapturedMediaTime) < 0.0001) return;
+
+        try {
+          if (bidirectional) {
+            if (temporalBufferCount === 0) {
+              uploadVideoFrame(gl.TEXTURE0, glTexture);
+              temporalBufferCount = 1;
+              renderBufferedFrame(false, false);
+            } else {
+              uploadVideoFrame(gl.TEXTURE2, glNextTexture);
+              renderBufferedFrame(temporalBufferCount >= 2, true);
+              const oldPast = glPrevTexture;
+              glPrevTexture = glTexture;
+              glTexture = glNextTexture;
+              glNextTexture = oldPast;
+              temporalBufferCount = Math.min(2, temporalBufferCount + 1);
+            }
+          } else {
+            uploadVideoFrame(gl.TEXTURE0, glTexture);
+            renderBufferedFrame(temporalBufferCount >= 1, false);
+            const oldPast = glPrevTexture;
+            glPrevTexture = glTexture;
+            glTexture = oldPast;
+            temporalBufferCount = 1;
+          }
+          if (Number.isFinite(mediaTime)) lastCapturedMediaTime = mediaTime;
+        } catch (error) {
+          console.error(error);
+          setEnhanced(false, false);
+          showToast('GPU frame upload failed');
+        }
+      }
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function waitFor(target, eventName, timeoutMs = 6000) {
+        return new Promise((resolve, reject) => {
+          let timeout = 0;
+          const cleanup = () => {
+            target.removeEventListener(eventName, onEvent);
+            target.removeEventListener('error', onError);
+            clearTimeout(timeout);
+          };
+          const onEvent = () => { cleanup(); resolve(); };
+          const onError = () => { cleanup(); reject(new Error('Probe video could not decode this media')); };
+          target.addEventListener(eventName, onEvent, { once: true });
+          target.addEventListener('error', onError, { once: true });
+          timeout = setTimeout(() => { cleanup(); reject(new Error(`Timed out waiting for ${eventName}`)); }, timeoutMs);
+        });
+      }
+
+      function analyzePixels(data, width, height) {
+        const y = new Float32Array(width * height);
+        for (let i = 0, p = 0; i < data.length; i += 4, p += 1) {
+          y[p] = data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
+        }
+        let gradSum = 0, gradCount = 0;
+        let blockSum = 0, blockCount = 0, normalSum = 0, normalCount = 0;
+        let flatLapSum = 0, flatCount = 0, edgeLapSum = 0, edgeCount = 0;
+        for (let py = 1; py < height - 1; py += 1) {
+          for (let px = 1; px < width - 1; px += 1) {
+            const i = py * width + px;
+            const c = y[i];
+            const l = y[i - 1], r = y[i + 1], u = y[i - width], d = y[i + width];
+            const dx = Math.abs(c - l);
+            const dy = Math.abs(c - u);
+            const g = (dx + dy) * 0.5;
+            gradSum += g;
+            gradCount += 1;
+            if (px % 8 === 0) { blockSum += dx; blockCount += 1; }
+            else { normalSum += dx; normalCount += 1; }
+            if (py % 8 === 0) { blockSum += dy; blockCount += 1; }
+            else { normalSum += dy; normalCount += 1; }
+            const lap = Math.abs(4 * c - l - r - u - d);
+            if (g < 7.0) { flatLapSum += lap; flatCount += 1; }
+            if (g > 16.0) { edgeLapSum += lap; edgeCount += 1; }
+          }
+        }
+        const blockMean = blockSum / Math.max(1, blockCount);
+        const normalMean = normalSum / Math.max(1, normalCount);
+        return {
+          gradient: gradSum / Math.max(1, gradCount),
+          blockRatio: blockMean / Math.max(0.25, normalMean),
+          flatNoise: flatLapSum / Math.max(1, flatCount),
+          edgeRing: edgeLapSum / Math.max(1, edgeCount)
+        };
+      }
+
+      function averageMetrics(list) {
+        if (!list.length) return { gradient: 0, blockRatio: 1, flatNoise: 0, edgeRing: 0 };
+        const sum = list.reduce((acc, item) => {
+          for (const key of Object.keys(acc)) acc[key] += item[key];
+          return acc;
+        }, { gradient: 0, blockRatio: 0, flatNoise: 0, edgeRing: 0 });
+        for (const key of Object.keys(sum)) sum[key] /= list.length;
+        return sum;
+      }
+
+      function deriveAutoProfile(metrics, file, duration, width, height) {
+        const mp = Math.max(0.01, (width * height) / 1_000_000);
+        const bitrateMbps = file && duration > 0 ? (file.size * 8) / duration / 1_000_000 : 0;
+        const density = bitrateMbps > 0 ? bitrateMbps / mp : 4.0;
+        let metadataSeverity = 12;
+        if (height <= 360) metadataSeverity += 28;
+        else if (height <= 480) metadataSeverity += 22;
+        else if (height <= 576) metadataSeverity += 17;
+        else if (height <= 720) metadataSeverity += 11;
+        else if (height >= 1440) metadataSeverity -= 7;
+        if (density < 1.2) metadataSeverity += 30;
+        else if (density < 2.0) metadataSeverity += 22;
+        else if (density < 3.0) metadataSeverity += 15;
+        else if (density < 4.5) metadataSeverity += 8;
+        else if (density > 9.0) metadataSeverity -= 5;
+
+        const blockPenalty = clamp((metrics.blockRatio - 0.98) * 85, 0, 38);
+        const noisePenalty = clamp((metrics.flatNoise - 1.2) * 3.1, 0, 34);
+        const ringPenalty = clamp((metrics.edgeRing - 14) * 0.85, 0, 26);
+        const severity = clamp(metadataSeverity + blockPenalty * 0.7 + noisePenalty * 0.55 + ringPenalty * 0.25, 0, 100);
+
+        const settings = {
+          denoise: Math.round(clamp(10 + severity * 0.38 + noisePenalty * 0.55, 8, 68)),
+          temporal: Math.round(clamp(18 + severity * 0.42 + noisePenalty * 0.38, 12, 76)),
+          motion: Math.round(clamp(58 + (height <= 720 ? 8 : 3) - noisePenalty * 0.12, 46, 72)),
+          deblock: Math.round(clamp(12 + severity * 0.34 + blockPenalty * 1.05, 8, 82)),
+          dering: Math.round(clamp(10 + severity * 0.26 + ringPenalty * 0.95 + noisePenalty * 0.24, 6, 72)),
+          detail: Math.round(clamp(28 - severity * 0.16 - noisePenalty * 0.12 + clamp((metrics.gradient - 7) * 0.28, -4, 6), 8, 30))
+        };
+        const strength = severity >= 67 ? 'STRONG' : severity >= 38 ? 'MEDIUM' : 'LIGHT';
+        return { bitrateMbps, density, severity, strength, settings };
+      }
+
+      function applyAutoSettings(profile, announce = true) {
+        if (!profile) return;
+        const values = profile.settings;
+        denoise.value = String(values.denoise);
+        temporal.value = String(values.temporal);
+        motion.value = String(values.motion ?? 62);
+        deblock.value = String(values.deblock);
+        dering.value = String(values.dering);
+        detail.value = String(values.detail);
+        denoiseValue.textContent = denoise.value;
+        temporalValue.textContent = temporal.value;
+        motionValue.textContent = motion.value;
+        deblockValue.textContent = deblock.value;
+        deringValue.textContent = dering.value;
+        detailValue.textContent = detail.value;
+        resetTemporalHistory();
+        if (enhanced && video.readyState >= 2) drawStaticFrame();
+        if (announce) showToast(`AUTO ${profile.strength}: settings applied`);
+      }
+
+      async function runAutoAnalyze(announce = true) {
+        if (!currentFile || !objectUrl || !Number.isFinite(video.duration) || video.duration <= 0 || !video.videoWidth || !video.videoHeight) return;
+        const generation = ++analysisGeneration;
+        autoAnalyzing = true;
+        autoBtn.disabled = true;
+        autoBtn.textContent = 'ANALYZING…';
+        analysisInfo.textContent = 'AUTO · sampling frames…';
+        const probe = document.createElement('video');
+        probe.muted = true;
+        probe.preload = 'auto';
+        probe.playsInline = true;
+        probe.src = objectUrl;
+        const analysisCanvas = document.createElement('canvas');
+        // Preserve the source pixel grid so 8/16 px codec boundaries remain measurable.
+        // For large sources we analyze an aligned native-resolution center crop instead of scaling it down.
+        analysisCanvas.width = Math.max(48, Math.min(640, video.videoWidth));
+        analysisCanvas.height = Math.max(32, Math.min(360, video.videoHeight));
+        const cropX = Math.max(0, Math.floor(((video.videoWidth - analysisCanvas.width) * 0.5) / 8) * 8);
+        const cropY = Math.max(0, Math.floor(((video.videoHeight - analysisCanvas.height) * 0.5) / 8) * 8);
+        const ctx = analysisCanvas.getContext('2d', { willReadFrequently: true });
+        const metrics = [];
+        try {
+          if (probe.readyState < 1) await waitFor(probe, 'loadedmetadata');
+          const safeDuration = Math.max(0.1, Math.min(probe.duration || video.duration, video.duration));
+          const positions = safeDuration < 2 ? [0.1] : [0.08, 0.31, 0.57, 0.83].map((f) => clamp(safeDuration * f, 0, Math.max(0, safeDuration - 0.08)));
+          for (const t of positions) {
+            if (generation !== analysisGeneration) return;
+            if (Math.abs(probe.currentTime - t) > 0.025) {
+              probe.currentTime = t;
+              await waitFor(probe, 'seeked');
+            }
+            if (probe.readyState < 2) await waitFor(probe, 'loadeddata');
+            ctx.drawImage(probe, cropX, cropY, analysisCanvas.width, analysisCanvas.height, 0, 0, analysisCanvas.width, analysisCanvas.height);
+            const image = ctx.getImageData(0, 0, analysisCanvas.width, analysisCanvas.height);
+            metrics.push(analyzePixels(image.data, image.width, image.height));
+          }
+          if (generation !== analysisGeneration) return;
+          const avg = averageMetrics(metrics);
+          const profile = deriveAutoProfile(avg, currentFile, video.duration, video.videoWidth, video.videoHeight);
+          lastAnalysis = { ...profile, metrics: avg };
+          applyAutoSettings(lastAnalysis, false);
+          const bitrateText = profile.bitrateMbps > 0 ? `${profile.bitrateMbps.toFixed(1)} Mb/s` : 'bitrate n/a';
+          analysisInfo.textContent = `AUTO ${profile.strength} · ${bitrateText} · block ${avg.blockRatio.toFixed(2)}×`;
+          autoBtn.textContent = `AUTO: ${profile.strength}`;
+          autoBtn.classList.toggle('active', profile.strength !== 'LIGHT');
+          if (announce) showToast(`AUTO ${profile.strength} · GPU settings prepared`);
+        } catch (error) {
+          console.warn('Auto analysis failed:', error);
+          const fallback = deriveAutoProfile({ gradient: 8, blockRatio: 1, flatNoise: 2.5, edgeRing: 15 }, currentFile, video.duration, video.videoWidth, video.videoHeight);
+          lastAnalysis = fallback;
+          applyAutoSettings(fallback, false);
+          analysisInfo.textContent = `AUTO metadata profile · ${fallback.strength}`;
+          autoBtn.textContent = `AUTO: ${fallback.strength}`;
+          if (announce) showToast('Frame analysis unavailable · metadata profile applied');
+        } finally {
+          probe.removeAttribute('src');
+          probe.load();
+          if (generation === analysisGeneration) {
+            autoAnalyzing = false;
+            autoBtn.disabled = !glReady || !video.src;
+          }
+        }
+      }
+
+      function ensureNativeCanvasSize() {
+        const w = Math.max(2, Number(video.videoWidth) || 2);
+        const h = Math.max(2, Number(video.videoHeight) || 2);
+        if (nativeCanvas.width !== w || nativeCanvas.height !== h) {
+          nativeCanvas.width = w;
+          nativeCanvas.height = h;
+        }
+      }
+
+      function drawNativeFrame() {
+        if (!nativeCtx || video.readyState < 2 || !video.videoWidth || !video.videoHeight) return;
+        ensureNativeCanvasSize();
+        try {
+          nativeCtx.imageSmoothingEnabled = true;
+          if ('imageSmoothingQuality' in nativeCtx) nativeCtx.imageSmoothingQuality = 'high';
+          nativeCtx.drawImage(video, 0, 0, nativeCanvas.width, nativeCanvas.height);
+          nativeFrameSerial += 1;
+        } catch (_) {}
+      }
+
+      function cancelNativeRenderLoop() {
+        if (!nativeRenderHandle) return;
+        if (nativeRenderHandleKind === 'video' && typeof video.cancelVideoFrameCallback === 'function') {
+          try { video.cancelVideoFrameCallback(nativeRenderHandle); } catch (_) {}
+        } else {
+          cancelAnimationFrame(nativeRenderHandle);
+        }
+        nativeRenderHandle = 0;
+        nativeRenderHandleKind = '';
+      }
+
+      function scheduleNativeRenderLoop() {
+        cancelNativeRenderLoop();
+        if (enhanced || video.paused || video.ended || !video.src) return;
+        if (typeof video.requestVideoFrameCallback === 'function') {
+          nativeRenderHandleKind = 'video';
+          nativeRenderHandle = video.requestVideoFrameCallback(() => {
+            nativeRenderHandle = 0;
+            drawNativeFrame();
+            scheduleNativeRenderLoop();
+          });
+        } else {
+          nativeRenderHandleKind = 'raf';
+          nativeRenderHandle = requestAnimationFrame(() => {
+            nativeRenderHandle = 0;
+            drawNativeFrame();
+            scheduleNativeRenderLoop();
+          });
+        }
+      }
+
+      function cancelRenderLoop() {
+        if (!renderHandle) return;
+        if (renderHandleKind === 'video' && typeof video.cancelVideoFrameCallback === 'function') {
+          video.cancelVideoFrameCallback(renderHandle);
+        } else {
+          cancelAnimationFrame(renderHandle);
+        }
+        renderHandle = 0;
+        renderHandleKind = '';
+      }
+
+      function scheduleRenderLoop() {
+        cancelRenderLoop();
+        if (!enhanced || video.paused || video.ended) return;
+        if (typeof video.requestVideoFrameCallback === 'function') {
+          renderHandleKind = 'video';
+          renderHandle = video.requestVideoFrameCallback((_, metadata) => {
+            renderHandle = 0;
+            const mediaTime = Number(metadata?.mediaTime);
+            if (Number.isFinite(mediaTime)) {
+              if (lastMediaTime !== null && (mediaTime < lastMediaTime || mediaTime - lastMediaTime > 0.20)) {
+                resetTemporalHistory();
+              }
+              lastMediaTime = mediaTime;
+            }
+            drawFrame(mediaTime);
+            scheduleRenderLoop();
+          });
+        } else {
+          renderHandleKind = 'raf';
+          renderHandle = requestAnimationFrame(() => {
+            renderHandle = 0;
+            drawFrame(video.currentTime);
+            scheduleRenderLoop();
+          });
+        }
+      }
+
+      function setUpscaleMode(nextMode, announce = true) {
+        upscaleMode = ((Number(nextMode) % 5) + 5) % 5;
+        const labels = ['OFF', 'BICUBIC 2X', 'FSR 2X', 'FSR HQ 4X', 'FSR SUPER SS'];
+        upscaleBtn.textContent = `UPSCALE: ${labels[upscaleMode]}`;
+        // The mode can be prepared while GPU CLEAN is OFF, but it must not touch
+        // canvas size, GL textures, temporal buffers, or native video playback.
+        upscaleBtn.classList.toggle('active', enhanced && upscaleMode !== 0);
+        fsrSharp.disabled = !glReady || !video.src || upscaleMode < 2;
+        if (enhanced) {
+          resizeCanvas();
+          resetTemporalHistory();
+          if (video.readyState >= 2) drawStaticFrame();
+          modeBadge.textContent = `GPU CLEAN · ${upscaleLabel(true)} · ${bidirectional ? '2-SIDED' : '1-SIDED'}`;
+        } else {
+          syncOutputVisibility();
+          modeBadge.textContent = 'ORIGINAL';
+        }
+        if (announce) showToast(enhanced ? `Upscale ${labels[upscaleMode]}` : `Upscale ${labels[upscaleMode]} ready · GPU Clean is OFF`);
+      }
+
+      function setEnhanced(next, announce = true) {
+        if (next && !glReady) {
+          if (announce) showToast('WebGL2 GPU processing is unavailable');
+          return;
+        }
+        const nextEnhanced = Boolean(next);
+        if (!nextEnhanced) cancelRenderLoop();
+        else cancelNativeRenderLoop();
+        enhanced = nextEnhanced;
+        enhanceBtn.classList.toggle('active', enhanced);
+        enhanceBtn.textContent = enhanced ? 'GPU CLEAN: ON' : 'GPU CLEAN: OFF';
+        upscaleBtn.classList.toggle('active', enhanced && upscaleMode !== 0);
+        modeBadge.textContent = enhanced ? `GPU CLEAN · ${upscaleLabel(true)} · ${bidirectional ? '2-SIDED' : '1-SIDED'}` : 'ORIGINAL';
+        modeBadge.classList.toggle('enhanced', enhanced);
+        resetTemporalHistory();
+        syncOutputVisibility();
+        if (enhanced) {
+          resizeCanvas();
+          drawStaticFrame();
+          scheduleRenderLoop();
+        } else {
+          // Do not resize or clear WebGL resources here. Touching the GPU surface at the
+          // same moment as switching output can stall Chromium's native video compositor.
+          // Instead, present the decoded source through the unfiltered 2D canvas.
+          drawNativeFrame();
+          scheduleNativeRenderLoop();
+          syncOutputVisibility();
+        }
+        if (announce) showToast(enhanced ? 'GPU Clean ON' : 'Native video · GPU bypass');
+      }
+
+      function mediaErrorText(error) {
+        if (!error) return 'Unknown media error';
+        const names = { 1: 'loading aborted', 2: 'network/read error', 3: 'decode error', 4: 'codec/container unsupported' };
+        return names[error.code] || error.message || `media error ${error.code}`;
+      }
+
+      async function sniffCodecFourCC(file) {
+        if (!file || !/\.(mp4|m4v|mov)$/i.test(file.name)) return null;
+        try {
+          const chunk = 4 * 1024 * 1024;
+          const parts = [];
+          const first = await file.slice(0, Math.min(file.size, chunk)).arrayBuffer();
+          parts.push(new Uint8Array(first));
+          if (file.size > chunk) {
+            const last = await file.slice(Math.max(0, file.size - chunk), file.size).arrayBuffer();
+            parts.push(new Uint8Array(last));
+          }
+          let text = '';
+          const decoder = new TextDecoder('latin1');
+          for (const bytes of parts) text += decoder.decode(bytes);
+          const videoCandidates = [
+            ['avc1', 'H.264/AVC'], ['avc3', 'H.264/AVC'],
+            ['hvc1', 'HEVC/H.265'], ['hev1', 'HEVC/H.265'],
+            ['av01', 'AV1'], ['vp09', 'VP9'], ['mp4v', 'MPEG-4 Visual']
+          ];
+          const audioCandidates = [['mp4a', 'AAC/MP4 Audio'], ['ac-3', 'Dolby AC-3'], ['ec-3', 'Dolby E-AC-3'], ['Opus', 'Opus']];
+          const v = videoCandidates.find(([fourcc]) => text.includes(fourcc));
+          const a = audioCandidates.find(([fourcc]) => text.includes(fourcc));
+          return { videoFourcc: v?.[0] || null, videoName: v?.[1] || null, audioFourcc: a?.[0] || null, audioName: a?.[1] || null };
+        } catch (error) {
+          console.warn('Codec sniff failed', error);
+          return null;
+        }
+      }
+
+      function codecMimeForDiagnosis(diag) {
+        const map = {
+          avc1: 'video/mp4; codecs="avc1.42E01E"', avc3: 'video/mp4; codecs="avc1.42E01E"',
+          hvc1: 'video/mp4; codecs="hvc1.1.6.L93.B0"', hev1: 'video/mp4; codecs="hev1.1.6.L93.B0"',
+          av01: 'video/mp4; codecs="av01.0.05M.08"', vp09: 'video/mp4; codecs="vp09.00.10.08"',
+          mp4v: 'video/mp4; codecs="mp4v.20.9"'
+        };
+        return diag?.videoFourcc ? map[diag.videoFourcc] || null : null;
+      }
+
+      async function diagnoseCodecSupport(diag) {
+        const contentType = codecMimeForDiagnosis(diag);
+        if (!contentType) return null;
+        const canPlay = video.canPlayType(contentType);
+        let capability = null;
+        if (navigator.mediaCapabilities?.decodingInfo && video.videoWidth && video.videoHeight) {
+          try {
+            capability = await navigator.mediaCapabilities.decodingInfo({
+              type: 'file',
+              video: {
+                contentType,
+                width: video.videoWidth,
+                height: video.videoHeight,
+                bitrate: currentFile && Number.isFinite(video.duration) && video.duration > 0 ? Math.max(100000, Math.round(currentFile.size * 8 / video.duration)) : 5000000,
+                framerate: 30
+              }
+            });
+          } catch (_) {}
+        }
+        return { contentType, canPlay, capability };
+      }
+
+      function buildLoadCandidates(file) {
+        const ext = (file.name.match(/\.([^.]+)$/)?.[1] || '').toLowerCase();
+        const candidates = [];
+        const seen = new Set();
+        const add = (blob, type, label) => {
+          const key = type || blob.type || 'unknown';
+          if (seen.has(key)) return;
+          seen.add(key);
+          candidates.push({ blob, type: key, label });
+        };
+        add(file, file.type || '', 'native MIME');
+        if (['mp4', 'm4v'].includes(ext) || file.type === 'application/octet-stream' || !file.type) {
+          add(new Blob([file], { type: 'video/mp4' }), 'video/mp4', 'forced video/mp4');
+        }
+        if (ext === 'mov') add(new Blob([file], { type: 'video/quicktime' }), 'video/quicktime', 'forced video/quicktime');
+        return candidates;
+      }
+
+      function applyLoadCandidate(index) {
+        if (!loadCandidates[index]) return false;
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+        loadAttemptIndex = index;
+        objectUrl = URL.createObjectURL(loadCandidates[index].blob);
+        video.removeAttribute('src');
+        if (nativeCtx) nativeCtx.clearRect(0, 0, nativeCanvas.width, nativeCanvas.height);
+        video.src = objectUrl;
+        video.load();
+        statusEl.textContent = index ? 'RETRYING' : 'LOADING';
+        return true;
+      }
+
+      function loadFile(file, options = {}) {
+        if (!file) return;
+        const looksLikeVideo = file.type.startsWith('video/') || /\.(mp4|m4v|mov|webm)$/i.test(file.name);
+        if (!looksLikeVideo) {
+          showToast('Video fileを選択してください');
+          return;
+        }
+
+        cancelRenderLoop();
+        cancelNativeRenderLoop();
+        analysisGeneration += 1;
+        loadGeneration += 1;
+        const thisGeneration = loadGeneration;
+        autoAnalyzing = false;
+        currentFile = file;
+        currentSourceHandle = options.handle || null;
+        recentSessionFiles.set(historyIdFor(file), file);
+        lastAnalysis = null;
+        codecDiagnosis = null;
+        analysisInfo.textContent = 'AUTO · waiting for frames';
+        autoBtn.textContent = 'AUTO ANALYZE';
+        autoBtn.classList.remove('active');
+        resetTemporalHistory();
+        setEnhanced(false, false);
+        video.pause();
+        loadCandidates = buildLoadCandidates(file);
+        loadAttemptIndex = 0;
+        applyLoadCandidate(0);
+
+        emptyState.hidden = true;
+        fileNameEl.hidden = false;
+        modeBadge.hidden = false;
+        fileNameEl.textContent = file.name;
+        metaEl.textContent = `${file.name} · ${(file.size / (1024 * 1024)).toFixed(1)} MB · probing codec…`;
+        setControlsEnabled(false);
+        stage.focus({ preventScroll: true });
+        showHudTemporarily(3400);
+
+        sniffCodecFourCC(file).then((diag) => {
+          if (thisGeneration !== loadGeneration) return;
+          codecDiagnosis = diag;
+          if (diag?.videoName) {
+            const audio = diag.audioName ? ` / ${diag.audioName}` : '';
+            metaEl.textContent = `${file.name} · ${(file.size / (1024 * 1024)).toFixed(1)} MB · ${diag.videoName}${audio}`;
+          }
+        });
+      }
+
+      async function pickVideoFile() {
+        if (window.showOpenFilePicker && window.isSecureContext) {
+          try {
+            const [handle] = await window.showOpenFilePicker({ multiple: false, types: [{ description: 'Video', accept: { 'video/*': ['.mp4','.m4v','.mov','.webm'] } }] });
+            if (!handle) return;
+            const file = await handle.getFile();
+            const id = historyIdFor(file);
+            await storeFileHandle(id, handle);
+            loadFile(file, { handle });
+            return;
+          } catch (error) {
+            if (error?.name === 'AbortError') return;
+          }
+        }
+        fileInput.click();
+      }
+      importBtn.addEventListener('click', pickVideoFile);
+      emptyImportBtn.addEventListener('click', pickVideoFile);
+      fileInput.addEventListener('change', () => {
+        const [file] = fileInput.files || [];
+        if (file) {
+          if (pendingHistoryId) {
+            const expected = getHistory().find((item) => item.id === pendingHistoryId);
+            if (expected && historyIdFor(file) !== expected.id) showToast('Different file selected · history relink updated');
+            pendingHistoryId = null;
+          }
+          loadFile(file);
+        }
+        fileInput.value = '';
+      });
+
+      ['dragenter', 'dragover'].forEach((type) => {
+        stage.addEventListener(type, (event) => {
+          event.preventDefault();
+          stage.classList.add('dragover');
+        });
+      });
+      ['dragleave', 'drop'].forEach((type) => {
+        stage.addEventListener(type, (event) => {
+          event.preventDefault();
+          stage.classList.remove('dragover');
+        });
+      });
+      stage.addEventListener('drop', (event) => {
+        const [file] = event.dataTransfer?.files || [];
+        loadFile(file);
+      });
+
+      playBtn.addEventListener('click', togglePlay);
+      video.addEventListener('click', togglePlay);
+      nativeCanvas.addEventListener('click', togglePlay);
+      canvas.addEventListener('click', togglePlay);
+      canvas.addEventListener('webglcontextlost', (event) => {
+        if (event.cancelable) event.preventDefault();
+        glReady = false;
+        setEnhanced(false, false);
+        syncOutputVisibility();
+        gpuInfo.textContent = 'WebGL2 context lost · native video active';
+        showToast('GPU context lost · switched to native video');
+      });
+      backBtn.addEventListener('click', () => skip(-10));
+      forwardBtn.addEventListener('click', () => skip(10));
+
+      muteBtn.addEventListener('click', () => {
+        video.muted = !video.muted;
+        updateMuteButton();
+      });
+      volume.addEventListener('input', () => {
+        video.volume = Number(volume.value);
+        if (video.volume > 0) video.muted = false;
+        updateMuteButton();
+      });
+
+      function previewSeekValue(ms) {
+        if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+        const minMs = Number(seek.min) || 0;
+        const maxMs = Number(seek.max) || Math.round(video.duration * 1000);
+        const clamped = Math.max(minMs, Math.min(maxMs, Math.round(ms)));
+        seek.value = String(clamped);
+        currentTimeEl.textContent = formatTimePrecise(clamped / 1000);
+      }
+      function pointerSeekValue(event) {
+        const rect = seekHit.getBoundingClientRect();
+        if (!rect.width) return Number(seek.value) || 0;
+        const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+        const minMs = Number(seek.min) || 0;
+        const maxMs = Number(seek.max) || minMs + 1;
+        return minMs + ratio * (maxMs - minMs);
+      }
+      function commitSeek() {
+        if (!Number.isFinite(video.duration) || video.duration <= 0) { isSeeking = false; return; }
+        video.currentTime = Math.min(video.duration, Math.max(0, Number(seek.value) / 1000));
+        isSeeking = false;
+        if (seekZoom > 1) updateSeekWindow(video.currentTime, true);
+      }
+      let seekPointerId = null;
+      seekHit.addEventListener('pointerdown', (event) => {
+        if (seek.disabled) return;
+        event.preventDefault();
+        seekPointerId = event.pointerId;
+        seekHit.setPointerCapture?.(event.pointerId);
+        isSeeking = true;
+        resetTemporalHistory();
+        showHudTemporarily();
+        previewSeekValue(pointerSeekValue(event));
+      });
+      seekHit.addEventListener('pointermove', (event) => {
+        if (!isSeeking || seekPointerId !== event.pointerId) return;
+        event.preventDefault();
+        previewSeekValue(pointerSeekValue(event));
+      });
+      seekHit.addEventListener('pointerup', (event) => {
+        if (seekPointerId !== event.pointerId) return;
+        event.preventDefault();
+        previewSeekValue(pointerSeekValue(event));
+        seekPointerId = null;
+        commitSeek();
+      });
+      seekHit.addEventListener('pointercancel', () => { seekPointerId = null; isSeeking = false; });
+      seek.addEventListener('input', () => {
+        if (!Number.isFinite(video.duration) || video.duration <= 0) return;
+        const previewTime = Number(seek.value) / 1000;
+        currentTimeEl.textContent = formatTimePrecise(previewTime);
+      });
+      seek.addEventListener('change', commitSeek);
+
+      seekZoomBtn.addEventListener('click', () => setSeekZoom());
+
+      function setTheaterMode(next, announce = true) {
+        theaterMode = Boolean(next);
+        app.classList.toggle('theater', theaterMode);
+        if (!theaterMode) app.classList.remove('ui-idle');
+        document.body.classList.toggle('theater-mode', theaterMode);
+        theaterBtn.classList.toggle('active', theaterMode);
+        theaterBtn.setAttribute('aria-pressed', String(theaterMode));
+        if (theaterMode) window.scrollTo({ top: 0, behavior: 'instant' });
+        requestAnimationFrame(() => { fitStageToViewport(); resizeCanvas(); showHudTemporarily(); });
+        if (announce) showToast(theaterMode ? 'Browser theater mode' : 'Theater mode off');
+      }
+      theaterBtn.addEventListener('click', () => setTheaterMode(!theaterMode));
+
+      historyBtn.addEventListener('click', () => { historyPopover.hidden = !historyPopover.hidden; if (!historyPopover.hidden) renderHistory(); });
+      historyClearBtn.addEventListener('click', () => { historyMemory = []; safeLocalRemove(HISTORY_KEY); renderHistory(); showToast('History cleared'); });
+      document.addEventListener('pointerdown', (event) => { if (!historyPopover.hidden && !historyPopover.contains(event.target) && event.target !== historyBtn) historyPopover.hidden = true; });
+
+      fullscreenBtn.addEventListener('click', async () => {
+        try {
+          if (!document.fullscreenElement) await stage.requestFullscreen();
+          else await document.exitFullscreen();
+        } catch (error) {
+          showToast('Fullscreen is not available');
+        }
+      });
+
+      guardBtn.addEventListener('click', () => setBrowserGuard(!browserGuard));
+      autoBtn.addEventListener('click', () => runAutoAnalyze(true));
+      upscaleBtn.addEventListener('click', () => setUpscaleMode(upscaleMode + 1));
+      bidirBtn.addEventListener('click', () => {
+        bidirectional = !bidirectional;
+        bidirBtn.classList.toggle('active', bidirectional);
+        bidirBtn.textContent = bidirectional ? '2-SIDED: ON' : '2-SIDED: OFF';
+        bidirBtn.setAttribute('aria-pressed', String(bidirectional));
+        resetTemporalHistory();
+        if (enhanced) {
+          modeBadge.textContent = `GPU CLEAN · ${upscaleLabel(true)} · ${bidirectional ? '2-SIDED' : '1-SIDED'}`;
+          drawStaticFrame();
+          if (!video.paused) scheduleRenderLoop();
+        }
+        showToast(bidirectional ? '2-sided temporal · 1 frame look-ahead' : '1-sided temporal · low latency');
+      });
+      enhanceBtn.addEventListener('click', () => setEnhanced(!enhanced));
+      denoise.addEventListener('input', () => {
+        denoiseValue.textContent = denoise.value;
+        if (enhanced && video.paused) drawStaticFrame();
+      });
+      temporal.addEventListener('input', () => {
+        temporalValue.textContent = temporal.value;
+        if (enhanced && video.paused) { drawStaticFrame(); }
+      });
+      motion.addEventListener('input', () => {
+        motionValue.textContent = motion.value;
+        if (enhanced && video.paused) { drawStaticFrame(); }
+      });
+      deblock.addEventListener('input', () => {
+        deblockValue.textContent = deblock.value;
+        if (enhanced && video.paused) drawStaticFrame();
+      });
+      dering.addEventListener('input', () => {
+        deringValue.textContent = dering.value;
+        if (enhanced && video.paused) drawStaticFrame();
+      });
+      detail.addEventListener('input', () => {
+        detailValue.textContent = detail.value;
+        if (enhanced && video.paused) drawStaticFrame();
+      });
+      fsrSharp.addEventListener('input', () => {
+        fsrSharpValue.textContent = fsrSharp.value;
+        if (enhanced && video.paused) drawStaticFrame();
+      });
+
+      video.addEventListener('loadedmetadata', () => {
+        setControlsEnabled(true);
+        fsrSharp.disabled = upscaleMode < 2;
+        updateSeekWindow(0, true);
+        durationEl.textContent = formatTimePrecise(video.duration);
+        currentTimeEl.textContent = '00:00.000';
+        seek.value = '0';
+        volume.value = String(video.volume);
+        const size = video.videoWidth && video.videoHeight ? `${video.videoWidth}×${video.videoHeight}` : 'Video';
+        const codecText = codecDiagnosis?.videoName ? ` · ${codecDiagnosis.videoName}` : '';
+        metaEl.textContent = `${fileNameEl.textContent} · ${size} · ${formatTime(video.duration)}${codecText}`;
+        diagnoseCodecSupport(codecDiagnosis).then((support) => {
+          if (!support) return;
+          const state = support.capability ? `${support.capability.smooth ? 'smooth' : 'decode'}${support.capability.powerEfficient ? ' / HW-efficient' : ''}` : (support.canPlay || 'unknown');
+          analysisInfo.textContent = `${analysisInfo.textContent.split(' · codec:')[0]} · codec: ${codecDiagnosis?.videoFourcc || '?'} ${state}`;
+        });
+        statusEl.textContent = 'READY';
+        const historyId = rememberHistory(currentFile);
+        if (historyId && currentSourceHandle) storeFileHandle(historyId, currentSourceHandle);
+        updateMuteButton();
+        fitStageToViewport();
+        if (enhanced) resizeCanvas();
+        syncOutputVisibility();
+      });
+      video.addEventListener('loadeddata', () => {
+        if (enhanced) drawStaticFrame();
+        else drawNativeFrame();
+        if (currentFile && !autoAnalyzing && !lastAnalysis) runAutoAnalyze(true);
+      });
+      video.addEventListener('durationchange', () => { if (Number.isFinite(video.duration)) { updateSeekWindow(video.currentTime, true); durationEl.textContent = formatTimePrecise(video.duration); } });
+      video.addEventListener('timeupdate', updateTimeline);
+      video.addEventListener('play', () => {
+        updatePlayButton();
+        if (enhanced) scheduleRenderLoop(); else scheduleNativeRenderLoop();
+        showHudTemporarily(1800);
+      });
+      video.addEventListener('pause', () => {
+        updatePlayButton();
+        cancelRenderLoop();
+        cancelNativeRenderLoop();
+        if (enhanced) drawStaticFrame(); else drawNativeFrame();
+      });
+      video.addEventListener('ended', () => { updatePlayButton(); cancelRenderLoop(); cancelNativeRenderLoop(); });
+      video.addEventListener('seeking', resetTemporalHistory);
+      video.addEventListener('seeked', () => {
+        resetTemporalHistory();
+        if (enhanced) drawStaticFrame(); else drawNativeFrame();
+      });
+      video.addEventListener('waiting', () => { statusEl.textContent = 'BUFFERING'; });
+      video.addEventListener('playing', () => {
+        statusEl.textContent = 'PLAYING';
+        if (enhanced) scheduleRenderLoop(); else scheduleNativeRenderLoop();
+      });
+      video.addEventListener('error', () => {
+        const reason = mediaErrorText(video.error);
+        if (loadAttemptIndex + 1 < loadCandidates.length) {
+          const next = loadCandidates[loadAttemptIndex + 1];
+          showToast(`Retrying as ${next.type || 'alternate MIME'}`);
+          applyLoadCandidate(loadAttemptIndex + 1);
+          return;
+        }
+        statusEl.textContent = 'ERROR';
+        setControlsEnabled(false);
+        const codec = codecDiagnosis?.videoName ? `${codecDiagnosis.videoName} (${codecDiagnosis.videoFourcc})` : 'unknown codec';
+        metaEl.textContent = `${currentFile?.name || 'Video'} · decode failed · ${codec} · ${reason}`;
+        showToast(`Decode failed · ${codec}`);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        const editable = isEditableTarget(event.target);
+        const key = event.key.toLowerCase();
+
+        if (browserGuard) {
+          const browserCombo = event.metaKey || event.ctrlKey;
+          if (browserCombo && ['=', '+', '-', '0', 's', 'p', 'f', 'o', 'r'].includes(key)) {
+            if (event.cancelable) event.preventDefault();
+            event.stopPropagation();
+            showToast('Browser shortcut blocked');
+            return;
+          }
+          if (!editable && event.key === 'Backspace') {
+            if (event.cancelable) event.preventDefault();
+          }
+        }
+
+        if (editable || event.metaKey || event.ctrlKey || event.altKey) return;
+        if (key === 'l') {
+          event.preventDefault();
+          setBrowserGuard(!browserGuard);
+          return;
+        }
+        if (!video.src) return;
+        if (event.code === 'Space') { event.preventDefault(); togglePlay(); }
+        else if (event.key === 'ArrowLeft') { event.preventDefault(); skip(event.shiftKey ? -0.05 : -5); }
+        else if (event.key === 'ArrowRight') { event.preventDefault(); skip(event.shiftKey ? 0.05 : 5); }
+        else if (key === 'z') { event.preventDefault(); if (!seekZoomBtn.disabled) seekZoomBtn.click(); }
+        else if (key === 'v') { event.preventDefault(); if (!theaterBtn.disabled) theaterBtn.click(); }
+        else if (key === 'f') { event.preventDefault(); fullscreenBtn.click(); }
+        else if (key === 'm') { event.preventDefault(); muteBtn.click(); }
+        else if (key === 'a') { event.preventDefault(); if (!autoBtn.disabled) autoBtn.click(); }
+        else if (key === 't') { event.preventDefault(); if (!bidirBtn.disabled) bidirBtn.click(); }
+        else if (key === 'u') { event.preventDefault(); if (!upscaleBtn.disabled) upscaleBtn.click(); }
+        else if (key === 'g') { event.preventDefault(); enhanceBtn.click(); }
+      }, true);
+
+      document.addEventListener('contextmenu', (event) => {
+        if (browserGuard && $('app').contains(event.target)) {
+          event.preventDefault();
+          showToast('Browser context menu blocked');
+        }
+      }, true);
+
+      document.addEventListener('dragstart', (event) => {
+        if (browserGuard && $('app').contains(event.target)) event.preventDefault();
+      }, true);
+
+      window.addEventListener('dragover', (event) => {
+        if (browserGuard) event.preventDefault();
+      }, { capture: true });
+
+      window.addEventListener('drop', (event) => {
+        if (!browserGuard) return;
+        if (!stage.contains(event.target)) {
+          event.preventDefault();
+          showToast('Drop video onto the player area');
+        }
+      }, { capture: true });
+
+      window.addEventListener('wheel', (event) => {
+        if (browserGuard && (event.ctrlKey || event.metaKey)) {
+          event.preventDefault();
+          showToast('Browser zoom blocked');
+        }
+      }, { passive: false, capture: true });
+
+      let splitterStartY = 0, splitterStartHeight = 0;
+      panelSplitter.addEventListener('pointerdown', (event) => {
+        splitterStartY = event.clientY; splitterStartHeight = controlsPanel.getBoundingClientRect().height;
+        panelSplitter.classList.add('dragging'); panelSplitter.setPointerCapture(event.pointerId);
+      });
+      panelSplitter.addEventListener('pointermove', (event) => {
+        if (!panelSplitter.hasPointerCapture(event.pointerId)) return;
+        applyPanelHeight(splitterStartHeight + (splitterStartY - event.clientY), false);
+      });
+      const finishSplitter = (event) => { if (panelSplitter.hasPointerCapture(event.pointerId)) panelSplitter.releasePointerCapture(event.pointerId); panelSplitter.classList.remove('dragging'); applyPanelHeight(panelHeight, true); };
+      panelSplitter.addEventListener('pointerup', finishSplitter);
+      panelSplitter.addEventListener('pointercancel', finishSplitter);
+      panelSplitter.addEventListener('keydown', (event) => { if (!['ArrowUp','ArrowDown'].includes(event.key)) return; event.preventDefault(); applyPanelHeight(panelHeight + (event.key === 'ArrowUp' ? 16 : -16)); });
+
+      stage.addEventListener('pointermove', () => showHudTemporarily());
+      stage.addEventListener('pointerenter', () => showHudTemporarily());
+      app.addEventListener('pointermove', () => { if (theaterMode) showHudTemporarily(); });
+      video.addEventListener('play', () => { if (theaterMode) showHudTemporarily(2200); });
+      video.addEventListener('pause', () => { app.classList.remove('ui-idle'); showHudTemporarily(4000); });
+
+      const resizeObserver = new ResizeObserver(() => { layoutMediaSurface(); resizeCanvas(); });
+      resizeObserver.observe(stage);
+      resizeObserver.observe(mediaSurface);
+      const layoutObserver = new ResizeObserver(() => fitStageToViewport());
+      layoutObserver.observe(document.querySelector('.topbar'));
+      layoutObserver.observe(document.querySelector('.controls'));
+      window.addEventListener('resize', () => { applyPanelHeight(panelHeight, false); fitStageToViewport(); }, { passive: true });
+      document.addEventListener('fullscreenchange', () => {
+        if (!document.fullscreenElement) fitStageToViewport();
+        else layoutMediaSurface();
+        requestAnimationFrame(resizeCanvas);
+      });
+
+      window.addEventListener('beforeunload', () => {
+        analysisGeneration += 1;
+        cancelRenderLoop();
+        resizeObserver.disconnect();
+        layoutObserver.disconnect();
+        if (objectUrl) URL.revokeObjectURL(objectUrl);
+      });
+
+      panelHeight = Number(safeLocalGet(PANEL_KEY) || 250);
+      applyPanelHeight(panelHeight, false);
+      renderHistory();
+      setBrowserGuard(true, false);
+      bidirBtn.setAttribute('aria-pressed', 'true');
+      theaterBtn.setAttribute('aria-pressed', 'false');
+      initGPU();
+      syncOutputVisibility();
+      setControlsEnabled(false);
+      fitStageToViewport();
+    })();
+  </script>
 </body>
 </html>
